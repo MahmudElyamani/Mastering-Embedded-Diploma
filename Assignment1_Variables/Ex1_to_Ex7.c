@@ -5,7 +5,7 @@
 #include <stdio.h>
 int main()
 {
-    /* Ex.1:        This is a test, Hello Mahmoud :")
+    /* Ex.1:
     printf("C Programming");
     */
 
