@@ -4,7 +4,7 @@
 //Unit5
 
 #include "queue.h"
-
+FIFO_Buf_t Data;
 int main()
 {
     /*      Selection is for the user input and Exit condition is for condition 10      */
@@ -32,31 +32,31 @@ int main()
         switch (selection)
         {
             case '1':
-            fileAddStudent();
+            fileAddStudent(&Data);
             break;
             case '2':
-            ManualAddStudent();
+            ManualAddStudent(&Data);
             break;
             case '3':
-            findDR();
+            findDR(&Data);
             break;
             case '4':
-            findDN();
+            findDN(&Data);
             break;
             case '5':
-            findDC();
+            findDC(&Data);
             break;
             case '6':
-            findTOT();
+            findTOT(&Data);
             break;
             case '7':
-            RDelete();
+            RDelete(&Data);
             break;
             case '8':
-            RUpdate();
+            RUpdate(&Data);
             break;
             case '9':
-            SShow();
+            SShow(&Data);
             break;
             case '10':
             printf("=====Thank you for using the Student Queue management System====");
