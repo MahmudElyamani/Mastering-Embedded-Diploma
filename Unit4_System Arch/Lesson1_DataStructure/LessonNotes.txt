@@ -1,0 +1,67 @@
+--- ✄ --------- 2026.04.08 13:44 -------------------
+-Data_Structure is a massive field with lots of references, we're not going to be taking all of it in but only the necessary
+part that will aid us in our embedded journey.
+Things such as @Buffers made by a code you write and can be re-used for communication protocols like UART,I2C,CAN
+
+
+The purpose of Data Structures is to basically:
+• store data and create an algorithm that does specific calculations or operations such as: send to UART
+• This Data could be sensor readings or orders you're trying to write to another MCU or an actuator.
+
+
+Types of data structures that are used in embedded:
+• LIFO (Last in first out ) buffer also known as (stack)
+• FIFO (First in first out) there's circular and non-circular type and is also known as (Queue)
+• Linked_Lists which can be single, doubly and circular.
+
+
+-Comapnies measure the effectiveness of data structures based on the time taken to transfer data using LIFO for example.
+-For how to write a code for LIFO check out @lifo.h and @lifo.c and read comments.
+
+
+Circular Buffer and FIFO:
+• Buffers are a means for first in information to be first out and is used in most embedded programs.
+• for example if we wanted to make an application that prints to the screen a paragraph through a MCU:
+    1. We'd first have to not the paragraph a character by character in FIFO.
+    2. Add an interrupt serviece routine in UART to indicate that transmitting is complete.
+    3. once this interrupt is called we'll get data from FIFO.
+• Circular buffers add data to head and remove data from tail.
+• when boundary is reached and space has been freed up in the tail, the head wraps around starting from the beginning.
+• that's why it's called circular because they wrap around each other.
+-For how to write a code for @Circular_Buffer and FIFO check out @fifo.h and @fifo.c and read comments.
+
+
+Data Structures are divided into two types:
+1. Linear data structures:
+    • elements are constructed sequentially (one after the other).
+    • if we wanted to know where the elemnt is we just have to know the start of the sequence and the element's order.
+    • examples such as arrays and linked lists.
+2. Non-Linear data structures: 
+    • items are not arranged in order and the structure is non-sequential.
+    • one element can point to multiple others meaning that it can't be traversed sequentially.
+    • examples such as Trees and graphs.
+.
+
+Linked Lists:
+• They're a linear data structure whose elements are tied together with links.
+• each element is a seperate object that holds a value and an adress, could be a variable, array or anything.
+• each link contains the address of to the next address and the address before it.
+• The first element of a linked list is called the Head and it points to the first element of the list.
+• The last element of the linked list is NULL address.
+
+
+Types of Linked lists:
+i. Singly: (Interviewers ask about this one most) where each element points to the direction of the next element but not
+    to the one previous to it.
+ii. Doubly: each element points to the one after it and before it, its downside is the increased size due to pointers.
+iii. Circular: Last element contains link of the first element and first element has link to the last element.
+
+--- ✄ --------- 2026.04.11 14:28 -------------------
+Assignment:
+1. Write a @GetNth() function that takes a lninked list and an integer index and returns the data value stored in
+   the node at that index position, add this function alongside the linked lists code and all of it should function.        (done)
+2. Write a function to count the number of nodes in a given singly linked list in both iterative and recursive solutions.   (done)
+3. Write a function to get the n'th node from the end                                                                       (done)
+4. Find the middle of a given linked list, if the list is even take the 2nd middle element.                                 (done)
+5. Function to reverse a given linked list                                                                                  (fail)
+-check the video from (4:13:00) for more detail.

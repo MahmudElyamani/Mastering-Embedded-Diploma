@@ -1,0 +1,104 @@
+-This lesson discusses different kinds of debuggers from all kinds, you won't need them at this point or for a long
+time at least, but this lesson will be a refernce for the future in case you come across one.
+
+Debug hardware adaptors such as Lauterbach, ST-link, Keil ULINK are connected to the MCU using either JTAG or SWD
+connection.
+Once you get the debugger you must make sure to download its driver in order to communicate properly with it.
+
+
+In order to start debugging you must have a GDB_server, that server communicates with the driver in order to send
+processor signals and memory through the JTAG or SWD adaptors.
+
+
+
+What is a GDB_server?:
+it's a software that runs on the host machine -such as your own PC- to act as a GDB_server.
+There's lots of GDB_servers, some commercial and some non-commercial.
+The most popular open-source GDB_server is called OpenOCD, it doesn't support all architectures or all targets.
+
+
+The GDB for Lauterbach is called trace32, it's an IDE that has its own GDB_server that we cannot communicate with
+by means other than trace32 IDE.
+
+
+Once the GDB_server is up, we attach it with the GDB client or telnet client in order to give the GDB orders.
+The GDB client can be used either directilly through terminal(gitBASH or cmd prompt) or through an IDE like Eclipse.
+
+
+Some companies put the Debug hardware adaptors on the MCU itself or the kit housing it, they do this simply to increase
+their sales so that more people are not inclined to buy some sort of one purpose fit all debugger
+
+
+
+How to pick the right debugger for you:
+1. In order to select the proper debugger hardware you have to look at the processor name within
+    the SOC inside your kit, meaning (Cortex-M4, Renesas-RX110, etc..).
+2. Look at the interface, meaning JTAG or SWD and if it's compatible with your MCU interface or not
+3. Look at the driver, whether it's available for free on the internet or not easily obtainible.
+4. Look at the GDB_server if it's widely available or not.
+- some debuggers like J-Link can code X type renesas CPU but can't program H type. That's why we
+have to make sure it works from the specs.
+
+
+(22:30 -> 47:20)The lesson then talks about how to start debugging using @Lauterbach and @trace32 IDE, starting from how to wire it to its
+connection to the IDE, you should only go back and watch this part if you're working in an automotive company, and are seeking
+some information on how to get started.
+ 
+(47:21 -> 1:01:50)Talks about @Renesas E1/E2 Debugger, starting from its GDB_servers, how to connect it to CPU and MCU, how to start if
+you're in a company and have to start working on it, self checking program to make sure the debgger hardware works, the software
+you'll use afterwards to debug (IDE)
+
+
+What is static memory allocation?:
+• when you identify a local variable, say: int x[3]; the compiler tells the stack to allocate memory for that variable.
+• when you identify the same variable but globally, the compiler will preserve space for it in either .data or .bss .
+• Allocation in memory is calculated during compile time and is fixed because the size of .data section cannot change at runtime.
+• if you do such that: int x[1024]; you're basically allocating 4-Kb in flash and in ram making a total of 8-Kb, this memory is already burnt
+and cannot be changed later on, This type of memory is called Static memory allocation.
+
+
+
+What is Dynamic memory allocation?:
+• By storing data in the heap we can make it seen by the entire code without having to store it in .bss or .data.
+• Heap is a place that allows us to store and delete data during runtime.
+• The ram structure now goes as follows (from bottom to top): .data -> .bss -> heap -> stack -> stack top.
+• To access memory stored by the heap you must only use pointers.
+• Memory allocation is not a standard C function, you need to include @stdlib.h library in order to allocate memory dynamically
+  using functions such as: malloc(), calloc(), free(), realloc(). 
+* when you allocate memory the bytes in that memory are not sequential, meaning they don't follow each other byte by byte. That's why
+we combine allocating memory with @linked-lists, which basically attach a 4-byte pointer to every element that points to the element
+next on the line.
+
+
+-HOWEVER!!: we are not going to be using @dynamic-memory-allocation in Embedded_Systems, because it uses a non-standard C library
+that relies on having an OS that it communicate with through its api in order topreserve memory in its own heap, in real embedded
+systems development there won't be any OS interface as you'll be communicating with a MCU 
+
+-IF you really want to use the standard libc.a libraries in your embedded C code enviroment, you have to track down the point where
+the library itself starts to talk to the OS, for printf() for example, the function goes to call a function called _write(); and it's
+responsible for writing words to the console, for malloc() it goes to a function called _sbark() and it's responsible for telling the
+OS to reserve space in its heap, so we'll have to write from scratch out own libraries to these functions so that they'd work on our
+Microcontroller similarly.
+However for the case of malloc() since you're writing a code to manipulate the heap there is potential that it could overflow to the
+stack and cause issues to the MCU which is very dangerous.
+Therefore MISRA made a rule universal to all embedded programmers that prohibited the use of any malloc() functions that could manipulate
+the heap, which is why it's not recommended for use.
+
+-You might think writing your own library from scratch as opposed to writing definitions for these functions would be easier and you'd
+be correct! but it's just a simple flex to let people know you understand these stuff.
+
+Syntax of malloc():+
+• ptr = (cast-type*)malloc(byte-size);
+• ptr = (int*)malloc(100*sizeof(int));
+
+Syntax of calloc():
+• ptr = (cast-type*)calloc(n, element-size);
+• ptr = (float*)calloc(25, sizeof(float));
+
+Syntax of free():
+• free(ptr);
+
+Syntax of realloc():
+• ptr = realloc(ptr,newsize);
+
+

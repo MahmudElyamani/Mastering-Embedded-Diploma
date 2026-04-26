@@ -1,0 +1,38 @@
+#@copyright: Mahmoud Elyamani
+
+CC = arm-none-eabi-
+CFLAGS = -g -mcpu=arm926ej-s
+INCS = -I .
+LIBS=
+SRC = $(wildcard *.c)
+#OBJ = app.o uart.o startup.o
+OBJ = $(SRC:.c=.o)
+ASSEM = $(wildcard *.s)
+ASSOBJ = $(ASSEM:.s=.o)
+ProjectName = learn-in-depth
+all: $(ProjectName).bin
+	@echo "============Build is Done============="
+
+startup.o: startup.s
+	$(CC)as.exe $(CFLAGS) $< -o $@
+
+# app.o: app.c
+# 	$(CC)gcc.exe -c $(INCS) $(CFLAGS) $< -o $@
+# uart.o: uart.c
+# 	$(CC)gcc.exe -c -g $(INCS) $(CFLAGS) $< -o $@
+
+%.o: %.c
+	$(CC)gcc.exe -c -g $(INCS) $(CFLAGS) $< -o $@
+
+$(ProjectName).elf: $(OBJ) $(ASSOBJ)
+	$(CC)ld.exe -T linker_script.ld $(LIBS) $(OBJ) $(ASSOBJ) -o $@
+
+$(ProjectName).bin: $(ProjectName).elf
+	$(CC)objcopy.exe -O binary $< $@ 
+
+clean_all:
+	rm *.o *.elf *.bin
+
+clean:
+	rm *.elf *.bin
+

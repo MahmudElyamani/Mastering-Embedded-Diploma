@@ -1,0 +1,53 @@
+--- ✄ --------- 2026.04.14 14:53 -------------------
+-This lecture is about the principle of designing for a massive system archeticture in an organized and clean manner.
+-Every team does this on a different scale, there are seperate teams of engineers whose roles are to clean code.
+-we must lay out the idea on flowchart blocks first before we write a C code, not just for yourself but for the customer thats
+ buying the code from you.
+ you must lay out your ideas clearly so that there's no misunderstanding later on if the code isn't exactly like expected.
+-For time-ordered operation such as figuring out the key compination to a key lock, the best diagram that could describe it
+ is state machines.
+Moore vs Meaky state machines:
+• A moore machine performs actions when entering a state, for example a led would turn on when its time comes.
+• A mealy machine performs actions when transitioning from a state, for example a led wouldn't turn on unless its time comes and a button is pressed.
+
+TTool is a free open-source software that helps you design a project plan
+(it seems very old and outdated so I'd prefer if you looked at some better flowchart software)
+
+A MCU system consists of basic layers, for example:
+• The MCU communicates with the I2C that's tied to the ultrasonic sensor
+• It also can have a timer that produces pwm signal to drive a motor.
+• each of these signals is passed on through a driver for each, DC motor and ultrasonic sensor.
+• above them is whats called Algorithm which contains the states
+• this is called HAL (hardware abstraction layer)
+
+-The lesson then talks about forming a project and laying out concepts and a lot of theoritical steps
+, these are not important to note but good to know as side information
+if you want to revisit this side of questions go back to Lesson 2 part 1 and .\
+
+Sytem architecting / Design sequence: (37:04)
+Assuming you're the business owner communicating with a customer, here's how you should lay out your plan of operation,
+• First step is to meet with the customer and deduce a case study out of his requirements, which is basically a list of operations
+  that are supposed to be performed followed by assumption by yourself of what you have and don't have in terms of information.
+• Choose the method of operation you want, including when to do meetings and how to organize teams.
+• Get into the requirements that needs to be met and calculate the price for each requirement, then speak with the customer 
+  to verify these requirements and to see if he needs any changes to the specs. This also helps getting you out of jobs
+  that are not meant to be performed by you in case you're working as a freelancer. Eng.Keroles suggested we use UML2.
+• next is the space exploration/partitioning which includes determining the MCU, how many will be used, how will the operation be
+  split between them, etc.. some big companies use tools that are specifically designed to compat this matt
+  er but in lower-scale
+  projects you will only need to know what MCU you will be using based on the requirements.
+• System analysis is a step that can be performed earlier than this point, but its basically grouping the system requirements into
+  three UML diagrams which is yours to see just to start implementing
+• next is the designing and system testing and implementation which we'll be going over in the 2nd term.
+-View video example presented at (54:30) if you want a real life .example for all of this.
+-Video talks about Misra rules from (3:55:25) and gives ways to verify your code using misra rules.
+
+Regarding checking rules with MISRA:
+• Nobody is required to remember all the rules stated by misra as there are so many, same goes for Autosar rules although Autosar
+  requires you to abide by MISRA rules by default so it adds just a few extra conditions on top of it.
+• There are softwares you can use to check if your code violates any MISRA rules, and to point out which line violates specifically
+  what in the rule book, these softwares offer a 30-day free trial use and some are paid up front.
+• If you want a permenant checker without having to pay for the software's fees download Cppcheck from github, or through the
+-  course's google drive directory. Look the video from (4:00:00) for installation guide and how to use.
+
+--- ✄ --------- 2026.04.16 16:28 -------------------
