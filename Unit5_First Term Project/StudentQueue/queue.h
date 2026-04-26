@@ -6,87 +6,61 @@
 
 
 
-#include <stdint.h>
-
-
-
-
 /*      User Definition        */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 100
+
 typedef struct {
-    char fname[50];
-    char lname[50];
     int roll;
-    float GPA;
-    int cid[10];
-} studentInfo;
+    char fname[50];
+    char course[50];
+    float grade;
+} Student;
 
 typedef struct {
-    unsigned int length;
-    unsigned int count;
-    studentInfo *base;
-    studentInfo *head;
-    studentInfo *tail;
-    int StudentNumber;
-}FIFO_Buf_t;
+    Student data[MAX];
+    int front;
+    int rear;
+} Queue;
 
-//Status of FIFO:
-typedef enum{
-    FIFO_no_error,
-    FIFO_full,
-    FIFO_empty,
-    FIFO_null
-}FIFO_Buf_Status;
-
-
-
-
-
-
-
-
-/*      Declarations for FIFO       */
-#define element_type uint8_t
-#define width 5
-element_type buff[width];
-
-FIFO_Buf_Status FIFO_init (FIFO_Buf_t* fifo, element_type *buf, uint32_t length);
-FIFO_Buf_Status FIFO_IS_FULL (FIFO_Buf_t* fifo);
-
-
-
-
-
+/* Core queue operations */
+void initQueue();
+int isEmpty();
+int isFull();
+void enqueue(Student s);
+void dequeue();
 
 
 /*      Function Declaration        */
 
 /*Option(1): Adds student via a seperate file*/
-void fileAddStudent(FIFO_Buf_t *FIFO);
+void fileAddStudent();
 
 /*Option(2): Adds student manually via user input*/
-void ManualAddStudent(FIFO_Buf_t *FIFO);
+void ManualAddStudent();
 
 /*Option(3): Finds student details by role number*/
-void findDR(FIFO_Buf_t *FIFO);
+void findDR();
 
 /*Option(4): Finds student details by name*/
-void findDN(FIFO_Buf_t *FIFO);
+void findDN();
 
 /*Option(5): Finds student details by course ID*/
-void findDC(FIFO_Buf_t *FIFO);
+void findDC();
 
 /*Option(6): Finds the total number of students*/
-void findTOT(FIFO_Buf_t *FIFO);
+void findTOT();
 
 /*Option(7): Deletes student details by role number*/
-void RDelete(FIFO_Buf_t *FIFO);
+void RDelete();
 
 /*Option(8): Updates student details by role number*/
-void RUpdate(FIFO_Buf_t *FIFO);
+void RUpdate();
 
 /*Option(9): Shows information for all students in the list*/
-void SShow(FIFO_Buf_t *FIFO);
-
-
+void SShow();
 
 #endif

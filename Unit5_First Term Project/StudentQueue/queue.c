@@ -2,110 +2,186 @@
 //Made by Eng. Mahmood Elyamani
 
 #include "queue.h"
-#include <stdio.h>
 
-/*       FIFO_init        */
-FIFO_Buf_Status FIFO_init (FIFO_Buf_t* fifo, element_type *buf, uint32_t length)
-{
-    if (buf == NULL)
-    return FIFO_null;
+Queue q;
 
-    fifo->base = buf;
-    fifo->head = buf;
-    fifo->tail = buf;
-    fifo->length = length;
-    fifo->count = 0;
+/* ================= Queue Core ================= */
 
-    return FIFO_no_error;
+void initQueue() {
+    q.front = 0;
+    q.rear = -1;
 }
 
-
-/*      FIFO_IS_FULL        */
-FIFO_Buf_Status FIFO_IS_FULL (FIFO_Buf_t* fifo)
-{
-    //checks if all these parameter are present or not
-    if (!fifo->base || !fifo->head || !fifo->tail)
-    return FIFO_null;
-
-    //checks if the current count exceeds the length 
-    if(fifo->count == fifo->length)
-    return FIFO_full;
-
-    return FIFO_no_error;
+int isEmpty() {
+    return q.front > q.rear;
 }
 
-
-
-
-/*      Option(1): Adds student via a seperate file     */
-void fileAddStudent(FIFO_Buf_t *FIFO)
-{
-    if (!FIFO->base || !FIFO->tail || FIFO->head)
-    printf("Error! data does not exist here yet");
-    else if (FIFO_IS_FULL(FIFO) == FIFO_full)
-    printf("Error! data base is full");
+int isFull() {
+    return q.rear == MAX - 1;
 }
 
-
-
-/*      Option(2): Adds student manually via user input     */
-void ManualAddStudent(FIFO_Buf_t *FIFO)
-{
-
+void enqueue(Student s) {
+    if (isFull()) {
+        printf("Queue is full!\n");
+        return;
+    }
+    q.data[++q.rear] = s;
 }
 
-
-
-/*      Option(3): Finds student details by role number     */
-void findDR(FIFO_Buf_t *FIFO)
-{
-
+void dequeue() {
+    if (isEmpty()) {
+        printf("Queue is empty!\n");
+        return;
+    }
+    q.front++;
 }
 
+/* ================= Menu Functions ================= */
 
+void ManualAddStudent() {
+    Student s;
 
-/*      Option(4): Finds student details by name        */
-void findDN(FIFO_Buf_t *FIFO)
-{
+    printf("Enter Roll: ");
+    scanf("%d", &s.roll);
 
+    printf("Enter First Name: ");
+    scanf("%s", s.fname);
+
+    printf("Enter Course: ");
+    scanf("%s", s.course);
+
+    printf("Enter Grade: ");
+    scanf("%f", &s.grade);
+
+    enqueue(s);
+    printf("Student added successfully!\n");
 }
 
+void fileAddStudent() {
+    FILE *fp = fopen("students.txt", "r");
+    if (!fp) {
+        printf("File not found!\n");
+        return;
+    }
 
+    Student s;
+    while (fscanf(fp, "%d %s %s %f", 
+                  &s.roll, s.fname, s.course, &s.grade) != EOF) {
+        enqueue(s);
+    }
 
-/*      Option(5): Finds student details by course ID       */
-void findDC(FIFO_Buf_t *FIFO)
-{
-
+    fclose(fp);
+    printf("Students loaded from file!\n");
 }
 
+void findDR() {
+    int roll;
+    printf("Enter Roll Number: ");
+    scanf("%d", &roll);
 
-
-/*      Option(6): Finds the total number of students       */
-void findTOT(FIFO_Buf_t *FIFO)
-{
-
+    for (int i = q.front; i <= q.rear; i++) {
+        if (q.data[i].roll == roll) {
+            printf("Found: %s | %s | %.2f\n",
+                   q.data[i].fname,
+                   q.data[i].course,
+                   q.data[i].grade);
+            return;
+        }
+    }
+    printf("Student not found!\n");
 }
 
+void findDN() {
+    char name[50];
+    printf("Enter First Name: ");
+    scanf("%s", name);
 
-
-/*      Option(7): Deletes student details by role number       */
-void RDelete(FIFO_Buf_t *FIFO)
-{
-
+    for (int i = q.front; i <= q.rear; i++) {
+        if (strcmp(q.data[i].fname, name) == 0) {
+            printf("Found Roll: %d | Course: %s | Grade: %.2f\n",
+                   q.data[i].roll,
+                   q.data[i].course,
+                   q.data[i].grade);
+        }
+    }
 }
 
+void findDC() {
+    char course[50];
+    printf("Enter Course: ");
+    scanf("%s", course);
 
-
-/*      Option(8): Updates student details by role number       */
-void RUpdate(FIFO_Buf_t *FIFO)
-{
-
+    for (int i = q.front; i <= q.rear; i++) {
+        if (strcmp(q.data[i].course, course) == 0) {
+            printf("%d | %s | %.2f\n",
+                   q.data[i].roll,
+                   q.data[i].fname,
+                   q.data[i].grade);
+        }
+    }
 }
 
+void findTOT() {
+    if (isEmpty()) {
+        printf("Total students: 0\n");
+    } else {
+        printf("Total students: %d\n", q.rear - q.front + 1);
+    }
+}
 
+void RDelete() {
+    int roll;
+    printf("Enter Roll to delete: ");
+    scanf("%d", &roll);
 
-/*      Option(9): Shows information for all students in the list       */
-void SShow(FIFO_Buf_t *FIFO)
-{
+    for (int i = q.front; i <= q.rear; i++) {
+        if (q.data[i].roll == roll) {
+            for (int j = i; j < q.rear; j++) {
+                q.data[j] = q.data[j + 1];
+            }
+            q.rear--;
+            printf("Deleted successfully!\n");
+            return;
+        }
+    }
+    printf("Student not found!\n");
+}
 
+void RUpdate() {
+    int roll;
+    printf("Enter Roll to update: ");
+    scanf("%d", &roll);
+
+    for (int i = q.front; i <= q.rear; i++) {
+        if (q.data[i].roll == roll) {
+            printf("Enter new name: ");
+            scanf("%s", q.data[i].fname);
+
+            printf("Enter new course: ");
+            scanf("%s", q.data[i].course);
+
+            printf("Enter new grade: ");
+            scanf("%f", &q.data[i].grade);
+
+            printf("Updated successfully!\n");
+            return;
+        }
+    }
+    printf("Student not found!\n");
+}
+
+void SShow() {
+    if (isEmpty()) {
+        printf("No students available.\n");
+        return;
+    }
+
+    printf("\n--- Student List (FIFO) ---\n");
+    for (int i = q.front; i <= q.rear; i++) {
+        printf("Roll: %d | Name: %s | Course: %s | Grade: %.2f\n",
+               q.data[i].roll,
+               q.data[i].fname,
+               q.data[i].course,
+               q.data[i].grade);
+    }
 }

@@ -4,11 +4,11 @@
 //Unit5
 
 #include "queue.h"
-FIFO_Buf_t Data;
+
 int main()
 {
     /*      Selection is for the user input and Exit condition is for condition 10      */
-    char selection, exitCondition=0;
+    int selection, exitCondition=0;
 
     /*      Starting statement. Only performed once on boot up      */
     printf("Welcome to the Student Management System\n");
@@ -28,37 +28,37 @@ int main()
         printf("Choose the task that you want to perform: ");
 
         /*      Gets the user's selected number     */
-        gets(selection);
+        scanf("%d", &selection);
         switch (selection)
         {
-            case '1':
-            fileAddStudent(&Data);
+            case 1:
+            fileAddStudent();
             break;
-            case '2':
-            ManualAddStudent(&Data);
+            case 2:
+            ManualAddStudent();
             break;
-            case '3':
-            findDR(&Data);
+            case 3:
+            findDR();
             break;
-            case '4':
-            findDN(&Data);
+            case 4:
+            findDN();
             break;
-            case '5':
-            findDC(&Data);
+            case 5:
+            findDC();
             break;
-            case '6':
-            findTOT(&Data);
+            case 6:
+            findTOT();
             break;
-            case '7':
-            RDelete(&Data);
+            case 7:
+            RDelete();
             break;
-            case '8':
-            RUpdate(&Data);
+            case 8:
+            RUpdate();
             break;
-            case '9':
-            SShow(&Data);
+            case 9:
+            SShow();
             break;
-            case '10':
+            case 10:
             printf("=====Thank you for using the Student Queue management System====");
             exitCondition = 1;
             break;
