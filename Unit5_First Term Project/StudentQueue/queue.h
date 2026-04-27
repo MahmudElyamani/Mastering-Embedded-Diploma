@@ -4,8 +4,6 @@
 #ifndef QUEUE_H_
 #define QUEUE_H_
 
-
-
 /*      User Definition        */
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,26 +11,43 @@
 
 #define MAX 100
 
-typedef struct {
+/* -------- Student Structure -------- */
+typedef struct
+{
     int roll;
-    char fname[50];
-    char course[50];
-    float grade;
-} Student;
+    char firstName[50];
+    char lastName[50];
+    float GPA;
+    int courses[5];
+} Student_info_t;
 
-typedef struct {
-    Student data[MAX];
-    int front;
-    int rear;
-} Queue;
+/* -------- FIFO Buffer Structure -------- */
+typedef struct
+{
+    int length;
+    int count;
+    Student_info_t *base;
+    Student_info_t *head;
+    Student_info_t *tail;
+} FIFO_Buf_t;
 
-/* Core queue operations */
-void initQueue();
-int isEmpty();
-int isFull();
-void enqueue(Student s);
-void dequeue();
+/* -------- FIFO Status -------- */
+typedef enum
+{
+    FIFO_NO_ERROR,
+    FIFO_FULL,
+    FIFO_EMPTY,
+    FIFO_NULL
+} FIFO_Status_t;
 
+/* -------- FIFO APIs -------- */
+FIFO_Status_t FIFO_Init(FIFO_Buf_t *fifo, Student_info_t *buffer, int length);
+FIFO_Status_t FIFO_Enqueue(FIFO_Buf_t *fifo, Student_info_t item);
+FIFO_Status_t FIFO_Dequeue(FIFO_Buf_t *fifo, Student_info_t *item);
+FIFO_Status_t FIFO_IsFull(FIFO_Buf_t *fifo);
+
+/* -------- Global Buffer -------- */
+extern FIFO_Buf_t gBuffer;
 
 /*      Function Declaration        */
 

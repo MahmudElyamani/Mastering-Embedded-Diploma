@@ -5,8 +5,15 @@
 
 #include "queue.h"
 
+//set up buffer address
+Student_info_t Buffer[50];
+
+//global buffer
+FIFO_Buf_t gBuffer;
+
 int main()
 {
+    FIFO_Init(&gBuffer,Buffer,50);
     /*      Selection is for the user input and Exit condition is for condition 10      */
     int selection, exitCondition=0;
 
