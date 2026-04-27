@@ -7,6 +7,7 @@ OBJ = $(SRC:.c=.o)
 As = $(wildcard *.s)
 AsOBJ = $(As:.s=.o)
 Project_name = PressureSystem
+Linker_Script = linkerscript
 all: $(Project_name).hex
 	@echo "=======================Compiling Done============================="
 
@@ -17,7 +18,7 @@ all: $(Project_name).hex
 	$(CC)gcc.exe $(CFLAGS) $(INCS) $(LIBS) -c -std=c99 $< -o $@
 
 $(Project_name).elf: $(OBJ) $(AsOBJ)
-	$(CC)ld.exe -T linker_script.ld -Map=Map_file.map $(LIBS) $(OBJ) $(AsOBJ) -o $@
+	$(CC)ld.exe -T $(Linker_Script).ld -Map=Map_file.map $(LIBS) $(OBJ) $(AsOBJ) -o $@
 
 $(Project_name).hex: $(Project_name).elf
 	$(CC)objcopy.exe -O binary $< $@
