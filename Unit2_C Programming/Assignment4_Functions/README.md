@@ -3,7 +3,7 @@
 
 ## Runtime Screenshots
 
-Below are the execution screenshots demonstrating the Array/String assignment operations:
+Below are the execution screenshots demonstrating the C Functions assignment operations:
 
 ### Example 1
 ![Operation 1](./OperationImages/ex1.PNG)

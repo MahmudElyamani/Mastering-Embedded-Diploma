@@ -37,5 +37,5 @@ int main()
     printf("Enter information for the 2st Distance: \n");
     y = GetDistance(y);
     z= AddDistance(x,y);
-    printf("Sum of distances = %d'-%.2f",z.feet,z.inches);
+    printf("Sum of distances = %d'%.2f''",z.feet,z.inches);
 }

@@ -24,6 +24,7 @@ struct SStudent displaystudent(struct SStudent x)
     printf("Name: %s\n",x.name);
     printf("Roll: %d\n",x.roll);
     printf("Marks: %.2f",x.marks);
+    return x;
 }
 
 int main()
@@ -34,4 +35,5 @@ int main()
     printf("\n");
     printf("Displaying Information: \n");
     displaystudent(x);
+    return 0;
 }

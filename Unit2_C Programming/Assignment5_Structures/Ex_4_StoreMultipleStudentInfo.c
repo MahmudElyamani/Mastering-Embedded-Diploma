@@ -30,10 +30,10 @@ int main()
 {
     struct SStudent students[10];
     printf("Enter information of students: \n");
-    for (int i=0; i<10; i++)
+    for (int i=0; i<3; i++)
     students[i] = GetStudent(students[i]);
     printf("\n");
     printf("Displaying information of students: \n");
-    for (int i=0; i<10; i++)
+    for (int i=0; i<3; i++)
     DispStudent(students[i]);
 }
