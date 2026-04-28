@@ -1,30 +1,30 @@
 
-# Assignment 1: Variables - Operation Images
+# Assignment 3: Arrays/Strings - Operation Images
 
 ## Runtime Screenshots
 
-Below are the execution screenshots demonstrating the variables assignment operations:
+Below are the execution screenshots demonstrating the Array/String assignment operations:
 
-### Screenshot 1
+### Example 1
 ![Operation 1](./OperationImages/ex1.PNG)
 
-### Screenshot 2
+### Example 2
 ![Operation 2](./OperationImages/ex2.PNG)
 
-### Screenshot 3
+### Example 3
 ![Operation 3](./OperationImages/ex3.PNG)
 
-### Screenshot 4
+### Example 4
 ![Operation 4](./OperationImages/ex4.PNG)
 
-### Screenshot 5
+### Example 5
 ![Operation 5](./OperationImages/ex5.PNG)
 
-### Screenshot 6
+### Example 6
 ![Operation 6](./OperationImages/ex6.PNG)
 
-### Screenshot 7
+### Example 7
 ![Operation 7](./OperationImages/ex7.PNG)
 
-### Screenshot 8
+### Example 8
 ![Operation 8](./OperationImages/ex8.PNG)

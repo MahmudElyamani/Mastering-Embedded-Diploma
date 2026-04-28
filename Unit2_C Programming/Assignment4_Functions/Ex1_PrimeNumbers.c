@@ -27,11 +27,14 @@ int main()
     int n1,n2;
     printf("Enter two numbers: ");
     scanf("%d %d",&n1,&n2);
-    printf("Prime numbers between %d and %d are: ",n1,n2);
+    printf("Prime numbers between %d and %d are: \n",n1,n2);
+    printf("( ");
     for (; n1<=n2; n1++)
     {
         if(isprime(n1) == 1)
         printf("%d ",n1);
     }
+    printf(")");
+    return 0;
 }
 
