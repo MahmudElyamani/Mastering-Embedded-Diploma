@@ -9,7 +9,7 @@ int main()
     printf("Input the %d numbers of the array: \n",aSize);
     for(i=0; i<aSize; i++)
     {
-        printf("element-%d: ",i+1);
+        printf("element(%d): ",i+1);
         scanf("%d",p);
         p++;
     }
@@ -17,6 +17,6 @@ int main()
     for(i=0; i<aSize; i++)
     {
         p--;
-        printf("element-%d : %d\n",i,*p);
+        printf("element(%d) : %d\n",i,*p);
     }
 }
