@@ -6,10 +6,10 @@
 
 ## 📖 Completed Units
 
-* [📘 Unit 2: C Programming](./Unit2_C_Programming)
-* [📘 Unit 3: Embedded C](./Unit3_Embedded_C)
-* [📘 Unit 4: System Architecture](./Unit4_System_Arch)
-* [📘 Unit 5: First Term Project](./Unit5_First_Term_Project)
+* [📘 Unit 2: C Programming](./Unit2_C\*Programming)
+* [📘 Unit 3: Embedded C](./Unit3_Embedded\*C)
+* [📘 Unit 4: System Architecture](./Unit4_System\*Arch)
+* [📘 Unit 5: First Term Project](./Unit5_First\*Term\*Project)
 
 ---
 
