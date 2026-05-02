@@ -1,0 +1,125 @@
+--- ✄ --------- 2026.04.30 12:22 -------------------
+TRM(technical reference manual) is what describes your MCU architecture.
+
+What is an embedded systems and how is it any different from a computer?:
+• An embedded system is a special_puropse computing system designed to perform one or few dedicated functions.
+• Embedded systems have real-time computing constraints as well as power constraints unlike computers which don't really have any.
+• In contrast, a general purpose computer can do many different tasks depending on the program.
+
+Moore's Law: States that the density of transistors in an IC will double every 2 years for the same size of IC
+
+Difference between IC, MCU, SOC, MPU, ECU?:
+• Integrated circuit (IC) is a single chip which has a set of electronic circuits, these electronic circuits are designed using
+  transistors which can act as a resistor, inductor or capacitor depending on the desing.
+  a simple example of an IC is 555-IC-timer which generates pulses depending on its input and how they interact with its electronics.
+  Microprocessors, Microcontrollers, SoCs and components like RAM and ROM are also made of IC's.
+• Central processing unit (CPU) consists of Arithmetic logic unit (ALU) which performs calculations and decisions, control unit (CU)
+• Microcontroller (MCU) is an IC which consists of CPU and other components like RAM, ROM and i/o ports
+  It can be treated as a small computer on a single IC containing a processor, core, memory, and programmable i/o peripherals.
+  In the past (around 2003) we used to have a differnt IC for each of the MCU parts like RAM, MPU and memory, and they would all be formed
+  together to make up the microcontroller, now everything is on the same chip which promotes ease of use and efficiency.
+  which coordinates processing steps, and registers which are small, fast storage areas for instructions and data.
+• Microprocessors (MPU) is an integrated circuit which can perform arithmetic and logical operations.
+• Co-processors such as GPU and DSP assist the CPU with some of the processing functions but they're not primary for the system.
+• System on chips (SOC) is a high performance microcontroller that includes a secondary core such as GPU or DSP and could include
+  another cluster of a CPU, meaning that a SOC could include more than 1 CPU as well as other co-processors like GPU.
+  For example a phone or a tablet or even a raspberry pi could be considered an SOC but an Atmega328 is considered an MCU.
+  In other words a SOC is a more powerful alternative for a MCU, not all MCU are SOC's but all SOC's are MCU's.
+
+
+How does a CPU execute instructions such as add(r3,r1,r2)?:
+• First thing the program counter (PC) points to he address of the instruction and Fetches_ it to memory
+• Next the processor Decodes_ the instruction to determine its function and the program counter now points to the next address.
+• The ALU now Executes_ the add function and outputs it onto the general purpose registers
+
+-The video then discusses different SOC architectures from raspberryPi to renesas until (1:45:00)
+--- ✄ --------- 2026.04.30 15:52 -------------------
+
+--- ✄ --------- 2026.05.02 09:00 -------------------
+**Assignment: Find and identify the MCU present within each of these development boards:
+( Renesas R-Car Starter kit, Rasbperry Pi, Amit development board, STM32F103C6, TivaC Develpment board)
+Bonus: Download the TRM (Technical Reference Manual) for each of them and note difference between their MCU schematic map
+
+What is ECU (Electrical Control Unit)?:
+• when you take out the SOC from its development board and use it in a seperate board that has sensors and actuators that's an ECU.
+• It is mainly a term preserved for the automotive industry as there are many ECU modules for different parts of the vehicle.
+• An ECU can have one or more MCU each one for a different reason, it doesn't have to be just 1 MCU per ECU.
+
+-There's an image at 2:00:00 that summarizes the past 2 hours of the video in one panel (Very important for time)
+
+What is Cache Memory?:
+• Is a high speed type of memory, the closest memory to the CPU registers followed by the main memory and the secondary memory.
+• It holds less information than the main memory and the secondary memory but is quicker in its operation.
+• it's integerated within the chip unlike the secondary memory which is an attachment part.
+
+Why do we need Cache memory instead of just communicating with hard drive?:
+• The CPU speed is very high, it has a refresh rate of up to 1GHZ meaning that it can perform 1 billion operations at a time,
+  whereas the HDD (Hard Drive Disk) can transfer data at rates of 150 MBPS which is far too slow for the CPU's capabilities.
+• In order to compat this issue we added a middle communication point called the Main Memory, (RAM, DDR3 or DDR4) which has a much
+  higher rate of information transfer (1600 MHZ) and can send and recieve information for the CPU directly.
+• However most modern CPU's operate at more than 1 core, some operate at 4 or more cores, and to communicate with all 4 cores
+  we had to include another memory management system called the Cache_Memory
+• There are different types of cached memory, L1, L2 and L3 cached memory as example, each one deals with information quicker and
+  each holds a different capacity of information at a time.
+• We use L1 cached memory within every core, then L2 per every 2 L1 cached memory, L2 is located outside the core but within the same
+  chip, then L3 per every L2 cached memory, L3 cahe is located outside the chip and is included within the motherboard.
+• Then the RAM communicates with the L3 cached memory all together instead of communicating with each core on its own.
+• This system could be like this or it could be different depending on the company.
+
+What is a Memory Protection Unit?:
+• Memory protection unit, also referred to as MPU, is another gateway between the main memory (RAM) and cached memory.
+• its purpose is to tell the ram which position of the memory is secure to access and which is not.
+• Its also used to manage memory operations between two differnet OS's where a system might have Linux and RtoS and we don't want
+  one's information to unintentionally go to the other, so we use MPU to direct information properly.
+
+What is a Memory Management Unit? (MMU):
+• Memory management Unit (MMU) is responsible for the transactions between virtual memory and physical memory.
+• meaning that when I want to run a program that requires 8GB of ram and I only have 1GB ram available, the 8GB is presented as
+  virtual memory and 1 GB is the physical memory.
+• The MMU takes the virtual memory part by part and maps it to the physical memory once at a time so that the operation succeeds.
+• If a MCU architecture includes an MMU that means it can definitely run Linux, this gives an advantage when picking an MCU.
+
+
+Explain different types of memory in embedded systems:
+• The primary memory in any embedded system consists of 3 parts, RAM, ROM and Hybrid memory
+• Ram memory consists of dynamic memory (DRAM) and static memory (SRAM).
+  -> also known as read-write memory.
+  -> data at any memory location can be read or written.
+  -> Retains information as long as electricity is on.
+• Rom memory consists of EPROM, PROM and masked EPROM.
+  -> Read only memory.
+  -> Data at any location can only be read. 
+• Hybrid memory consists of NVRAM, FLASH, EEPROM
+  -> Data can be read and writter
+  -> its content are non-volatile, they don't erase when it loses power.
+
+
+What's the difference between SRAM and DRAM?:
+• SRAM consists of transistors per cell, stores information in cells made of flip-flops, it is used to create speed sensitive cache,
+  it has medium power consumption, it is expensive and more complex compared to DRAM.
+• DRAM consists of 1 transistor and 1 capacitor per cell, lower price than SRAM, while its being refreshed its data could not
+  be accessed, larger in size than SRAM
+-Mircocontrollers are always based on SRAM because it has much lower power consumption, PCs are based on DRAM because of lower cost.
+
+What's the difference between PROM, EPROM, EEPROM?:
+• PROM is programmable ROM, user can store programs once, making a program in PROM is called "Burning", example: CD-R.
+• EPROM is erasable PROM, information can be removed and written by UV, cheaper than PROM as it is reusable, example CD(RW).
+• EEPROM is elecricaly erasable PROM, information can be removed by electrical signals, used to store BIOS in memory, ex: Pen Drive.
+
+
+Compare between CISC and RISC:
+• CISC is a complex instruction set computer, has many formats.
+• RISC is a small instruction set , most used 1 cycle per insturction.
+
+**Assignment: write a paper with your own hand writing explaing in it the meaning of:
+(Micro-processor, Micro-controller, Embedded-Systems, Mechatronic systems, n-bit processor) and upload them to google drive.
+also in another paper write a comparison table between:
+• Micro-processor vs Micro-controller
+• Von-Neuman vs Harvard Architecture
+• Different types of ROM
+• Different types of RAM
+-Why is ROM read only memory although I can write on it?
+-Make a table of comparison between all types of memory in terms of volatile or not, speed, cost, etc..
+
+--- ✄ --------- 2026.05.02 14:59 -------------------
+
