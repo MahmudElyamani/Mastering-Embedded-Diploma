@@ -14,11 +14,11 @@ Difference between IC, MCU, SOC, MPU, ECU?:
   a simple example of an IC is 555-IC-timer which generates pulses depending on its input and how they interact with its electronics.
   Microprocessors, Microcontrollers, SoCs and components like RAM and ROM are also made of IC's.
 • Central processing unit (CPU) consists of Arithmetic logic unit (ALU) which performs calculations and decisions, control unit (CU)
+  which coordinates processing steps, and registers which are small, fast storage areas for instructions and data.
 • Microcontroller (MCU) is an IC which consists of CPU and other components like RAM, ROM and i/o ports
   It can be treated as a small computer on a single IC containing a processor, core, memory, and programmable i/o peripherals.
   In the past (around 2003) we used to have a differnt IC for each of the MCU parts like RAM, MPU and memory, and they would all be formed
   together to make up the microcontroller, now everything is on the same chip which promotes ease of use and efficiency.
-  which coordinates processing steps, and registers which are small, fast storage areas for instructions and data.
 • Microprocessors (MPU) is an integrated circuit which can perform arithmetic and logical operations.
 • Co-processors such as GPU and DSP assist the CPU with some of the processing functions but they're not primary for the system.
 • System on chips (SOC) is a high performance microcontroller that includes a secondary core such as GPU or DSP and could include
@@ -56,7 +56,7 @@ Why do we need Cache memory instead of just communicating with hard drive?:
 • The CPU speed is very high, it has a refresh rate of up to 1GHZ meaning that it can perform 1 billion operations at a time,
   whereas the HDD (Hard Drive Disk) can transfer data at rates of 150 MBPS which is far too slow for the CPU's capabilities.
 • In order to compat this issue we added a middle communication point called the Main Memory, (RAM, DDR3 or DDR4) which has a much
-  higher rate of information transfer (1600 MHZ) and can send and recieve information for the CPU directly.
+  higher rate of information transfer (1600 MHZ) and can send and recieve information to the CPU directly.
 • However most modern CPU's operate at more than 1 core, some operate at 4 or more cores, and to communicate with all 4 cores
   we had to include another memory management system called the Cache_Memory
 • There are different types of cached memory, L1, L2 and L3 cached memory as example, each one deals with information quicker and
@@ -122,4 +122,3 @@ also in another paper write a comparison table between:
 -Make a table of comparison between all types of memory in terms of volatile or not, speed, cost, etc..
 
 --- ✄ --------- 2026.05.02 14:59 -------------------
-
