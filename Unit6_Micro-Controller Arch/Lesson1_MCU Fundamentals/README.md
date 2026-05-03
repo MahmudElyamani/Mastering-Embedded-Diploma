@@ -8,7 +8,7 @@ Answers to the assignments given in the lesson are shown as follows:
 ![Operation 1](./Assignment_Images/ex1.jfif)
 
 ### Assignment 2
-![Operation 1](./Assignment_Images/ex2.jfif)
+![Operation 1](./Assignment_Images/ex3.jfif)
 
 ### Assignment 3
-![Operation 1](./Assignment_Images/ex3.jfif)
+![Operation 1](./Assignment_Images/ex2.jfif)
