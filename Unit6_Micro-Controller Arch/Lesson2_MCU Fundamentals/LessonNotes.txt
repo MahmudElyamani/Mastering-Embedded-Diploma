@@ -1,0 +1,30 @@
+--- ✄ --------- 2026.05.04 08:33 -------------------
+Elaborate the difference between port-mapped I/O and memory mapped I/O:
+• Port mapped I/O requires special instructions, the memory address space and the I/O device address space are independent of
+  each other, for example, Intel x86 processors use IN and OUT instructions to read or write to a port.
+• Memory mapped I/O is what we use in embedded systems, doesn't require special instructions, The memory and I/O devices share
+  the same address.
+
+-If a system bus is 32 bit, that means the CPU can issue transaction to 2^32 of different address (4GB)
+
+Write 1 on pin 16 on ODR register using:
+1. Numeric memory address directly.
+2. Casting an address to a pointer.
+3. Casting to a pointer and then dereferencing it.
+4. Use structure, union and pointer for one register.
+5. Use structures and pointer for all registers in a GPIO peripheral
+** You'll find example code fo each within this file
+
+What's the difference between Bit, Byte, Halfword, Word, Double-word and Nibbles?:
+• A nibble is a group of 4 bits.
+• 1 byte is 8 bits
+• Halfword is 2 bytes or 16 bits
+• a Word has 4 bytes or 32 bits.
+• a double word has 8 bytes or 64 bits
+
+What's the difference between Little Endian and Big Endian?:
+• In little endian the low-order byte is stored in the lowest address and the high order byte in the highest address (from bottom up).
+• In Big endian the low-order byte is stored in the highest address and the high-order byte in the lowest address (from top to bottom).
+
+--- ✄ --------- 2026.05.04 15:58 -------------------
+
