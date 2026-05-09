@@ -6,21 +6,21 @@ SRC = $(wildcard *.c)
 OBJ = $(SRC:.c=.o)
 As = $(wildcard *.s)
 AsOBJ = $(As:.s=.o)
-all: learn-in-depth_cortexM4.hex
+ProjectName = LedBlink
+all: $(ProjectName).bin
 	@echo "=======================Compiling Done============================="
 
 %.o: %.s
 	$(CC)as.exe $(CFLAGS) $< -o $@
 
 %.o: %.c
-	$(CC)gcc.exe $(CFLAGS) $(INCS) $(LIBS) -c -std=c99 $< -o $@
+	$(CC)gcc.exe -std=c99 -c $(CFLAGS) $(INCS) $< -o $@
 
-learn-in-depth.elf: $(OBJ) $(AsOBJ)
+$(ProjectName).elf: $(OBJ) $(AsOBJ)
 	$(CC)ld.exe -T linker_script.ld -Map=Map_file.map $(LIBS) $(OBJ) $(AsOBJ) -o $@
 
-learn-in-depth_cortexM4.hex: learn-in-depth.elf
+$(ProjectName).bin: $(ProjectName).elf
 	$(CC)objcopy.exe -O binary $< $@
-
 
 clear:
 	rm *.o *.elf *.hex
