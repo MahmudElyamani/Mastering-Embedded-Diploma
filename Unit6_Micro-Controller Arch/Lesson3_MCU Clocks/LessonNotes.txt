@@ -1,0 +1,73 @@
+--- ✄ --------- 2026.05.05 11:33 -------------------
+-Clocks are the beating heart of every digital circuit found inside any IC
+
+-Digital circuits must all sync with one another using clocks so that operations are step by step
+
+-Any microcontroller must have a clock in order to function, that's why clocks are considered the heart of the IC
+
+-Clocks are used by the core and by the periphrals
+
+-When the frequency of a clock increases, its power consumbtion is also increased. That's why there are power management unit modules 
+ on some SOC's specifically designed to turn off the clock or decrease its frequency during stand-by or low power mode.
+-A periphral with a slow clock uses the least amount of power.
+
+-In most MCU's there's a clock management unit that governs the clock of every periphral so that the power consumbtion is managed.
+
+-The clock_source is the part responsible for generating the clock, it could be located within the MCU or outside of it depending
+ on the MCU, this is also known as a "Crystal Oscillator".
+
+What to look for in a datasheet when opening the clock segment?:
+• first check the MCU module diagram for the word clock and see what its called, in STM32 manual you'll see it's RCC
+• Next from the table of context open the RCC page and locate your exact MCU, e.g STM32F103X
+• Identify the types of clock sources it has, e.g HSI oscillator clock, HSE oscillator clock, PLL clock.
+• Open the RCC registers and look at its different pirephrals, e.g clock control register (RCC_CR)
+• in STM32 the PLL clock is what runs the system clock and cannot be turned off, but if we want to turn it off we can oder the 
+  HSI timer to run the system clock then turn off the PLL.
+• The RCC clock in the STM is connected to the AHB bus according to the MCU diagram, so to find its base address we must open the
+  memory map and locate RCC and we'll find its address range.
+• we can find the registers of RCC next to it in sections and it'll lay out a map of every RCC pirephral.
+
+-Some MCU have both internal and external clocks, in order to pick which one to operate from you have to manipulate the register.
+
+What's the clock tree diagram?:
+• a diagram that shows the connections of internal and external clocks as well as the speeds of each.
+• this lets you understand each protocol's speed and how does it get its speed.
+• for example in the STM32 Trm the external oscilator is connected to HSE which accepts a 4-16MHZ crystal, that signal is
+  given to the user as an option and is alos divided by 2 and passed through PLL which allows you to multiply it by x3, x4,...,x16
+  to access different frequencies.
+• you'll also find in the diagram that the maximum frequency you can output is 72MHz so that's something to keep in mind when using
+  the PLL multiplier and choosing the external crystal frequency.
+• There's also an internal clock that resonates at 8MHZ called HSI connected to the bus as an option.
+• this distinction is important because this allows you to choose which frequency you like based on the firmware you write.
+* You can view the clock diagram in a cleaner and more interactive way within the "STM32CubeIDE" that lets you manipulate time.
+
+if you take a look back at the MCU diagram you'll find that the AHB bus operates at 72MHZ, but the APB1 bus is at 24/36 MHZ, why?:
+• According to the clock tree, the 72 MHZ clock frequency went through a pre-scaler through AHB that divides the frequency.
+• each clock and timer is shown in the clock diagram that shows why each clock is that quick.
+• these pre-scalers exist to optimize power consumbtion, as not all pirephrals need high speeds to operate.
+
+
+**LAB1 use Keil uVision to run a simple blink code on the STM32F103C6 with and without enabling the GPIOA register:
+• check pirephral clock values and timer values through keil uVision and make sure they're correct for your code.
+• check the duty cycle of the wave after enabling the register.
+• check the proteus simulation using an oscilloscope.
+
+
+**LAB2 configure the STM32 board to run with the following rates:
+• APB1 Bus frequency 4MHZ
+• APB2 Bus frequency 2MHZ
+• AHB Bus frequency 8MHZ
+• SysClk 8MHZ
+• Use only internal HSI_RC
+• check on keil uVision and proteus the clock speeds and output waveform.
+
+
+**LAB3 configure the STM32 board to run with the following rates:
+• APB1 Bus frequency 16MHZ
+• APB2 Bus frequency 8MHZ
+• AHB Bus frequency 32MHZ
+• SysClk 32MHZ
+• Use only internal HSI_RC
+• check on keil uVision and proteus the clock speeds and output waveform.
+
+--- ✄ --------- 2026.05.06 10:25 -------------------

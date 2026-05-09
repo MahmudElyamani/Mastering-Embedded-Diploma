@@ -6,7 +6,7 @@ extern int main(void);
 
 void Reset_Handler();
 
-void Default_handler()
+void Default_Handler()
 {
     Reset_Handler();
 }
