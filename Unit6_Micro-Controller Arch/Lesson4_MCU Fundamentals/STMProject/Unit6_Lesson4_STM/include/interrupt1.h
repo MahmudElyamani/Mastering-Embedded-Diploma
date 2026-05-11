@@ -5,8 +5,8 @@
     writing full registers for RCC in STM32F103C6 microchip
 */
 
-#ifndef LEDBLINK_H_
-#define LEDBLINK_H_
+#ifndef INTERRUPT1_H_
+#define INTERRUPT1_H_
 
 #include <stdint.h>
 typedef volatile uint32_t vuint32_t;
@@ -25,10 +25,28 @@ typedef volatile uint32_t vuint32_t;
 #define RCC_BDCR        *(vuint32_t*)(RCC_BASE  + 0x20)     /* Backup domain control register */
 #define RCC_CSR         *(vuint32_t*)(RCC_BASE  + 0x24)     /* Control/Status register */
 
+
 /*      GPIO A      */
 #define GPIOA_BASE      0x40010800
+#define GPIOA_CRL       *(vuint32_t*)(GPIOA_BASE+ 0x00)
 #define GPIOA_CRH       *(vuint32_t*)(GPIOA_BASE+ 0x04)
 #define GPIOA_ODR       *(vuint32_t*)(GPIOA_BASE+ 0x0C)
+
+
+/*      EXTI        */
+#define EXTI_BASE       0x40010400
+#define EXTI_IMR        *(vuint32_t*)(EXTI_BASE+ 0x00)
+#define EXTI_RTSR       *(vuint32_t*)(EXTI_BASE+ 0x08)
+#define EXTI_PR         *(vuint32_t*)(EXTI_BASE+ 0x14)
+
+
+/*      AFIO        */
+#define AFIO_BASE       0x40010000
+#define AFIO_EXTICR1    *(vuint32_t*)(AFIO_BASE+ 0x08)
+
+
+/*      Arm Cortex M3 pirephrals    */
+#define NVIC_EXTI0      *(vuint32_t*)(0xE000E100)
 
 typedef union
 {
@@ -45,7 +63,7 @@ volatile R_ODR_t* R_ODR = (volatile R_ODR_t*)(GPIOA_BASE + 0x0C);
 void DelaySeconds(unsigned long i)
 {
    i = i*100000;
-   for (; i>0; i--);
+   for (i =0; i<100000; i++);
 }
 
 
