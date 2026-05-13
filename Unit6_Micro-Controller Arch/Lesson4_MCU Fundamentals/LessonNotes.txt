@@ -15,7 +15,7 @@ What is an Interrupt Service Routine (ISR)?:
 • when an interrupt occurs the microcontroller runs its respective ISR
 • each interrupt has its own address depending on the MCU, each address can be known via the interrupt vector table found in TRM.
 • All ISR's are declared as weak in the system startup code.
-• The keyword "Weak" mans that another non-weak subroutine with the same name defined elsewhere can override this one. 
+• The keyword "Weak" means that another non-weak subroutine with the same name defined elsewhere can override this one. 
 
 Explain an interrupt serviece routine operation where an internal interrupt from ADC gets handled:
 • The pirephral ADC gets an interrupt signal through to the GIC interrupt handler.
@@ -129,7 +129,7 @@ How to enable external interrupt for STM32F103XX?:
 9. by reading the interrupt mask register in the TRM we determine that we need to write 1 on bit 0 for the IMR to use line 0
 10. we enable the rising edge trigger by writing 1 on bit0 of the EXTI_RTSR register 
 11. it's good practice to configure all the other registers first before enabling the operation so try to make it last line.
-12. The pending register is unique in that it's a status register that allows the use to clear it by typing 1 to the bit.
+12. The pending register is unique in that it's a status register that allows the user to clear it by writing 1 to the bit.
 13. if the bit is not cleared after an interrupt has been made the interrupt action will keep repeating.
 14. it's necessary to clear the bit in the pending register at the end of the interrupt function execution code.
 15. in order to detemine which port do we want this line 0 signal to come from we go to the AFIO_EXTICR1 register in the GPIO tab.
@@ -148,3 +148,4 @@ What is an interrupt overload?:
 -There are some base definitions at 1:18:41 (Part 2) that go over some important terms that have been discussed.
 
 Assignment: check video at (1:19:00)
+--- ✄ --------- 2026.05.12 15:47 -------------------
