@@ -10,7 +10,7 @@
 * [📘 Unit 3: Embedded C](./Unit3_Embedded%20C)
 * [📘 Unit 4: System Architecture](./Unit4_System%20Arch)
 * [📘 Unit 5: First Term Project](./Unit5_First%20Term%20Project)
-* [📘 Unit 6: Micro-Controller Architecture](./Unit6_Micro-Controller&20Architecture)
+* [📘 Unit 6: Micro-Controller Architecture](./Unit6_Micro-Controller&20Arch)
 
 ---
 
