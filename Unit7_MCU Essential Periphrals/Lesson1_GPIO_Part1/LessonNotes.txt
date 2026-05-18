@@ -1,0 +1,115 @@
+--- ✄ --------- 2026.05.17 12:05 -------------------
+What are peripherals?:
+• Hardware devices designed to aid the CPU to accomplish a given job.
+• if they are located inside an SOC or MCU they are called an on-chip pirephral.
+• if they are located outside like a CAN protocol converter they are called off-chip peripheral
+• All on-chip peripherals are connected through the bus and communicate with the CPU throughout it.
+
+-It is important to know which peripheral exists on the chip and which off the chip because it matters when writing to the abstraction
+layer MCAL and ECU which one would read from which
+
+What is GPIO?:
+• GPIO stands for general purpose input outpus, they include all of the pins coming out of the MCU.
+• Their basic functionality include setting pins as input/output, reading voltage from input pins, setting voltage to output pins.
+• they can also be programmed in some cases to other peripherals such as ADC and DAC to serve other functions.
+
+-Most kits or ECU use an MCU developed by some other company, this MCU is designed as general purpose not for one specific case
+and so it could have more than 10 GPIO ports but the kit would only have 4 and use the rest for some other reason or not use them at all.
+Not because it exist in the TRM of the MCU means that it exists on the kit you're using.
+
+-Most MCU use a configuration system for the GPIO pins making the pin programmable to choose between different functionalities.
+for instance it could be a UART_TX or CAN_TX or ADC or input or output depending on what the user desires.
+-The reason why there aren't seperate individual pins for these modules is mostly because of cost and convenience, as you'd have to
+increase the number of pins significantly to support each module wich would increase cost + it's more convenient for the user to
+choose the functionality of the pin himself.
+
+How does GPIO store input and write outputs?:
+• when GPIO pin x is set as a digital input, the binary read from this pin of this GPIO group is saved at bit i in the data
+  register (IDR). Each bit in IDR holds the digital input of the corresponding pin.
+• when GPIO pin i is configured as a digital output, bit i in the output data register (ODR) holds the output of this pin, the
+. the programmer should only alter the value of the corresponding bit of (ODR) without affecting other bits in ODR
+
+Explain the inner structure of a GPIO pin's digital design:
+• for most cases, a GPIO pin consists of an input buffer, an output buffer and an enable line connected to them.
+• the output buffer consists of two transistors in series, one P type and one N type, between them connects the GPIO output pin.
+• the transistors are connected between VCC and GND and their gates connected to the control signal from the enable line.
+• the Input buffer is the same as the output buffer but its direction is the opposite
+
+
+Explain the 2 types of GPIO output modes:
+• GPIO push-pull output allows the pin to absorb or supply current by writing to the GPIO register either 0 or 1.
+  when writing 0 to the GPIO bit in the register, the controller that governs the buffer circuit of the pin inverts the signal
+  to output 1 to the enable line.
+  this would cause the PMOS connected to VCC to be open circuit and the NMOS connected to GND to be short circuit.
+  since the GPIO pin output is connected in between them this would cause the GPIO pin to connect to GND making it logic 0.
+  The opposite happens when you write 1 to the GPIO register making the pin output connected to VCC.
+• GPIO open drain output makes the pin operate either as a GND pin or FLOATING pin making it neither ground nor vcc.
+  This happens by disabling the PMOS transistor entirely making the circuit only consisting of NMOS transistor connected to GPIO pin
+  when 0 is written to the register pin the controller inverts it to 1 shorting the mosfets's gate-drain connection and connecting
+  the GPIO pin output to GND.
+  when 1 is written to the register pin the controller inverts it to 0 opening the mosfet's gate, this makes the output pin not
+  connected to anything as in it's not a valid path to absorb or recieve current making the pin un-usable.
+--- ✄ --------- 2026.05.17 15:23 -------------------
+
+--- ✄ --------- 2026.05.18 08:25 -------------------
+What is one of the most important usages of open-drain outputs?:
+• By connecting multiple open-drain outputs together to the same pin, and then connecting it to VCC through a resistor you can
+  implement a logic AND gate.
+• all registers are written to 0 by default so the output pin is connected to GND through every open-drain output pin.
+• Since there's path between VCC and ground the open-drain pins works as a drain and the output becomes logic 0.
+• once all connected open drain pins are written to 1 then there will be no valid path to ground and VCC will pass through the output.
+
+**This idea of using open-drain pins as and gates is what made the basis of I2C bus as the data pin (SDA) and the clock pin (SCL) must
+both be open-drain pins so that in normal state when the I2C starts the SDA and SCL lines are connected to pull up resistors to VCC
+and no reading or writing happens to the MCU which is due to the pins being in float state.
+
+**Push-pull output is best when using a communication interface that has a single direction line such as SPI or UART. as both of them
+have a TX and RX line.
+
+What's the difference between push-pull output and open-drain output?:
+• open-drain output is used for communication protocol where multiple devices are connected to the same bus such as I2C.
+• Push-pull output is best when using a communication interface that has a single direction line such as SPI or UART. as both of them
+  have a TX and RX line.
+• Open-drain mode has a higher consumbtion than push-pull output mode due to the use of 1 or more pull up resistors.
+• The logic change in case of Push-pull output is faster than open-drain output 
+
+Explain the working operation on an input pin circuit:
+• consists of 1 input buffer  as opposed to 2 in the case of output buffer.
+• The input buffer is built exactly the same as the output buffer except in reverse order.
+• when a logic 1 is recieved through the pin, the controller inverts it to 0 through the PMOS and NMOS gates.
+• the NMOS gate is open while the PMOS which is connected to VCC is shorted creating a path between VCC and the IDR register.
+• The opposite happens when there's a logic 0 on the pin shorting the register bit with GND making it render as 0.
+
+Explain 3 different cases of input modes:
+• Input pull-up mode is when you connect the input pin with VCC through a resistor either internally or externally, This would make
+  the register read 1 unless it is connected externally to GND through a push button or a switch-controlled circuit.
+• Input pull-down mode is when you connect the input pin with GND through a resistor either internally or externally, this would make
+  the register read 0 unless it is connected externally to VCC through a push button or a switch-controlled circuit.
+• High impedance mode is when the pin is connected to neither pull up nor pull down, instead it's at a float state connected to the pin.
+
+**usually high impedance state is used when making your own pull up/pull down circuit outside the MCU since sometimes the resistance
+values inside of them can be too high, and this is usually preffered by the industry.
+
+Navigation steps to accessing GPIO through the TRM of an MCU:
+• First we have to identify the GPIO ports and their bus through the MCU design diagram, for STM32 we find that it has 7 GPIO ports.
+• Notice how in TRM there's 7 GPIO ports but in STM32F103C there's only 4, that's because the TRM includes all STM32FXX family of MCU 
+  and the MCU diagram only shows how each peripheral is connected to the bus, the number of ports varies with the type of family .
+• Next we navigate through the memory map to find the bus they're on and the base addresses of each GPIO port.
+• After that we read through the functional description of the GPIO ot understand how it works (quick reading).
+• In the pin definition we can understand the functionality of every pin and what its default it and what it can be programmed as.
+• the number of pins and GPIO ports a MCU has depends also on the package type, some packages have fewer ports and some have higher.
+
+
+Explain briefly the different registers on STM32F and their functionality.:
+• GPIOx_CRL : configuration register low which controls the state of lower pins, it's important to note that the reset state of
+  this register 0x44444444 which means bit 2 of every nibble is set to 1 which corresponds to floating input, if the user wants to
+  change the floating input state to input pull-up they have to reset this bit first before writing to it otherwise it wont work.
+• GPIOx_CRH : configuration register high which controls the state of higher pins
+• GPIOx_IDR : Input data register has a register for every pin to inform the user of the pin's state, all pins are on read only mode.
+• GPIOx_ODR : Output data register which is responsible for writing to the bit logic 1 or 0.
+• GPIOx_BSRR : Bit set reset register is a write only register which can set or reset bits directly without needing to read ODR, this
+  register has the same function as ODR but is used mainly to alter ODR's values safely without causing any override issues to the register.
+• GPIOx_BRR : Bit reset register used to reset bits in ODR register without needing to read ODR, used in time sensitive scenarios.
+• GPIO_LCKR : lock configuration lock register makes the configuration on the pin un-changable after setting.
+
+--- ✄ --------- 2026.05.18 15:56 ------------------- Lesson stopped at 4:26:00
