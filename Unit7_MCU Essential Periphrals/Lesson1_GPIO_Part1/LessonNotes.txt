@@ -111,5 +111,4 @@ Explain briefly the different registers on STM32F and their functionality.:
   register has the same function as ODR but is used mainly to alter ODR's values safely without causing any override issues to the register.
 • GPIOx_BRR : Bit reset register used to reset bits in ODR register without needing to read ODR, used in time sensitive scenarios.
 • GPIO_LCKR : lock configuration lock register makes the configuration on the pin un-changable after setting.
-
---- ✄ --------- 2026.05.18 15:56 ------------------- Lesson stopped at 4:26:00
+--- ✄ --------- 2026.05.18 15:56 ------------------- 
