@@ -10,15 +10,15 @@ the binary you write on the register like in the case of TivaC.
 However sometimes it can also be mentioned all together without registers like in STM32 where it says possible alternate functions
 for the pin as I2CSD/UARTRX/CANTX. If that is the case then to choose which one you want to operate at you have to enable them
 through their own register or by enabling their clock in the clock enable register.
-
 --- ✄ --------- 2026.05.23 15:48 ------------------- 
+
 --- ✄ --------- 2026.06.01 13:42 -------------------
 -When choosing alternate pin function for CAN TX for example, we have to refer first to its recommended functionality in the TRM
 and we'll find that it's prefered to use it as an output push-pull.
 
 Explain remapping in a MCU:
 • Some peripherals within a microcontroller could be or could not be present on the MCU depending on its packaging type. for example
-  in the STM32F103C6 the periphral TIM4_ETR is tied to PE0 which is non-existant in the packaging VFQFPN36 and others but exists in
+  in the STM32F103C6 the periphral TIM4_ETR is tied to PE0 which is non-existant in the packaging VFQFPN36 but exists in
   packaging types like LFBGA100.
 • IN ORDER TO USE THESE PERIPHERALS there's a functionality that's been invented called "function remapping" as it is possible to
   remap some alternate functions to other pins.
@@ -33,12 +33,12 @@ What's the event function in alternative functions used for?:
 • The pin could be determined through the register pin number and port number configuration and enabled after.
 • when multiple MCU's are present on an ECU it is necessary to perserve power so to do that we put some MCU's to sleep.
 • If lets say for example an MCU is responsible for reading data and the other is responsible for sending information we can
-  put the CPU of the one that sends information to sleep until it reaches an event signal from the other CPU that recieves information
+  put the CPU of the one that sends information to sleep until it gets an event signal from the other CPU that recieves information
   so that it only operates truely once data has been gathered.
 • in this mode the MCU does not respond to any other actions the user takes, not even interrupts as they require the CPU to be awake and operating.
-• However when recieving this event pulse it must be through an external interrupt after enabling the event mask register through the TRM.
+• However when recieving this event pulse it must be through an external interrupt register after enabling its event mask register.
 
-What is a MCU devfice header and what does it include?:
+What is a MCU device header and what does it include?:
 • When writing a driver for an MCU you have to make a header file with the MCU's name such as STM32F103C6.h which is called device header
   this header file has all the adresses, offsets and information regarding that MCU.
 • it also contains other important stuff like base address for each module in the MCU

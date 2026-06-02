@@ -9,7 +9,7 @@ What are peripherals?:
 layer MCAL and ECU which one would read from which
 
 What is GPIO?:
-• GPIO stands for general purpose input outpus, they include all of the pins coming out of the MCU.
+• GPIO stands for general purpose input output, they include all of the pins coming out of the MCU.
 • Their basic functionality include setting pins as input/output, reading voltage from input pins, setting voltage to output pins.
 • they can also be programmed in some cases to other peripherals such as ADC and DAC to serve other functions.
 
@@ -26,7 +26,7 @@ choose the functionality of the pin himself.
 How does GPIO store input and write outputs?:
 • when GPIO pin x is set as a digital input, the binary read from this pin of this GPIO group is saved at bit i in the data
   register (IDR). Each bit in IDR holds the digital input of the corresponding pin.
-• when GPIO pin i is configured as a digital output, bit i in the output data register (ODR) holds the output of this pin, the
+• when GPIO pin i is configured as a digital output, bit i in the output data register (ODR) holds the output of this pin
 . the programmer should only alter the value of the corresponding bit of (ODR) without affecting other bits in ODR
 
 Explain the inner structure of a GPIO pin's digital design:
@@ -56,11 +56,11 @@ What is one of the most important usages of open-drain outputs?:
 • By connecting multiple open-drain outputs together to the same pin, and then connecting it to VCC through a resistor you can
   implement a logic AND gate.
 • all registers are written to 0 by default so the output pin is connected to GND through every open-drain output pin.
-• Since there's path between VCC and ground the open-drain pins works as a drain and the output becomes logic 0.
+• Since there's path between VCC and ground the open-drain pins work as a drain and the output becomes logic 0.
 • once all connected open drain pins are written to 1 then there will be no valid path to ground and VCC will pass through the output.
 
-**This idea of using open-drain pins as and gates is what made the basis of I2C bus as the data pin (SDA) and the clock pin (SCL) must
-both be open-drain pins so that in normal state when the I2C starts the SDA and SCL lines are connected to pull up resistors to VCC
+**This idea of using open-drain pins as AND gates is what made the basis of I2C bus as the data pin (SDA) and the clock pin (SCL) must
+both be open-drain pins so that in normal state when the I2C starts the SDA and SCL lines are connected to pull-up resistors to VCC
 and no reading or writing happens to the MCU which is due to the pins being in float state.
 
 **Push-pull output is best when using a communication interface that has a single direction line such as SPI or UART. as both of them
@@ -73,8 +73,9 @@ What's the difference between push-pull output and open-drain output?:
 • Open-drain mode has a higher consumbtion than push-pull output mode due to the use of 1 or more pull up resistors.
 • The logic change in case of Push-pull output is faster than open-drain output 
 
+
 Explain the working operation on an input pin circuit:
-• consists of 1 input buffer  as opposed to 2 in the case of output buffer.
+• consists of 1 input buffer as opposed to 2 in the case of output buffer.
 • The input buffer is built exactly the same as the output buffer except in reverse order.
 • when a logic 1 is recieved through the pin, the controller inverts it to 0 through the PMOS and NMOS gates.
 • the NMOS gate is open while the PMOS which is connected to VCC is shorted creating a path between VCC and the IDR register.
@@ -96,7 +97,7 @@ Navigation steps to accessing GPIO through the TRM of an MCU:
   and the MCU diagram only shows how each peripheral is connected to the bus, the number of ports varies with the type of family .
 • Next we navigate through the memory map to find the bus they're on and the base addresses of each GPIO port.
 • After that we read through the functional description of the GPIO ot understand how it works (quick reading).
-• In the pin definition we can understand the functionality of every pin and what its default it and what it can be programmed as.
+• In the pin definition we can understand the functionality of every pin and what its default is and what it can be programmed as.
 • the number of pins and GPIO ports a MCU has depends also on the package type, some packages have fewer ports and some have higher.
 
 
