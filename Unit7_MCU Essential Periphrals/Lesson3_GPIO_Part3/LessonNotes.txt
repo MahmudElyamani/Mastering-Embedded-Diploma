@@ -1,0 +1,52 @@
+--- ✄ --------- 2026.06.06 08:22 -------------------
+-This lesson discusses how to write a driver for any peripheral in a professional way.
+-Drivers don't necessarily have to include every function possible for the peripheral, it only has to cover the basic functionalities.
+as long as you're not going to need the other un-necessary peripherals it can only cover up to 80% of the functionality and still be
+a good driver.
+
+-In this session we'll be focusing on GPIO drivers and how to write them, next session will discuss external interrupt drivers.
+
+Explain the layers of bare metal software abstraction:
+• Every SOC consists of 3 layers, MCAL, HAL and application layer.
+• The MCAL (Micro-controller Abstraction Layer) covers the on-chip peripherals such as GPIO, I2C, Timers, etc.. and this layer has
+  to be modified whenever the MCU is changed or updated to be a different one.
+• The HAL (Hardware Abstraction Layer) covers every off-chip peripheral that exists within your ECU such as a keypad or an LCD and is
+  connected to the MCU through an on-chip peripheral like I2C or GPIO
+• The application layer which is the code you're writing either deals directly with your MCAL or indirectly through communicating
+. with the HAL to then communicate with the MCAL based on its needs.
+
+What is the MCU device driver?:
+• Is a header file named after the MCU you're using which has all the contents of memory map, base addresses and registers of all
+  peripherals within the SOC.
+• It is needed by every peripheral so it knows where to communicate with the CPU and other peripherals such as EXTI
+
+-To write a professional driver there are multiple ways you can go about it, some methods are standard such as autosar driver
+or can control driver.
+-We are going to be writing a professional driver that doesn't follow any standard but out file layout will have a consistent structure.
+
+Explain the basic set up for creating a driver for an MCU:
+• To start the baseline of driver writing we first have to decide on the MCU we're using, in this case it's STM32F103C6.
+• we start a new project folder that includes the source files for the driver as well as headers in a sub-folder called inc.
+• we'll name the project folder "Stm32_F103C6_Drivers" the source file "Stm32_F103C6_gpio_driver.c" and add an Inc folder.
+• Inside this inc folder we'll add 2 header files, "Stm32_F103C6_gpio_driver.h" for GPIO peripherals and "Stm32_F103x6.h" for the MCU.
+• In the project settings we can include that folder in the paths so we can include it in our code in an easier way.
+
+-When the HAL communicates with the MCAL it needs a definition for every pin, so we need to create a configuration feature for
+every pin within the MCAL header file in our code
+To do that we create something called API's inside our driver which are functions that can be seen and used by the user. In other
+words they're library functions designed to be used by the user, functions that are not in the library but are in the C file for
+other purposes are not seen by the user and therefore not API's  
+
+List some of the basic API's for the GPIO user interface:
+• MCAL_GPIO_ReadPin(), MCAL_GPIO_ReadPort()
+• MCAL_GPIO_WritePin(), MCAL_GPIO_WritePort(), MCAL_GPIO_TogglePin()
+• MCAL_GPIO_Init(), MCAL_GPIO_DeInit()
+• MCAL_GPIO_EXTI_IRQConfig, MCAL_GPIO_EXTI_IRQHandling()
+• MCAL_GPIO_LockPin()
+• These are baseline for functions needed for GPIO interface but you can add or adjust them depending on your style.
+• The API's could also include structs and enums for the user to use such as HIGH as 1 and LOW as 0, pin and port numbers, etc.
+
+-When writing a driver's API's you have to know the type of driver you're writing, it could be a general purpose driver sold by
+your company and you have to write all functionalities within it. or it could be a specific-purpose driver designed to be used
+to operate the MCU for a specific operation so all that's needed is the API's you're going to be using.
+--- ✄ --------- 2026.06.06 14:57 -------------------
