@@ -22,7 +22,7 @@ What is the MCU device driver?:
 
 -To write a professional driver there are multiple ways you can go about it, some methods are standard such as autosar driver
 or can control driver.
--We are going to be writing a professional driver that doesn't follow any standard but out file layout will have a consistent structure.
+-We are going to be writing a professional driver that doesn't follow any standard but our file layout will have a consistent structure.
 
 Explain the basic set up for creating a driver for an MCU:
 • To start the baseline of driver writing we first have to decide on the MCU we're using, in this case it's STM32F103C6.
