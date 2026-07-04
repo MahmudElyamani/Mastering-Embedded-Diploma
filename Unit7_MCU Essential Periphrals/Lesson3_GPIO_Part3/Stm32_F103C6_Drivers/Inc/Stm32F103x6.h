@@ -134,7 +134,6 @@ typedef struct
 #define RCC_GPIOB_CLK_EN()      (RCC->APB2ENR |= 1<<3)
 #define RCC_GPIOC_CLK_EN()      (RCC->APB2ENR |= 1<<4)
 #define RCC_GPIOD_CLK_EN()      (RCC->APB2ENR |= 1<<5)
-
 #define AFIO_CLK_EN()           (RCC->APB2ENR |= 1<<0)
 
 //===================================================================================================
