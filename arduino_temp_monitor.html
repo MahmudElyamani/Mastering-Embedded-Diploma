@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arduino Thermal Monitor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d0f14; --surface: #161a23; --surface2: #1e2330;
+    --border: rgba(255,255,255,0.07); --text: #e8eaf0; --muted: #6b7280;
+    --accent-temp: #f97316; --accent-target: #22d3ee; --accent-pwm: #a78bfa;
+    --green: #4ade80; --red: #f87171; --yellow: #fbbf24;
+    --mono: 'Space Mono', monospace; --sans: 'DM Sans', sans-serif;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; overflow-x: hidden; }
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: linear-gradient(rgba(167,139,250,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(167,139,250,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .container { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+
+  /* ── CONNECTION OVERLAY ── */
+  .conn-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(13,15,20,0.96);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .conn-box {
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    width: 420px;
+    max-width: 95vw;
+  }
+  .conn-box h2 { font-family: var(--mono); font-size: 13px; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 1.5rem; }
+  .conn-section { margin-bottom: 1.25rem; }
+  .conn-label { font-size: 11px; font-family: var(--mono); letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; display: block; }
+  .baud-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .baud-btn {
+    font-family: var(--mono); font-size: 11px; padding: 5px 12px;
+    border-radius: 6px; border: 1px solid var(--border); background: var(--surface2);
+    color: var(--muted); cursor: pointer; transition: all 0.15s;
+  }
+  .baud-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+  .baud-btn.selected { border-color: var(--accent-pwm); color: var(--accent-pwm); }
+  .connect-btn {
+    width: 100%; padding: 11px; border-radius: 8px; border: none;
+    background: var(--accent-pwm); color: #0d0f14;
+    font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+    cursor: pointer; transition: opacity 0.2s; margin-bottom: 10px;
+  }
+  .connect-btn:hover { opacity: 0.85; }
+  .sim-btn {
+    width: 100%; padding: 9px; border-radius: 8px;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .sim-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+  .conn-note { font-size: 11px; color: var(--muted); line-height: 1.6; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .conn-note a { color: var(--accent-target); text-decoration: none; }
+  .no-serial-warn {
+    background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.25);
+    border-radius: 8px; padding: 10px 14px; margin-bottom: 1rem;
+    font-size: 11px; font-family: var(--mono); color: var(--yellow); line-height: 1.6;
+  }
+  .port-detected {
+    background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2);
+    border-radius: 8px; padding: 8px 14px; margin-bottom: 1rem;
+    font-size: 11px; font-family: var(--mono); color: var(--green); display: none;
+  }
+
+  /* ── HEADER ── */
+  header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #a78bfa, #22d3ee); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .logo h1 { font-family: var(--mono); font-size: 14px; font-weight: 700; letter-spacing: 0.08em; }
+  .logo p { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; margin-top: 1px; }
+  .status-badge { display: flex; align-items: center; gap: 7px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 12px; color: var(--muted); font-family: var(--mono); cursor: pointer; transition: border-color 0.2s; }
+  .status-badge:hover { border-color: rgba(255,255,255,0.2); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+  .dot.live { background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s infinite; }
+  .dot.sim { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); animation: pulse 2s infinite; }
+  .dot.err { background: var(--red); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ── METRICS ── */
+  .metrics-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+  .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; position: relative; overflow: hidden; }
+  .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: 12px 12px 0 0; }
+  .metric-card.temp::before { background: var(--accent-temp); }
+  .metric-card.target::before { background: var(--accent-target); }
+  .metric-card.pwm::before { background: var(--accent-pwm); }
+  .metric-card .glow { position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; border-radius: 50%; opacity: 0.06; filter: blur(30px); }
+  .metric-card.temp .glow { background: var(--accent-temp); }
+  .metric-card.target .glow { background: var(--accent-target); }
+  .metric-card.pwm .glow { background: var(--accent-pwm); }
+  .metric-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-family: var(--mono); display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .metric-value { font-family: var(--mono); font-size: 2.4rem; font-weight: 700; line-height: 1; }
+  .metric-card.temp .metric-value { color: var(--accent-temp); }
+  .metric-card.target .metric-value { color: var(--accent-target); }
+  .metric-card.pwm .metric-value { color: var(--accent-pwm); }
+  .metric-unit { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin-left: 4px; }
+  .metric-sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .delta { font-size: 12px; font-family: var(--mono); padding: 2px 7px; border-radius: 4px; display: inline-block; margin-top: 6px; }
+  .delta.above { background: rgba(248,113,113,0.15); color: var(--red); }
+  .delta.below { background: rgba(74,222,128,0.15); color: var(--green); }
+  .delta.on { background: rgba(74,222,128,0.15); color: var(--green); }
+
+  .metric-card.ttt::before { background: var(--green); }
+  .metric-card.ttt .glow { background: var(--green); }
+  .metric-card.ttt .metric-value { color: var(--green); }
+  .ttt-counting { color: var(--yellow) !important; }
+  .ttt-done { color: var(--green) !important; }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+  .chart-title { font-size: 13px; font-family: var(--mono); letter-spacing: 0.06em; color: var(--muted); }
+  .legend { display: flex; gap: 16px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); font-family: var(--mono); }
+  .legend-line { width: 20px; height: 2px; border-radius: 1px; }
+  .chart-wrap { position: relative; width: 100%; height: 420px; }
+  .pwm-chart-wrap { position: relative; width: 100%; height: 200px; }
+
+  /* ── SERIAL ── */
+  .serial-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .serial-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+  .serial-title { font-size: 11px; font-family: var(--mono); letter-spacing: 0.08em; color: var(--muted); }
+  .serial-body { padding: 12px 16px; height: 120px; overflow-y: auto; font-family: var(--mono); font-size: 11px; line-height: 1.8; }
+  .serial-line { color: var(--muted); }
+  .serial-line .s-pwm { color: var(--accent-pwm); }
+  .serial-line .s-temp { color: var(--accent-temp); }
+  .serial-line .s-target { color: var(--accent-target); }
+  .serial-line .s-sys { color: var(--yellow); font-style: italic; }
+
+  /* ── CONTROLS ── */
+  .controls { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .ctrl-group { display: flex; flex-direction: column; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; }
+  .ctrl-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-family: var(--mono); }
+  .ctrl-row { display: flex; align-items: center; gap: 10px; }
+  input[type=range] { accent-color: var(--accent-target); width: 120px; cursor: pointer; }
+  .ctrl-val { font-family: var(--mono); font-size: 13px; color: var(--text); min-width: 40px; }
+  .btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; padding: 8px 14px; cursor: pointer; transition: all 0.2s; }
+  .btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+  .btn.active { border-color: var(--accent-pwm); color: var(--accent-pwm); }
+  .sim-controls { display: none; }
+
+  @media (max-width: 700px) { .metrics-row { grid-template-columns: repeat(2, 1fr); } .metric-value { font-size: 1.8rem; } }
+  @media (max-width: 400px) { .metrics-row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<!-- CONNECTION OVERLAY -->
+<div class="conn-overlay" id="connOverlay">
+  <div class="conn-box">
+    <h2>⚡ CONNECT ARDUINO</h2>
+
+    <div id="noSerialWarn" class="no-serial-warn" style="display:none">
+      ⚠ Web Serial API not available.<br>
+      Use Chrome or Edge (desktop) to connect to a real port. You can still run in simulation mode.
+    </div>
+
+    <div id="portDetected" class="port-detected">
+      ✓ Previously used port detected — ready to reconnect.
+    </div>
+
+    <div class="conn-section">
+      <span class="conn-label">BAUD RATE</span>
+      <div class="baud-row" id="baudRow">
+        <button class="baud-btn" data-baud="9600">9600</button>
+        <button class="baud-btn selected" data-baud="115200">115200</button>
+        <button class="baud-btn" data-baud="57600">57600</button>
+        <button class="baud-btn" data-baud="38400">38400</button>
+      </div>
+    </div>
+
+    <button class="connect-btn" id="connectBtn">⟳ SELECT PORT &amp; CONNECT</button>
+    <button class="sim-btn" id="simBtn">Run in simulation mode instead</button>
+
+    <div class="conn-note">
+      The browser will show a native port picker. Select the port your Arduino is on (usually <strong>COM3–COM9</strong> on Windows or <strong>/dev/ttyUSB0</strong> / <strong>/dev/ttyACM0</strong> on Linux/Mac).<br><br>
+      Requires <a href="https://caniuse.com/web-serial" target="_blank">Web Serial API</a> — Chrome or Edge desktop only.
+    </div>
+  </div>
+</div>
+
+<!-- MAIN DASHBOARD -->
+<div class="container">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">🌡</div>
+      <div>
+        <h1>THERMAL MONITOR</h1>
+        <p id="sourceLabel">Arduino Serial Interface</p>
+      </div>
+    </div>
+    <div class="status-badge" id="statusBadge" title="Click to disconnect">
+      <div class="dot" id="statusDot"></div>
+      <span id="statusText">DISCONNECTED</span>
+    </div>
+  </header>
+
+  <!-- sim-only controls -->
+  <div class="controls sim-controls" id="simControls">
+    <div class="ctrl-group">
+      <span class="ctrl-label">Target Temp</span>
+      <div class="ctrl-row">
+        <input type="range" id="targetSlider" min="20" max="80" value="45" step="1">
+        <span class="ctrl-val" id="targetSliderVal">45°C</span>
+      </div>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">Noise Level</span>
+      <div class="ctrl-row">
+        <input type="range" id="noiseSlider" min="0" max="5" value="1" step="0.5" style="accent-color:var(--accent-temp)">
+        <span class="ctrl-val" id="noiseSliderVal">1.0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- shared controls -->
+  <div class="controls" id="sharedControls">
+    <button class="btn" id="pauseBtn">⏸ PAUSE</button>
+    <button class="btn" id="clearBtn">⟳ CLEAR</button>
+    <button class="btn" id="disconnectBtn" style="display:none">⏏ DISCONNECT</button>
+  </div>
+
+  <div class="metrics-row">
+    <div class="metric-card temp">
+      <div class="glow"></div>
+      <div class="metric-label"><div class="legend-dot" style="background:var(--accent-temp)"></div>Current Temp</div>
+      <div><span class="metric-value" id="valTemp">--</span><span class="metric-unit">°C</span></div>
+      <div id="deltaDisplay" class="delta below">waiting...</div>
+    </div>
+    <div class="metric-card target">
+      <div class="glow"></div>
+      <div class="metric-label"><div class="legend-dot" style="background:var(--accent-target)"></div>Target Temp</div>
+      <div><span class="metric-value" id="valTarget">--</span><span class="metric-unit">°C</span></div>
+      <div class="metric-sub">Setpoint</div>
+    </div>
+    <div class="metric-card pwm">
+      <div class="glow"></div>
+      <div class="metric-label"><div class="legend-dot" style="background:var(--accent-pwm)"></div>PWM Duty</div>
+      <div><span class="metric-value" id="valPWM">--</span><span class="metric-unit">%</span></div>
+      <div style="margin-top:8px; height:4px; background:var(--surface2); border-radius:2px;">
+        <div id="pwmFill" style="height:100%;width:0%;background:var(--accent-pwm);border-radius:2px;transition:width 0.5s;"></div>
+      </div>
+    </div>
+    <div class="metric-card ttt">
+      <div class="glow"></div>
+      <div class="metric-label"><div class="legend-dot" style="background:var(--green)"></div>Time to Target</div>
+      <div><span class="metric-value ttt-counting" id="valTTT">--</span><span class="metric-unit" id="valTTTUnit"></span></div>
+      <div class="metric-sub" id="tttStatus">waiting for target change</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">TEMPERATURE vs TIME</span>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-line" style="background:var(--accent-temp)"></div>Current</div>
+        <div class="legend-item"><div class="legend-line" style="background:var(--accent-target);opacity:0.7"></div>Target</div>
+      </div>
+    </div>
+    <div class="chart-wrap"><canvas id="tempChart" role="img" aria-label="Temperature over time">Loading...</canvas></div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">PWM DUTY CYCLE vs TIME</span>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-line" style="background:var(--accent-pwm)"></div>Duty %</div>
+      </div>
+    </div>
+    <div class="pwm-chart-wrap"><canvas id="pwmChart" role="img" aria-label="PWM duty cycle over time">Loading...</canvas></div>
+  </div>
+
+  <div class="serial-card">
+    <div class="serial-header">
+      <span class="serial-title">SERIAL MONITOR</span>
+      <span class="serial-title" id="serialCount">0 lines</span>
+    </div>
+    <div class="serial-body" id="serialBody"></div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────
+// Full history — grows forever, never trimmed
+const fullLabels = [], fullTemp = [], fullTarget = [], fullPWM = [];
+// Chart view — always MAX_CHART_PTS points, downsampled from full history
+const MAX_CHART_PTS = 300;
+const labels = [], tempData = [], targetData = [], pwmData = [];
+
+function rebuildChartView() {
+  const n = fullLabels.length;
+  labels.length = 0; tempData.length = 0; targetData.length = 0; pwmData.length = 0;
+  if (n === 0) return;
+  if (n <= MAX_CHART_PTS) {
+    labels.push(...fullLabels); tempData.push(...fullTemp);
+    targetData.push(...fullTarget); pwmData.push(...fullPWM);
+  } else {
+    // Pick MAX_CHART_PTS evenly-spaced indices across the full history
+    for (let i = 0; i < MAX_CHART_PTS; i++) {
+      const idx = Math.round(i * (n - 1) / (MAX_CHART_PTS - 1));
+      labels.push(fullLabels[idx]); tempData.push(fullTemp[idx]);
+      targetData.push(fullTarget[idx]); pwmData.push(fullPWM[idx]);
+    }
+  }
+}
+
+let paused = false, lineCount = 0, elapsed = 0;
+let simInterval = null;
+let serialPort = null, serialReader = null, readerTask = null;
+let mode = 'none'; // 'serial' | 'sim'
+let selectedBaud = 115200;
+
+// sim state
+let simTemp = 22, simTarget = 45;
+
+// time-to-target state
+let tttStartMs = null;        // Date.now() when target last changed
+let tttTargetValue = null;    // the target value we're racing toward
+let tttReached = false;       // whether we've hit it yet
+let tttLastTarget = null;     // last confirmed target (updated only on change)
+let tttFinalSeconds = null;   // final result once reached
+let tttTickInterval = null;   // setInterval handle for live counter updates
+
+// ── CHARTS ──────────────────────────────────────────────────────────────────
+const commonOpts = {
+  responsive: true, maintainAspectRatio: false, animation: false,
+  plugins: { legend: { display: false } },
+  elements: { point: { radius: 0, hitRadius: 6 } },
+  scales: {
+    x: { ticks: { color: '#4b5563', font: { family: 'Space Mono', size: 10 }, maxTicksLimit: 8, maxRotation: 0 }, grid: { color: 'rgba(255,255,255,0.04)' }, border: { color: 'rgba(255,255,255,0.07)' } },
+    y: { ticks: { color: '#4b5563', font: { family: 'Space Mono', size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' }, border: { color: 'rgba(255,255,255,0.07)' } }
+  }
+};
+
+const tempChart = new Chart(document.getElementById('tempChart').getContext('2d'), {
+  type: 'line',
+  data: { labels, datasets: [
+    { label: 'Current', data: tempData, borderColor: '#f97316', borderWidth: 2, fill: true,
+      backgroundColor: ctx => { const g = ctx.chart.ctx.createLinearGradient(0,0,0,420); g.addColorStop(0,'rgba(249,115,22,0.18)'); g.addColorStop(1,'rgba(249,115,22,0)'); return g; }, tension: 0.4 },
+    { label: 'Target', data: targetData, borderColor: '#22d3ee', borderWidth: 1.5, borderDash: [6,4], fill: false, tension: 0 }
+  ]},
+  options: { ...commonOpts, scales: { ...commonOpts.scales, y: { ...commonOpts.scales.y, suggestedMin: 15, suggestedMax: 80, ticks: { ...commonOpts.scales.y.ticks, callback: v => v+'°C' } } } }
+});
+
+const pwmChart = new Chart(document.getElementById('pwmChart').getContext('2d'), {
+  type: 'line',
+  data: { labels, datasets: [
+    { label: 'PWM', data: pwmData, borderColor: '#a78bfa', borderWidth: 2, fill: true,
+      backgroundColor: ctx => { const g = ctx.chart.ctx.createLinearGradient(0,0,0,200); g.addColorStop(0,'rgba(167,139,250,0.2)'); g.addColorStop(1,'rgba(167,139,250,0)'); return g; }, tension: 0.3 }
+  ]},
+  options: { ...commonOpts, scales: { ...commonOpts.scales, y: { ...commonOpts.scales.y, min: 0, max: 100, ticks: { ...commonOpts.scales.y.ticks, callback: v => v+'%', stepSize: 25 } } } }
+});
+
+// ── UI HELPERS ───────────────────────────────────────────────────────────────
+function setStatus(state, text) {
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusText');
+  dot.className = 'dot ' + state;
+  txt.textContent = text;
+}
+
+function sysLog(msg) {
+  const body = document.getElementById('serialBody');
+  const line = document.createElement('div');
+  line.className = 'serial-line';
+  line.innerHTML = `<span class="s-sys">// ${msg}</span>`;
+  body.appendChild(line);
+  body.scrollTop = body.scrollHeight;
+}
+
+function formatTime(sec) {
+  return String(Math.floor(sec/60)).padStart(2,'0') + ':' + String(sec%60).padStart(2,'0');
+}
+
+function pushDataPoint(duty, temp, target) {
+  if (paused) return;
+  elapsed++;
+  const t = formatTime(elapsed);
+
+  // Always append to full unbounded history
+  fullLabels.push(t); fullTemp.push(parseFloat(temp.toFixed(1)));
+  fullTarget.push(parseFloat(target)); fullPWM.push(duty);
+
+  // Rebuild the chart view (downsampled to MAX_CHART_PTS) and update
+  rebuildChartView();
+  tempChart.update('none');
+  pwmChart.update('none');
+
+  document.getElementById('valTemp').textContent = parseFloat(temp.toFixed(1));
+  document.getElementById('valTarget').textContent = parseFloat(target.toFixed(1));
+  document.getElementById('valPWM').textContent = duty;
+  document.getElementById('pwmFill').style.width = duty + '%';
+
+  const delta = temp - target;
+  const dEl = document.getElementById('deltaDisplay');
+  if (Math.abs(delta) < 1) { dEl.className = 'delta on'; dEl.textContent = '✓ On target'; }
+  else if (delta > 0) { dEl.className = 'delta above'; dEl.textContent = '+' + Math.abs(delta).toFixed(1) + '°C above'; }
+  else { dEl.className = 'delta below'; dEl.textContent = '-' + Math.abs(delta).toFixed(1) + '°C below'; }
+
+  // ── TIME-TO-TARGET ────────────────────────────────────────────────────────
+  const roundedTarget = parseFloat(target.toFixed(1));
+
+  // First data point — just record baseline, don't start timer
+  if (tttLastTarget === null) {
+    tttLastTarget = roundedTarget;
+    tttTargetValue = roundedTarget;
+  }
+
+  // Target changed — reset and start fresh wall-clock timer
+  if (Math.abs(roundedTarget - tttLastTarget) >= 0.5) {
+    tttLastTarget = roundedTarget;
+    tttTargetValue = roundedTarget;
+    tttStartMs = Date.now();
+    tttReached = false;
+    tttFinalSeconds = null;
+    if (tttTickInterval) clearInterval(tttTickInterval);
+    const tttVal2 = document.getElementById('valTTT');
+    const tttUnit2 = document.getElementById('valTTTUnit');
+    const tttSub2 = document.getElementById('tttStatus');
+    tttVal2.className = 'metric-value ttt-counting';
+    tttSub2.textContent = 'counting...';
+    // Drive the live counter from its own 1s interval so it's independent of data rate
+    tttTickInterval = setInterval(() => {
+      if (tttReached || tttStartMs === null) { clearInterval(tttTickInterval); return; }
+      const s = Math.floor((Date.now() - tttStartMs) / 1000);
+      tttVal2.textContent = s < 60 ? s : (s / 60).toFixed(1);
+      tttUnit2.textContent = s < 60 ? 's' : 'min';
+    }, 1000);
+  }
+
+  // Check if we've reached target (within 1°C) — only while timer is running
+  if (tttStartMs !== null && !tttReached) {
+    if (Math.abs(temp - tttTargetValue) < 1) {
+      tttReached = true;
+      if (tttTickInterval) { clearInterval(tttTickInterval); tttTickInterval = null; }
+      const secs = Math.floor((Date.now() - tttStartMs) / 1000);
+      tttFinalSeconds = secs;
+      const tttVal3 = document.getElementById('valTTT');
+      const tttUnit3 = document.getElementById('valTTTUnit');
+      const tttSub3 = document.getElementById('tttStatus');
+      tttVal3.className = 'metric-value ttt-done';
+      tttVal3.textContent = secs < 60 ? secs : (secs / 60).toFixed(1);
+      tttUnit3.textContent = secs < 60 ? 's' : 'min';
+      tttSub3.textContent = 'reached ' + tttTargetValue.toFixed(1) + '°C';
+    }
+  }
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const body = document.getElementById('serialBody');
+  const line = document.createElement('div');
+  line.className = 'serial-line';
+  line.innerHTML = `<span style="color:#374151">[${t}]</span> PWMDuty: <span class="s-pwm">${duty}</span> | CurrentTemp: <span class="s-temp">${temp.toFixed(1)} °C</span> | TargetTemp: <span class="s-target">${target.toFixed(1)} °C</span>`;
+  body.appendChild(line);
+  if (body.children.length > 80) body.removeChild(body.firstChild);
+  body.scrollTop = body.scrollHeight;
+  lineCount++;
+  document.getElementById('serialCount').textContent = lineCount + ' lines';
+}
+
+// ── SERIAL PARSING ───────────────────────────────────────────────────────────
+// Expects: "PWMDuty: 72 | CurrentTemp: 38.5 °C | TargetTemp: 45.0 °C"
+function parseLine(line) {
+  const duty  = line.match(/PWMDuty:\s*([\d.]+)/);
+  const temp  = line.match(/CurrentTemp:\s*([\d.]+)/);
+  const tgt   = line.match(/TargetTemp:\s*([\d.]+)/);
+  if (duty && temp && tgt) {
+    pushDataPoint(parseFloat(duty[1]), parseFloat(temp[1]), parseFloat(tgt[1]));
+    return true;
+  }
+  return false;
+}
+
+// ── WEB SERIAL ───────────────────────────────────────────────────────────────
+async function connectSerial() {
+  try {
+    serialPort = await navigator.serial.requestPort();
+    await serialPort.open({ baudRate: selectedBaud });
+    setStatus('live', 'CONNECTED');
+    document.getElementById('sourceLabel').textContent = 'Live Arduino Data';
+    document.getElementById('disconnectBtn').style.display = '';
+    sysLog('Port opened @ ' + selectedBaud + ' baud');
+
+    const decoder = new TextDecoderStream();
+    serialPort.readable.pipeTo(decoder.writable);
+    serialReader = decoder.readable.getReader();
+
+    let buf = '';
+    readerTask = (async () => {
+      try {
+        while (true) {
+          const { value, done } = await serialReader.read();
+          if (done) break;
+          buf += value;
+          const lines = buf.split('\n');
+          buf = lines.pop();
+          for (const l of lines) {
+            const trimmed = l.trim();
+            if (trimmed) parseLine(trimmed);
+          }
+        }
+      } catch(e) {
+        sysLog('Read error: ' + e.message);
+        setStatus('err', 'ERROR');
+      }
+    })();
+
+  } catch(e) {
+    if (e.name !== 'NotFoundError') {
+      sysLog('Connection failed: ' + e.message);
+      setStatus('err', 'FAILED');
+    }
+  }
+}
+
+async function disconnectSerial() {
+  try {
+    if (serialReader) { await serialReader.cancel(); serialReader = null; }
+    if (serialPort) { await serialPort.close(); serialPort = null; }
+  } catch(e) { /* ignore */ }
+  setStatus('', 'DISCONNECTED');
+  document.getElementById('disconnectBtn').style.display = 'none';
+  sysLog('Port closed');
+}
+
+// ── SIMULATION ───────────────────────────────────────────────────────────────
+function startSim() {
+  mode = 'sim';
+  document.getElementById('simControls').style.display = 'flex';
+  document.getElementById('disconnectBtn').style.display = 'none';
+  setStatus('sim', 'SIMULATION');
+  document.getElementById('sourceLabel').textContent = 'Simulation Mode';
+  sysLog('Simulation started');
+  simInterval = setInterval(() => {
+    if (paused) return;
+    simTarget = parseFloat(document.getElementById('targetSlider').value);
+    const noise = parseFloat(document.getElementById('noiseSlider').value);
+    simTemp += (simTarget - simTemp) * 0.12 + (Math.random() - 0.5) * 2 * noise;
+    simTemp = Math.max(0, Math.min(100, simTemp));
+    const duty = Math.round(Math.max(0, Math.min(100, (simTarget - simTemp) * 4)));
+    pushDataPoint(duty, simTemp, simTarget);
+  }, 1000);
+}
+
+// ── OVERLAY INIT ─────────────────────────────────────────────────────────────
+const hasSerial = 'serial' in navigator;
+if (!hasSerial) document.getElementById('noSerialWarn').style.display = 'block';
+
+// baud buttons
+document.getElementById('baudRow').addEventListener('click', e => {
+  if (!e.target.dataset.baud) return;
+  document.querySelectorAll('.baud-btn').forEach(b => b.classList.remove('selected'));
+  e.target.classList.add('selected');
+  selectedBaud = parseInt(e.target.dataset.baud);
+});
+
+document.getElementById('connectBtn').addEventListener('click', async () => {
+  if (!hasSerial) { sysLog('Web Serial not supported — use Chrome/Edge desktop'); return; }
+  document.getElementById('connOverlay').style.display = 'none';
+  mode = 'serial';
+  await connectSerial();
+});
+
+document.getElementById('simBtn').addEventListener('click', () => {
+  document.getElementById('connOverlay').style.display = 'none';
+  startSim();
+});
+
+// disconnect from header badge or button
+async function doDisconnect() {
+  if (mode === 'serial') {
+    await disconnectSerial();
+  } else if (mode === 'sim') {
+    clearInterval(simInterval);
+    setStatus('', 'DISCONNECTED');
+    sysLog('Simulation stopped');
+  }
+  mode = 'none';
+  document.getElementById('connOverlay').style.display = 'flex';
+  document.getElementById('simControls').style.display = 'none';
+}
+
+document.getElementById('disconnectBtn').addEventListener('click', doDisconnect);
+document.getElementById('statusBadge').addEventListener('click', () => {
+  if (mode !== 'none') doDisconnect();
+});
+
+// ── SHARED CONTROLS ──────────────────────────────────────────────────────────
+document.getElementById('pauseBtn').addEventListener('click', function() {
+  paused = !paused;
+  this.textContent = paused ? '▶ RESUME' : '⏸ PAUSE';
+  this.classList.toggle('active', paused);
+});
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  fullLabels.length = 0; fullTemp.length = 0; fullTarget.length = 0; fullPWM.length = 0;
+  labels.length = 0; tempData.length = 0; targetData.length = 0; pwmData.length = 0;
+  elapsed = 0; lineCount = 0;
+  if (tttTickInterval) { clearInterval(tttTickInterval); tttTickInterval = null; }
+  tttStartMs = null; tttTargetValue = null; tttReached = false;
+  tttFinalSeconds = null; tttLastTarget = null;
+  document.getElementById('valTTT').textContent = '--';
+  document.getElementById('valTTT').className = 'metric-value ttt-counting';
+  document.getElementById('valTTTUnit').textContent = '';
+  document.getElementById('tttStatus').textContent = 'waiting for target change';
+  document.getElementById('serialBody').innerHTML = '';
+  document.getElementById('serialCount').textContent = '0 lines';
+  tempChart.update(); pwmChart.update();
+});
+
+document.getElementById('targetSlider').addEventListener('input', function() {
+  document.getElementById('targetSliderVal').textContent = this.value + '°C';
+});
+document.getElementById('noiseSlider').addEventListener('input', function() {
+  document.getElementById('noiseSliderVal').textContent = parseFloat(this.value).toFixed(1);
+});
+</script>
+</body>
+</html>
