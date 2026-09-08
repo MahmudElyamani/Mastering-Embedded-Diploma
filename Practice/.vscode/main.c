@@ -1,13 +1,18 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-atol();
+
 int main()
 {
-    char c[100];
-    printf("Testing\n");
-    printf("Enter an equation: ");
-    scanf("%s",&c);
-    printf("The integer form of your equation is: %d",atoi(c));
+    int i;
+    for (i=0; i<15; i++)
+    {
+        printf("/*============================ EXTI%d =========================*/\n",i);
+        printf("#define EXTI%dP%c%d                 (EXTI_GPIO_Mapping_t){EXTI%d, GPIO%c, GPIO_PIN_%d, EXTI%d_IRQ}\n",i,'A',i,i,'A',i,i);
+        printf("#define EXTI%dP%c%d                 (EXTI_GPIO_Mapping_t){EXTI%d, GPIO%c, GPIO_PIN_%d, EXTI%d_IRQ}\n",i,'B',i,i,'B',i,i);
+        printf("#define EXTI%dP%c%d                 (EXTI_GPIO_Mapping_t){EXTI%d, GPIO%c, GPIO_PIN_%d, EXTI%d_IRQ}\n",i,'C',i,i,'C',i,i);
+        printf("#define EXTI%dP%c%d                 (EXTI_GPIO_Mapping_t){EXTI%d, GPIO%c, GPIO_PIN_%d, EXTI%d_IRQ}\n",i,'D',i,i,'D',i,i);
+        printf("\n\n\n\r");
+    }
     return 0;
 }
