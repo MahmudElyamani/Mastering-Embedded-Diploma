@@ -83,7 +83,7 @@ void myKeypadINIT()
 
 char myKeypadgetc(void)
 {
-    short row,col,i;
+    short row,col,i = 0;
     if(PIND & 0x0F) /*  waits a read signal on any of the row pins (PD0:PD3)    */
     {
         for (i=0; i<4; i++)
