@@ -28,7 +28,13 @@
 #define Peripherals_BASE 							0x40000000UL
 
 #define Cortex_M3_Internal_Peripherals_BASE 		0xE0000000UL
-
+#define NVIC_Base									0xE000E100UL
+#define NVIC_ISER0									*(volatile uint32_t*)(NVIC_Base +0x00);
+#define NVIC_ISER1									*(volatile uint32_t*)(NVIC_Base +0x04);
+#define NVIC_ISER2									*(volatile uint32_t*)(NVIC_Base +0x08);
+#define NVIC_ICER0									*(volatile uint32_t*)(NVIC_Base +0x80);
+#define NVIC_ICER1									*(volatile uint32_t*)(NVIC_Base +0x84);
+#define NVIC_ICER2									*(volatile uint32_t*)(NVIC_Base +0x88);
 
 //-----------------------------
 //Base addresses for AHB Peripherals
