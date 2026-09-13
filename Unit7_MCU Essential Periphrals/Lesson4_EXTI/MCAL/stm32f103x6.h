@@ -138,10 +138,7 @@ typedef struct
 {
 	volatile uint32_t  EVCR ;
 	volatile uint32_t  MAPR ;
-	volatile uint32_t  EXTICR1 ;
-	volatile uint32_t  EXTICR2 ;
-	volatile uint32_t  EXTICR3 ;
-	volatile uint32_t  EXTICR4 ;
+	volatile uint32_t  EXTICR[4] ;
 	 uint32_t  		   RESERVED0 ; //0x18
 	volatile uint32_t  MAPR2 ; // 0x1c
 
