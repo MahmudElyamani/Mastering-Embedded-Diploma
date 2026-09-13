@@ -36,134 +36,47 @@
 #include "LCD_DRIVER/lcd.h"
 #include "EXTI_Driver/Stm32_F103C6_EXTI_Driver.h"
 
-#define ZERO 0x01
-#define ONE 0x79
-#define TWO 0x24
-#define THREE 0x30
-#define FOUR 0x4C
-#define FIVE 0x12
-#define SIX 0x02
-#define SEVEN 0x19
-#define EIGHT 0x00
-#define NINE 0x10
+unsigned int IRQ_Flag = 0;
 
-void clock_init() {
-	//Enable clock GPIOA
+void my_wait(int x)
+{
+	volatile uint32_t i, j;
+	for (i=0; i<x; i++)
+		for(j=0; j<255; j++);
+}
+
+void EXTI9_Callback(void)
+{
+	IRQ_Flag = 1;
+	LCD_WRITE_STRING("IRQ EXTI9 Triggered _|-");
+	my_wait(1000);
+}
+
+int main(void)
+{
+	//Enable clock
 	RCC_GPIOA_CLK_EN();
-	//Enable clock GPIOB Bit 3 IOPBEN: IO port B clock enable
 	RCC_GPIOB_CLK_EN();
-}
-void GPIO_init() {
-
-	//GPIO_PinConfig_t PinCfg;
-
-	//PA1 input HighZ Floating input (reset state)
-//	PinCfg.GPIO_PinNumber = GPIO_PIN_1;
-//	PinCfg.GPIO_MODE = GPIO_MODE_INPUT_FLO;
-//	MCAL_GPIO_Init(GPIOA, &PinCfg);
-
-//PB1 (output PUSH pull Mode)
-//01: Output mode, max speed 10 MHz.
-//CNF 00: General purpose output push-pull
-	PinCfg.GPIO_PinNumber = GPIO_PIN_9;
-	PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_PP;
-	PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
-	MCAL_GPIO_Init(GPIOB, &PinCfg);
-
-	PinCfg.GPIO_PinNumber = GPIO_PIN_10;
-	PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_PP;
-	PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
-	MCAL_GPIO_Init(GPIOB, &PinCfg);
-
-	PinCfg.GPIO_PinNumber = GPIO_PIN_11;
-	PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_PP;
-	PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
-	MCAL_GPIO_Init(GPIOB, &PinCfg);
-
-	PinCfg.GPIO_PinNumber = GPIO_PIN_12;
-	PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_PP;
-	PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
-	MCAL_GPIO_Init(GPIOB, &PinCfg);
-
-	PinCfg.GPIO_PinNumber = GPIO_PIN_13;
-	PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_PP;
-	PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
-	MCAL_GPIO_Init(GPIOB, &PinCfg);
-
-	//============================
-
-	//PA13 input HighZ Floating input (reset state)
-	PinCfg.GPIO_PinNumber = GPIO_PIN_14;
-	PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_PP;
-	PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
-	MCAL_GPIO_Init(GPIOB, &PinCfg);
-
-	//PB13 (output PUSH pull Mode)
-	PinCfg.GPIO_PinNumber = GPIO_PIN_15;
-	PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_PP;
-	PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
-	MCAL_GPIO_Init(GPIOB, &PinCfg);
-
-}
-void wait_ms(uint32_t time) {
-	uint32_t i, j;
-	for (i = 0; i < time; i++)
-		for (j = 0; j < 255; j++)
-			;
-}
-int main(void) {
-
-	clock_init();
+	RCC_AFIO_CLK_EN();
+	
 	LCD_INIT();
-	unsigned char key_pressed;
-	LCD_WRITE_STRING("HEY");
-	wait_ms(30);
 	LCD_clear_screen();
-	GPIO_init();
-	unsigned char LCD_DISPLAY [11] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
-	unsigned char DISPLAY [11] = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, ZERO};
-	for (unsigned char i = 0; i < 11; i++) {
-		LCD_WRITE_CHAR(LCD_DISPLAY[i]);
-		MCAL_GPIO_WritePort(GPIOB, DISPLAY[i] << 9); /* write data on to the LED port */
-		wait_ms(100);
-		/* wait for 1 second */
-	}
-//	MCAL_GPIO_WritePort(GPIOB, 0xDE);
-//	wait_ms(100);
-	LCD_clear_screen();
-	Keypad_init();
-	LCD_WRITE_STRING("Keypad is ready");
-	wait_ms(30);
-	LCD_clear_screen();
-
-	while (1) {
-
-		key_pressed = Keypad_getkey();
-		switch (key_pressed) {
-		case 'A':
-			break;
-		case '?':
+	
+	EXTI_PinConfig_t EXTI_CFG;
+	EXTI_CFG.EXTI_PIN = EXTI9PB9;
+	EXTI_CFG.Trigger_Case = Rising_Edge;
+	EXTI_CFG.P_IRQ_CallBack = EXTI9_Callback;
+	EXTI_CFG.IRQ_EN = EXTI_IRQ_Enable;
+	
+	MCAL_EXTI_GPIO_Init(&EXTI_CFG);
+	IRQ_Flag = 1;
+	while(1)
+	{
+		if (IRQ_Flag)
+		{
 			LCD_clear_screen();
-			break;
-		default:
-			LCD_WRITE_CHAR(key_pressed);
-			break;
+			IRQ_Flag = 0;
 		}
-//		//PA1 >>>Connected external PUR
-//
-//		if ( MCAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == 0) // press
-//		{
-//			MCAL_GPIO_TogglePin(GPIOB, GPIO_PIN_1);
-//			while  (MCAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == 0)  ; //Single Pressing
-//		}
-//		//PA13 >>>Connected external PDR
-//		if ( MCAL_GPIO_ReadPin(GPIOA, GPIO_PIN_13) == 1) //Multi Pressing
-//		{
-//			MCAL_GPIO_TogglePin(GPIOB, GPIO_PIN_13);
-//		}
-//		LCD_WRITE_STRING("HEY");
-//		wait_ms(30);
-//		LCD_clear_screen();
+		my_wait(1000);
 	}
 }
-

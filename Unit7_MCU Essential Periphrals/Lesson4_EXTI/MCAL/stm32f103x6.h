@@ -29,12 +29,12 @@
 
 #define Cortex_M3_Internal_Peripherals_BASE 		0xE0000000UL
 #define NVIC_Base									0xE000E100UL
-#define NVIC_ISER0									*(volatile uint32_t*)(NVIC_Base +0x00);
-#define NVIC_ISER1									*(volatile uint32_t*)(NVIC_Base +0x04);
-#define NVIC_ISER2									*(volatile uint32_t*)(NVIC_Base +0x08);
-#define NVIC_ICER0									*(volatile uint32_t*)(NVIC_Base +0x80);
-#define NVIC_ICER1									*(volatile uint32_t*)(NVIC_Base +0x84);
-#define NVIC_ICER2									*(volatile uint32_t*)(NVIC_Base +0x88);
+#define NVIC_ISER0									*(volatile uint32_t*)(NVIC_Base +0x00)
+#define NVIC_ISER1									*(volatile uint32_t*)(NVIC_Base +0x04)
+#define NVIC_ISER2									*(volatile uint32_t*)(NVIC_Base +0x08)
+#define NVIC_ICER0									*(volatile uint32_t*)(NVIC_Base +0x80)
+#define NVIC_ICER1									*(volatile uint32_t*)(NVIC_Base +0x84)
+#define NVIC_ICER2									*(volatile uint32_t*)(NVIC_Base +0x88)
 
 //-----------------------------
 //Base addresses for AHB Peripherals
@@ -67,7 +67,7 @@
 #define EXTI_BASE 							0x40010400UL
 
 //AFIO
-#define AFIO_BASE 							0x40010000 UL
+#define AFIO_BASE 							0x40010000UL
 
 //-----------------------------
 //Base addresses for APB1 Peripherals
@@ -139,7 +139,7 @@ typedef struct
 	volatile uint32_t  EVCR ;
 	volatile uint32_t  MAPR ;
 	volatile uint32_t  EXTICR[4] ;
-	 uint32_t  		   RESERVED0 ; //0x18
+	 uint32_t  		   RESERVED ; //0x18
 	volatile uint32_t  MAPR2 ; // 0x1c
 
 
@@ -177,7 +177,7 @@ typedef struct
 #define RCC_GPIOD_CLK_EN()	(RCC->APB2ENR |= 1<<5)
 #define RCC_GPIOE_CLK_EN()	(RCC->APB2ENR |= 1<<6)
 
-#define AFIO_GPIOE_CLK_EN()	(RCC->APB2ENR |= 1<<0)
+#define RCC_AFIO_CLK_EN()	(RCC->APB2ENR |= 1<<0)
 
 
 
