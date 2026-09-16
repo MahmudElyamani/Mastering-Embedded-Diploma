@@ -102,8 +102,8 @@ typedef struct
 
 typedef struct
 {
-	volatile uint32_t  CR ;
-	volatile uint32_t  CFGR ;
+	volatile uint32_t CR ;
+	volatile uint32_t CFGR ;
 	volatile uint32_t CIR;
 	volatile uint32_t APB2RSTR;
 	volatile uint32_t APB1RSTR;
