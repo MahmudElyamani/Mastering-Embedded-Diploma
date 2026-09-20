@@ -1,0 +1,46 @@
+--- ✄ --------- 2026.09.20 09:33 -------------------
+-This Unit is the final unit required to study before you're able to apply to any embedded job in Egypt. After that the upcoming
+ units will discuss topics that are nice to know but not necessary in embedded systems such as ADC and timers.
+-Interviewers for embedded jobs will mostly ask about @Unit3_Embedded_C, @Unit2_C_Porgramming, @Unit6_MCU_Fundamentals and 
+ @Unit7_MCU_Essential_Peripherals in that order.
+It's best to study these well before an interview.
+
+@starting at 38:04
+• The terms VCC and VDD refer to positive voltage or power with respect to VSS or VEE
+• These terms originally came from BJT transistor and MOSFETS pin names where CC refers to collector and DD refers to drain for example.
+
+It is important to know the Absolute maximum ratings (AMR) for a given MCU in order to determine important things such as:
+• What type of power supply are you going to need to feed the MCU.
+• Absolute maximum voltage the MCU can withstand without damage.
+• Current summation output from the MCU pins.
+• Pin logic level.
+• the 0-1 logic range votlage-wise for input pins and output pins (VIH-VOH , VIL-VOL).
+
+
+-Define the voltage limits and ranges of input and output logic signals:
+• The minimum input voltage to detect a logic 1 state going into the MCU is defined as VIH
+• The minimum input voltage to detect a logic 0 state going into the MCU is defined as VIL
+• The minimum output voltage to represent a logic 1 state coming out of the MCU is defined as VOH
+• The minimum output voltage to represent a logic 0 state coming out of the MCU is defined as VIH
+• Any voltage level between VIH/VOH and VDD is acceptable logic 1 input value.
+• Any voltage level between VIL/VOL and VSS is acceptable logic 0 input value.
+• Any voltage level between VIL and VIH or between VOH and VOL is an undefined logic level.
+
+=================
+          VDD/VCC
+ Logic 1 =   |
+          VIH/VOH 
+            ???
+Undefined{  ??? }
+            ???
+          VIL/VOL
+Logic 0 =    |
+          VEE/VSS
+=================
+
+-a 5v tolerant pin doesn't mean it could handle all the 5V range, but rather it has internal protection that clamps the voltage
+down to 3.3V in case it recieves 5V or higher.
+This could be fine for GPIO but ruin your results if you're using an ADC and require the 3.3V to 5v range to be measured
+In cases like these you need to use a logic level shifter.
+--- ✄ --------- 2026.09.20 12:06 -------------------
+
