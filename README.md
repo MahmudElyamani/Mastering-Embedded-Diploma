@@ -11,6 +11,7 @@
 * [📘 Unit 4: System Architecture](./Unit4_System%20Arch)
 * [📘 Unit 5: First Term Project](./Unit5_First%20Term%20Project)
 * [📘 Unit 6: Micro-Controller Architecture](./Unit6_Micro-Controller%20Arch)
+* [📘 Unit 7: Micro-Controller Essential Periphrals](./Unit7_MCU%20Essential%20Periphrals)
 
 ---
 
