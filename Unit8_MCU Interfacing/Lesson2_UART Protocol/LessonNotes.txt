@@ -1,0 +1,52 @@
+--- ✄ --------- 2026.09.21 08:55 -------------------
+-Data Skew is a phenomenon that occurs when multiple bits are sent simultaneously through a parallel interface, some bits arrive
+later than others due to propagation delay, this causes issues with signal integrity.
+
+-When there's a shared clock between transmitter and receiver, the transmitter sends a signal at the falling or rising edge of the
+clock pulse, the receiver then takes a sample on the rising or falling edge respectively on that same clock pulse.
+
+-There's a clear distinction between the clock frequency the MCU operates at and the clock frequency it uses to communicate with
+other MCU or sensor.
+If you get asked at an interview, there's 2 MCU's one of them operates at 800MHZ and the other at 1MHZ how can they communicate?
+• It's most likely a trick question trying to confuse you between CPU bit rate and communication baud rate.
+• An MCU that operates at 1MHZ means that it can handle up to 1 million instructions per second.
+• The MCU has separate clock peripherals that allow you to adjust the clock speed by prescaling it to reach the desired communication speed.
+• An MCU that communicates at 9600 baud rate means that it sends up to 9600 symbols per second to another MCU.
+• A symbol usually consists of multiple bits at a time but in the world of embedded system a symbol is only 1 bit.
+• Identifying the baud rate lets the MCU know the single clock's pulse width and thus when exactly to take samples for receiving.
+• It does so by a simple equation: 9600 baud rate = (1/9600) = 104.167 uS.
+
+
+-Synchronous Communication Protocols: SPI - I2C - USART
+-Asynchronous Communication Protocols: UART - CAN
+
+-Dynamic Data Rate: A baud rate that can be changed during runtime, example: Synchronous Communication Protocols.
+-Static Data Rate: A baud rate that cannot be changed during runtime, example: Asynchronous Communication Protocols.
+
+-An Asynchronous data transmission requires a stop bit and start bit at the very least while a Synchronous one does not necessarily
+require one due to the shared clock line but can sill have one for added security/assurance.
+
+-Throughput: is the amount of effective data sent to the amount of actual data sent.
+For example, if you transmit data at 800 Bits per second, but to transmit 8 bits of data you need 1 start bit and 1 end bit
+so you need 10 bits total to transmit 8 bits, this means the actual effictive data your transmitting is actually (8/10)*800
+= 640 Bits per second, this number is known as throughput.
+
+-UART is the most used communication protocol in the world of embedded Linux and embedded systems.
+
+-The @Framing of the data is the structure of the bits sent and their function, for examble some framing could have a pairty
+check bit and some do not, some framing could have 2 stop bits and some only 1.
+
+Regular Framing for a data structure:
+=========================================-------------============------------
+| @Start |         @Data_Bits           |   @parity   |   @Stop  |   @Stop   |
+|   1    |        5    ->    9 bits     |   0 -> 1    |     1    |  0 -> 1   |
+|        |                              |   Optional  |          |  Optional |
+=========================================-------------============------------
+
+-When sending the bits it is important to distinguish between order of sending, whether you're sending from LSB or MSB.
+For most UART protocols the data bits are sent starting from the LSB unless it specifically states that it's big endian, in
+which case the bits are order from the MSB order.
+
+-CTS and RTS are additional pins to the USART protocol used in flow control applications.
+--- ✄ --------- 2026.09.21 11:52 -------------------
+
