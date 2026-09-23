@@ -3,4 +3,6 @@
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
   MCAL\GPIO_Drivers\Stm32_F103C6_gpio_driver.h \
   HAL\KEYPAD_DRIVER\keypad.h HAL\LCD_DRIVER\lcd.h \
-  MCAL\EXTI_Driver\Stm32_F103C6_EXTI_Driver.h
+  MCAL\EXTI_Driver\Stm32_F103C6_EXTI_Driver.h \
+  MCAL\USART_Driver\Stm32_F103C6_USART_driver.h \
+  MCAL\RCC_Drivers\Stm32_F103C6_RCC_driver.h

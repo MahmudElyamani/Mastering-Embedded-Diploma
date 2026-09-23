@@ -471,6 +471,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>USART Driver</GroupName>
+          <Files>
+            <File>
+              <FileName>Stm32_F103C6_USART_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MCAL\USART_Driver\Stm32_F103C6_USART_driver.c</FilePath>
+            </File>
+            <File>
+              <FileName>Stm32_F103C6_USART_driver.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MCAL\USART_Driver\Stm32_F103C6_USART_driver.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
         <Group>

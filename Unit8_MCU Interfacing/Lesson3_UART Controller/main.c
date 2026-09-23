@@ -24,7 +24,7 @@
 /**================================================================
  * @file           :main.c
  * @author         :Mahmoud Elyamani
- * @Date		   		 :Sep 22nd, 2026
+ * @Date		   		 :Sep 23rd, 2026
  * @brief          :main code file
  *
  *=================================================================*/
@@ -35,13 +35,29 @@
 #include "KEYPAD_DRIVER/keypad.h"
 #include "LCD_DRIVER/lcd.h"
 #include "EXTI_Driver/Stm32_F103C6_EXTI_Driver.h"
+#include "USART_Driver/Stm32_F103C6_USART_driver.h"
 
+
+unsigned short ch;
 
 int main(void)
 {
+	UART_Config uartCFG;
+	uartCFG.BaudRate = UART_BAUDRate_115200;
+	uartCFG.HwFlowCtl = UART_HwFlowCtl_NONE;
+	uartCFG.IRQ_Enable = UART_IRQ_Enable_NONE;
+	uartCFG.P_IRQ_CallBack = NULL;
+	uartCFG.Pairity = UART_Pairity_NONE;
+	uartCFG.Payload_Length = UART_Payload_Length_8B;
+	uartCFG.StopBits = UART_StopBits_1;
+	uartCFG.USART_Mode = UART_Mode_TX_RX;
+	
+	MCAL_UART_Init(USART1, &uartCFG);
+	MCAL_UART_GPIO_Set_Pins(USART1);
 	
 	while(1)
 	{
-		
+		MCAL_UART_ReceiveData(USART1, &ch, enable);
+		MCAL_UART_SendData(USART1, &ch, enable);
 	}
 }
