@@ -16,3 +16,37 @@ SPI is @Synchronous @Full_Duplex @Single_Multi_Salve mode supports.
 its gathering important data it wants to send to the master or the micro-controller it cannot do that until the master pulls down
 its CS pin and provides it with clock speed, otherwise the master has no way of knowing if the slave has something to send.
 --- ✄ --------- 2026.09.26 15:51 ------------------- stopped video at 59:32
+
+--- ✄ --------- 2026.09.26 21:14 -------------------
+Explain what is SPI master with multi slave cascaded:
+• Multiple slaves can be controlled by a single master by means other than CS line for each slave.
+• This is done by connecting the data out of the master to one of the slaves, then connecting a slave's output to another slave
+  input and so on until the last slave output goes to the master's input.
+• The chip select pin is connected together between all slaves and master.
+• These slaves are acting as one slave.
+• commonly used in seven segments and LCD displays.
+-This configuration is also known as the @Daisy_Chain_Configuration (Interview_Question)
+
+What is Quad SPi [QSPI]?:
+• An addition of 4 new IO pins which act as a bi-directional input and output data signals between master and slaves.
+• It also has SCLK line and CS line making a total of 6 lines.
+• Mostly used in flash memory applications where an external flash memory is connected to the MCU for further memory.
+• These 4 data lines are half duplex for both transmitting and receiving.
+
+How does a half duplex SPI protocol work?:
+• When a single line in SPI is supposed to handle both transmitting and receiving data, a frame protocol emerges.
+• Such frame requires the first 8 bits to be command issue specific, as in read order or write order, etc.
+• after that there's a dummy cycle in which no data is being issued.
+• then comes the data write command or data read command depending on the issued data at first stage.
+• Between every data byte there's a dummy cycle to let the peripheral differentiate between data.
+• Examples of half duplex SPI are: 
+   -> SPI-3: where there's a single connecting both MISO and MOSI and transmits and receives line.
+   -> Dual-SPI: same number of pins as regular SPI except the 2 data pins are responsible for sending and receiving data
+   -> Quad-SPI: Same as dual SPI mode except it has 4 data lines instead of 2.
+
+Why are MCU's and ECU's in an electric vehicle not connected through SPI protocol?:
+• As it is single master multiple slave protocol which hinders efficient communication, whereas CAN protocol is multiple
+  master multiple slave protocol which works way better.
+• It is also frameless so there's no filter or an error checking method during trasmitting or receiving data.
+• Most importantly the maximum distance SPI can work at is 0.1m compared to CAN which can go up to 5km.
+--- ✄ --------- 2026.09.26 22:02 -------------------
