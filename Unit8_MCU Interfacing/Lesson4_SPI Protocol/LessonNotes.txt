@@ -1,0 +1,18 @@
+--- ✄ --------- 2026.09.26 14:49 -------------------
+SPI is @Synchronous @Full_Duplex @Single_Multi_Salve mode supports.
+• A protocol that supports @Full_Duplex can also support @Half_Duplex and @Simplex
+-Sometimes it is prefered to use half @duplex or @simplex mode in SPI as it reduces the number of wires used.
+-SPI is the communication protocol with the most amount of wires used on average.
+-Many Displays use SPI as their standard protocol of communication and that's due to its high speed.
+
+-What seperates SPI over most other Serial communication protocols?: (Interview_Question)
+• It's frameless, it doesn't need stop bit or start bit to send its data unlike UART, which makes its throughput very high.
+• However This make it very susceptible to noise so in order to minimise its effect it has shorter wires.
+
+-Why do many peripherals and interfaces use SPI more than any other communication protocol?: (Interview_Question)
+• Since SPI is frameless, designers can make their own frame for sensors and peripherals and encode it into their datasheet.
+
+-A Big drawback of SPI is that its slave cannot issue transaction requests, meaning that if you're using a sensor as a slave and
+its gathering important data it wants to send to the master or the micro-controller it cannot do that until the master pulls down
+its CS pin and provides it with clock speed, otherwise the master has no way of knowing if the slave has something to send.
+--- ✄ --------- 2026.09.26 15:51 ------------------- stopped video at 59:32
