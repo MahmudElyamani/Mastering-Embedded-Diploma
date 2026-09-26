@@ -28,7 +28,7 @@ typedef struct
 	uint32_t					BaudRate;						//Specifies Baud rate of communication
 																				//This parameter must be set based on @ref USART_BaudRate_define
 	
-	uint8_t						Payload_Length;			//Specifies Baud payload length of the frame
+	uint32_t					Payload_Length;			//Specifies Baud payload length of the frame
 																				//This parameter must be set based on @ref USART_PayLoad_Length_define
 	
 	uint8_t						Pairity;						//Specifies Pairity bits of the frame
@@ -37,7 +37,7 @@ typedef struct
 	uint8_t						StopBits;						//Specifies Stop bits of the frame
 																				//This parameter must be set based on @ref USART_StopBits_define
 	
-	uint8_t						HwFlowCtl;					//Specifies Whether the CTS and RTS bits are enabled or not
+	uint32_t					HwFlowCtl;					//Specifies Whether the CTS and RTS bits are enabled or not
 																				//This parameter must be set based on @ref USART_HwFlowCtl_define
 	
 	uint8_t						IRQ_Enable;					//Enables or disables IRQ TX/RX

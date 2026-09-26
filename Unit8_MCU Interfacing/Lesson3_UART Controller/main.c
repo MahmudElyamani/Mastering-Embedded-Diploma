@@ -29,7 +29,6 @@
  *
  *=================================================================*/
 
-
 #include "stm32f103x6.h"
 #include "GPIO_Drivers/Stm32_F103C6_gpio_driver.h"
 #include "KEYPAD_DRIVER/keypad.h"
@@ -40,13 +39,22 @@
 
 unsigned short ch;
 
+void Yamani_UART_IRQ_Callback(void)
+{
+	MCAL_UART_ReceiveData(USART1, &ch, disable);
+	MCAL_UART_SendData(USART1, &ch, enable);
+}
+
 int main(void)
 {
 	UART_Config uartCFG;
 	uartCFG.BaudRate = UART_BAUDRate_115200;
 	uartCFG.HwFlowCtl = UART_HwFlowCtl_NONE;
-	uartCFG.IRQ_Enable = UART_IRQ_Enable_NONE;
-	uartCFG.P_IRQ_CallBack = NULL;
+	
+	uartCFG.IRQ_Enable = UART_IRQ_Enable_RXNEIE;
+	
+	uartCFG.P_IRQ_CallBack = Yamani_UART_IRQ_Callback;
+	
 	uartCFG.Pairity = UART_Pairity_NONE;
 	uartCFG.Payload_Length = UART_Payload_Length_8B;
 	uartCFG.StopBits = UART_StopBits_1;
@@ -57,7 +65,5 @@ int main(void)
 	
 	while(1)
 	{
-		MCAL_UART_ReceiveData(USART1, &ch, enable);
-		MCAL_UART_SendData(USART1, &ch, enable);
 	}
 }
