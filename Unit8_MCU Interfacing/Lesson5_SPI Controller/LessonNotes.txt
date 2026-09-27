@@ -1,0 +1,12 @@
+--- ✄ --------- 2026.09.27 14:20 -------------------
+-This lesson we will write an SPI Library for STM32F103C8 MCU, below is a step by step guide to navigate your way through the datasheet.
+• First we navigate to the block diagram of the STM32 MCU in order to locate our peripheral, in this case SPI.
+• We notice there's 2 SPI modules, SPI1 connected to APB2 -> (pclk2) and SPI2 connected to APB1 -> (pclk1).
+• Next we navigate to the STM32's memory map in order to determine the SPI peripherals base adresses.
+• Through the table of contents we navigate to the SPI chapter to read the introduction to SPI part.
+• In the SPI features page we take notes of the possible features the SPI module can provide, this will be the baseline of the
+  possible options the user will be able to choose from in the library.
+• The NSS pin can be configured to be hardware controlled only.
+• For master case the NSS can automatically switch from 1 to 0 during sending process if hardware control is enabled via SSOE bit.
+• The NSS pin can be controlled through the SSM bit in the SPI_CR1 register.
+--- ✄ --------- 2026.09.27 15:49 ------------------- Lesson stopped at 1:00:00
