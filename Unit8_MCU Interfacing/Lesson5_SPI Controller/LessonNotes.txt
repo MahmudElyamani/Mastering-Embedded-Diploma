@@ -10,3 +10,47 @@
 • For master case the NSS can automatically switch from 1 to 0 during sending process if hardware control is enabled via SSOE bit.
 • The NSS pin can be controlled through the SSM bit in the SPI_CR1 register.
 --- ✄ --------- 2026.09.27 15:49 ------------------- Lesson stopped at 1:00:00
+--- ✄ --------- 2026.10.01 14:09 -------------------
+• The STM32's TRM gives you detailed steps of what to do for register manipulation in case of master or slave (page 706,707).
+• when the SSM pin is configured to operate through the software, the NSS pin is ignored and is controlled internally by the softwar
+  This gives you the ability to use the NSS pin as a GPIO pin for any purpose you need.
+• The user can also determine the Idle polarity level for the clock to let the MCU know when it receives the clock, this can be
+  done through the CPOL and CPHA bits in the SPI_CR1 register.
+• The receiver has to know when to start sampling during clock activation, to determine this we set the CPHA bit.
+• if CPHA is set to 0 sampling will start on the first edge, if it is set to 1 then it will start on the 2nd edge. 
+• You can enable or disable SPI mode through the SPE bit
+• You can choose to operate as master or slave through the MSTR bit.
+• You can set the desired clock speed through the BR bit.
+• You can select whether you're working on half-duplex of full-duplex through he BIDIMODE and BIDIOE bits.
+
+//Driver writing Started
+Step by step method of writing a driver documented:
+1- We define the base addresses of SPI1 and SPI2.
+2- Create a new typedef for SPI that holds all of its registers through a structure.
+3- Create instances of the data using SPI1 and SPI2 base addresses casted to the SPI_Typedef.
+4- We go to the NVIC table to determine the SPI1 and SPI2 position and define SPI1_IRQ and SPI2_IRQ through them.
+5- We create clock enable macros for SPI by setting the corresponding bits for each through their bus registers.
+6- Same goes for clock reset mechanism.
+7- We define the NVIC enable and disable macros like we did with RCC through their NVIC registers.
+8- After the basic setup is done, we now create our own SPI source and header files which will house our library functions.
+Library writing steps:
+1- We first have to start with the configurable items list, this will be everything the user will be able to configure and customize.
+• we make a structure for spi configuration called SPI_Config.
+• since each register has up to 15 bits maximum to manipulate we decide the size of SPI_Config's members as uint16_t.
+• we add the options to the user with description and reference to per-set values the user has to choose from.
+• we also add an IRQ_Enable option and a pointer to a function that will be called if the IRQ_Enable is set.
+• Next we define each register reference and the options available to the user.
+2- Next we write the API's supported by the driver (I.e the functions the user can use from the library)
+• The initialization function which is a stable in all drivers, takes the SPI register required to edit and the config register.
+• The de-initialization funciton takes the SPI register and resets all of its values.
+• Pin setting API for selecting which pins do which function for which SPI register.
+• Data sending API which sends data stored on a given buffer to a given SPI register at a state depending on polling or interrupt.
+• we add an enum to define if polling is enabled or disabled so the user can choose which.
+• We do the same for receive data API and receive and transmit API which automatically overrides on the given buffer.
+3- We then set up our source file by adding the API's from our library and documenting their describtion and parameters.
+• For each API it is necessary to add safety by creating temporary variables that we manipulate then pass its value to the actual address.
+• Since we have 2 SPI's that can work simultaneously with each other the config register can get mixed up between the two, so we
+  make an array of the 2 registers to store the config register's value in them and set their value to 0.
+• we have to account for SPI1 and SPI2 by making an If else statement in the init function in which we enable their respective macros.
+• We add the user picked options to our temporary variable that we're going to add to our actual register later on.
+--- ✄ --------- 2026.10.01 15:51 ------------------- Lesson stopped at 2:49:03
