@@ -54,3 +54,10 @@ Library writing steps:
 • we have to account for SPI1 and SPI2 by making an If else statement in the init function in which we enable their respective macros.
 • We add the user picked options to our temporary variable that we're going to add to our actual register later on.
 --- ✄ --------- 2026.10.01 15:51 ------------------- Lesson stopped at 2:49:03
+--- ✄ --------- 2026.10.02 14:00 ------------------- 
+• At the end of our initialization function we pass the value of both temp register to the actual register of CR1 and CR2.
+• The de-init API should start by closing the interrupt controllers for the given SPI as well as their clocks.
+• For the set pins function where we assign the GPIO to the SPI, we go to the GPIO map in the stm32 to check which pins are responsible for
+  controlling MISO , MOSI , SCK , NSS for both SPI1 and SPI2.
+• Then we decide their set up based on the recommended GPIO configuration for each pin on page 167.
+--- ✄ --------- 2026.10.02 15:00 ------------------- 
