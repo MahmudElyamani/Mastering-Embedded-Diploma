@@ -66,17 +66,39 @@ void MCAL_SPI_Init (SPI_Typedef *SPIx, SPI_Config *SPI_Config)
 	tempCR1 |= SPI_Config->CLKPhase ;
 		
 	//SPI NSS
-	tempCR2 |= SPI_Config->NSS ;
-		
+	if (SPI_Config->NSS == SPI_NSS_Hard_Master_Enable)
+	{
+		tempCR2 |= SPI_Config->NSS;
+	}
+	else if (SPI_Config->NSS == SPI_NSS_Hard_Master_Disable)
+	{
+		tempCR2 &= SPI_Config->NSS;
+	}
+	else
+	{
+		tempCR1 |= SPI_Config->NSS;
+	}
+	
 	//SPI BaudratePrescaler
 	tempCR1 |= SPI_Config->BaudratePrescaler ;
 		
 	//SPI IRQ_Enable
-	tempCR1 |= SPI_Config->IRQ_Enable ;
+	if (SPI_Config->IRQ_Enable != SPI_IRQ_ENABLE_NONE)
+	{
+		tempCR2 |= SPI_Config->IRQ_Enable;
+		if(SPIx == SPI1)
+		{
+			NVIC_IRQ35_SPI1_Enable;
+		}
+		else if (SPIx == SPI2)
+		{
+			NVIC_IRQ36_SPI2_Enable;
+		}
+	}
 	
-	
+	SPIx->CR1 = tempCR1;
+	SPIx->CR2 = tempCR2;
 
-	
 }
 
 
@@ -90,6 +112,15 @@ void MCAL_SPI_Init (SPI_Typedef *SPIx, SPI_Config *SPI_Config)
  */
 void MCAL_SPI_Deinit(SPI_Typedef *SPIx)
 {
+	if (SPIx == SPI1)
+	{
+		NVIC_IRQ35_SPI1_Disable;
+		RCC_SPI1_CLK_Reset
+	}
+	else if (SPIx == SPI2)
+	{
+		NVIC_IRQ36_SPI2_Disable;
+	}
 }
 
 
