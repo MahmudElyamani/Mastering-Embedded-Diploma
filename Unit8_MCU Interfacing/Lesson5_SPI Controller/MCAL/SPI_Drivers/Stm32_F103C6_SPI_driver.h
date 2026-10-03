@@ -17,10 +17,13 @@
 #include "RCC_Drivers/Stm32_F103C6_RCC_driver.h"
 #include "EXTI_Driver/Stm32_F103C6_EXTI_Driver.h"
  
- 
+ //Since interrupts could occur in one of 4 scenarios we make a structure to distinguish between them
  struct S_IRQ_SRC
  {
-	 uint8_t TXE:1;
+	 uint8_t TXE:1;					//Transmit buffer is empty Interrupt
+	 uint8_t RXNE:1;				//Receive buffer is not empty interrupt
+	 uint8_t ERRI:1;				//Error Interrupt
+	 uint8_t RESERVED:5;
  };
  
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -55,14 +58,95 @@
 	 uint16_t   IRQ_Enable;				//Whether or not you're using interrupt or polling
 										//Chosen based on a value at @ref SPI_IRQ_Enable
 										
-	void (* IRQ_CallBack)();			//Set the desired function to be called once IRQ happens
+	void (* IRQ_CallBack)(struct S_IRQ_SRC irq_src);    //Set the desired function to be called once IRQ happens
  }SPI_Config;
  
  
  
  
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+//Reference Macros:
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+ //@ref SPI_Device_Mode
+ #define SPI_MODE_MASTER					(0x1U<<2)
+ #define SPI_MODE_SLAVE						(0x0U<<2)
+ 
+ 
+ //@ref SPI_Communication_Mode
+ #define SPI_DIRECTION_2LINES				(0x0U)
+ #define SPI_DIRECTION_2LINES_RXONLY		(0x1U<<10)
+ #define SPI_DIRECTION_1LINE_Receive_only	(0x1U<<15)
+ #define SPI_DIRECTION_1LINE_Transmit_only	((0x1U<<15) | (0x1U<<14))
+ 
+ 
+ //@ref SPI_Frame_Format
+ #define SPI_FRAME_FORMATE_MSB_FIRST		(0x0U)
+ #define SPI_FRAME_FORMATE_LSB_FIRST		(0x1U<<7)
  
  
  
+ //@ref SPI_Data_Size
+ #define SPI_DataSize_8BIT					(0x0U)
+ #define SPI_DataSize_16BIT					(0x1U<<11)
  
+ 
+ 
+ //@ref SPI_Clock_Polarity
+ #define SPI_CLOCK_POLARITY_IDLE0			(0x0U)
+ #define SPI_CLOCK_POLARITY_IDLE1			(0x1U<<1)
+ 
+ 
+ 
+ //@ref SPI_Clock_Phase
+ #define SPI_CLOCK_PHASE_1ST_EDGE			(0x0U)
+ #define SPI_CLOCK_PHASE_2ND_EDGE			(0x1U)
+ 
+ 
+ 
+ //@ref SPI_NSS
+ #define SPI_NSS_HARDWARE_ENABLE			(0x0U)
+ #define SPI_NSS_SOFTWARE_ENABLE_SLAVE		(0x1U<<9)
+ #define SPI_NSS_SOFTWARE_ENABLE_MASTER		(0x1U<<2)
+ 
+ 
+ 
+ //@ref SPI_Baudrate
+ #define SPI_BAUDRATE_PRESCALER_2			(0x0U<<3)
+ #define SPI_BAUDRATE_PRESCALER_4			(0x1U<<3)
+ #define SPI_BAUDRATE_PRESCALER_8			(0x2U<<3)
+ #define SPI_BAUDRATE_PRESCALER_16			(0x3U<<3)
+ #define SPI_BAUDRATE_PRESCALER_32			(0x4U<<3)
+ #define SPI_BAUDRATE_PRESCALER_64			(0x5U<<3)
+ #define SPI_BAUDRATE_PRESCALER_128			(0x6U<<3)
+ #define SPI_BAUDRATE_PRESCALER_256			(0x7U<<3)
+ 
+ 
+ 
+ //@ref SPI_IRQ_Enable
+ #define SPI_IRQ_ENABLE_NONE				(uint32_t)(0)
+ #define SPI_IRQ_ENABLE_TXEIE				(uint32_t)(1U<<7)
+ #define SPI_IRQ_ENABLE_RXNEIE				(uint32_t)(1U<<6)
+ #define SPI_IRQ_ENABLE_ERRIE				(uint32_t)(0U<<5)
+ 
+ 
+ 
+ //@ref SPI_Polling_Mechanism
+  enum PollingMechanism
+ {
+	 pollingEnable,
+	 pollingDisable
+ };
+ 
+ //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+ //APIs suppored by MCAL SPI DRIVER:
+ //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+	 
+ void MCAL_SPI_Init (SPI_Typedef *SPIx, SPI_Config *SPI_Config);
+ void MCAL_SPI_Deinit(SPI_Typedef *SPIx);
+ void MCAL_SPI_Set_Pins(SPI_Typedef *SPIx);
+ void MCAL_SPI_SendData(SPI_Typedef *SPIx, uint16_t *pTxBuffer, enum PollingMechanism PollingEn);
+ void MCAL_SPI_ReceiveData(SPI_Typedef *SPIx, uint16_t *pRxBuffer, enum PollingMechanism PollingEn);
+ void MCAL_SPI_TX_RX(SPI_Typedef *SPIx, uint16_t *pTxRxBuffer, enum PollingMechanism PollingEnable);
+
  #endif
