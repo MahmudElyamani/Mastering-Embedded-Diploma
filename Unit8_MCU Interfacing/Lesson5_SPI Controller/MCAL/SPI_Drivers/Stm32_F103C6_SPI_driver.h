@@ -105,7 +105,7 @@
  
  //@ref SPI_NSS
  #define SPI_NSS_Hard_Slave								(0x0U) 
- #define SPI_NSS_Hard_Master_Disable 			~(0x1U<<2)
+ #define SPI_NSS_Hard_Master_Disable 			~(0x00000001U<<2)
  #define SPI_NSS_Hard_Master_Enable				(0x1U<<2) 
 
  #define SPI_NSS_Software_Reset						(0x1U<<9) 
@@ -149,6 +149,6 @@
  void MCAL_SPI_Set_Pins(SPI_Typedef *SPIx);
  void MCAL_SPI_SendData(SPI_Typedef *SPIx, uint16_t *pTxBuffer, enum PollingMechanism PollingEn);
  void MCAL_SPI_ReceiveData(SPI_Typedef *SPIx, uint16_t *pRxBuffer, enum PollingMechanism PollingEn);
- void MCAL_SPI_TX_RX(SPI_Typedef *SPIx, uint16_t *pTxRxBuffer, enum PollingMechanism PollingEnable);
+ void MCAL_SPI_TX_RX(SPI_Typedef *SPIx, uint16_t *pTxRxBuffer, enum PollingMechanism PollingEn);
 
  #endif

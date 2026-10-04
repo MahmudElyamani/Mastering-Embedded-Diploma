@@ -115,11 +115,12 @@ void MCAL_SPI_Deinit(SPI_Typedef *SPIx)
 	if (SPIx == SPI1)
 	{
 		NVIC_IRQ35_SPI1_Disable;
-		RCC_SPI1_CLK_Reset
+		RCC_SPI1_CLK_Reset();
 	}
 	else if (SPIx == SPI2)
 	{
 		NVIC_IRQ36_SPI2_Disable;
+		RCC_SPI2_CLK_Reset();
 	}
 }
 
@@ -134,6 +135,130 @@ void MCAL_SPI_Deinit(SPI_Typedef *SPIx)
  */
 void MCAL_SPI_Set_Pins(SPI_Typedef *SPIx)
 {
+	if ( SPIx == SPI1)
+	{
+		if (Global_SPI_Config[SPI1_INDEX]->Device_Mode == SPI_MODE_MASTER)
+		{
+			//NSS:
+			switch (Global_SPI_Config[SPI1_INDEX]->NSS)
+			{
+				case SPI_NSS_Hard_Master_Disable:
+				PinCfg.GPIO_PinNumber = GPIO_PIN_4;
+				PinCfg.GPIO_MODE = GPIO_MODE_INPUT_FLO;
+				MCAL_GPIO_Init(GPIOA, &PinCfg);
+				break;
+				case SPI_NSS_Hard_Master_Enable:
+				PinCfg.GPIO_PinNumber = GPIO_PIN_4;
+				PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_AF_PP;
+				PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
+				MCAL_GPIO_Init(GPIOA, &PinCfg);
+				break;
+			}
+			//PA5: SPI1_SCK
+			PinCfg.GPIO_PinNumber = GPIO_PIN_5;
+			PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_AF_PP;
+			PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
+			MCAL_GPIO_Init(GPIOA, &PinCfg);
+			
+			//PA6: SPI1_MISO
+			PinCfg.GPIO_PinNumber = GPIO_PIN_6;
+			PinCfg.GPIO_MODE = GPIO_MODE_INPUT_FLO;
+			MCAL_GPIO_Init(GPIOA, &PinCfg);
+			
+			//PA7: SPI1_MOSI
+			PinCfg.GPIO_PinNumber = GPIO_PIN_7;
+			PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_AF_PP;
+			PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
+			MCAL_GPIO_Init(GPIOA, &PinCfg);
+		}
+		else
+		{
+			//NSS
+			if (Global_SPI_Config[SPI1_INDEX]->NSS == SPI_NSS_Hard_Slave)
+			{
+				PinCfg.GPIO_PinNumber = GPIO_PIN_4;
+				PinCfg.GPIO_MODE = GPIO_MODE_INPUT_FLO;
+				MCAL_GPIO_Init(GPIOA, &PinCfg);
+			}
+			// PA5 : SPI1_SCK
+			PinCfg.GPIO_PinNumber = GPIO_PIN_5;
+			PinCfg.GPIO_MODE = GPIO_MODE_INPUT_FLO;
+			MCAL_GPIO_Init(GPIOA, &PinCfg);
+			
+			// PA6 : SPI1_MISO
+			PinCfg.GPIO_PinNumber = GPIO_PIN_6;
+			PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_AF_PP;
+			PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
+			MCAL_GPIO_Init(GPIOA, &PinCfg);
+			
+			// PA6 : SPI1_MOSI
+			PinCfg.GPIO_PinNumber = GPIO_PIN_7;
+			PinCfg.GPIO_MODE = GPIO_MODE_INPUT_FLO;
+			MCAL_GPIO_Init(GPIOA, &PinCfg);
+		}
+	}
+	else if ( SPIx == SPI2)
+	{
+		if (Global_SPI_Config[SPI2_INDEX]->Device_Mode == SPI_MODE_MASTER)
+		{
+			//NSS:
+			switch (Global_SPI_Config[SPI2_INDEX]->NSS)
+			{
+				case SPI_NSS_Hard_Master_Disable:
+				PinCfg.GPIO_PinNumber = GPIO_PIN_12;
+				PinCfg.GPIO_MODE = GPIO_MODE_INPUT_FLO;
+				MCAL_GPIO_Init(GPIOB, &PinCfg);
+				break;
+				case SPI_NSS_Hard_Master_Enable:
+				PinCfg.GPIO_PinNumber = GPIO_PIN_12;
+				PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_AF_PP;
+				PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
+				MCAL_GPIO_Init(GPIOB, &PinCfg);
+				break;
+			}
+			//PA5: SPI2_SCK
+			PinCfg.GPIO_PinNumber = GPIO_PIN_13;
+			PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_AF_PP;
+			PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
+			MCAL_GPIO_Init(GPIOB, &PinCfg);
+			
+			//PA6: SPI2_MISO
+			PinCfg.GPIO_PinNumber = GPIO_PIN_14;
+			PinCfg.GPIO_MODE = GPIO_MODE_INPUT_FLO;
+			MCAL_GPIO_Init(GPIOB, &PinCfg);
+			
+			//PA7: SPI2_MOSI
+			PinCfg.GPIO_PinNumber = GPIO_PIN_15;
+			PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_AF_PP;
+			PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
+			MCAL_GPIO_Init(GPIOB, &PinCfg);
+		}
+		else
+		{
+			//NSS
+			if (Global_SPI_Config[SPI2_INDEX]->NSS == SPI_NSS_Hard_Slave)
+			{
+				PinCfg.GPIO_PinNumber = GPIO_PIN_12;
+				PinCfg.GPIO_MODE = GPIO_MODE_INPUT_FLO;
+				MCAL_GPIO_Init(GPIOB, &PinCfg);
+			}
+			// PA5 : SPI2_SCK
+			PinCfg.GPIO_PinNumber = GPIO_PIN_13;
+			PinCfg.GPIO_MODE = GPIO_MODE_INPUT_FLO;
+			MCAL_GPIO_Init(GPIOB, &PinCfg);
+			
+			// PA6 : SPI2_MISO
+			PinCfg.GPIO_PinNumber = GPIO_PIN_14;
+			PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_AF_PP;
+			PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
+			MCAL_GPIO_Init(GPIOB, &PinCfg);
+			
+			// PA6 : SPI2_MOSI
+			PinCfg.GPIO_PinNumber = GPIO_PIN_15;
+			PinCfg.GPIO_MODE = GPIO_MODE_INPUT_FLO;
+			MCAL_GPIO_Init(GPIOB, &PinCfg);
+		}
+	}
 }
 
 
@@ -147,8 +272,14 @@ void MCAL_SPI_Set_Pins(SPI_Typedef *SPIx)
  * @param [in] 		-PollingEn : can be picked based on @ref SPI_Polling_Mechanism, determines if polling will occur
  * @retval 			-None
  */
+#define SPI_SR_TXE					((uint8_t)0x02)			//Transmit buffer empty
+#define SPI_SR_RXNE					((uint8_t)0x01)			//Receive buffer not empty
 void MCAL_SPI_SendData(SPI_Typedef *SPIx, uint16_t *pTxBuffer, enum PollingMechanism PollingEn)
 {
+	if (PollingEn == pollingEnable)
+		while(!((SPIx)->SR & SPI_SR_TXE));
+	
+	SPIx->DR = *pTxBuffer;
 }
 
 
@@ -164,6 +295,10 @@ void MCAL_SPI_SendData(SPI_Typedef *SPIx, uint16_t *pTxBuffer, enum PollingMecha
  */
 void MCAL_SPI_ReceiveData(SPI_Typedef *SPIx, uint16_t *pRxBuffer, enum PollingMechanism PollingEn)
 {
+	if (PollingEn == pollingEnable)
+		while(!((SPIx)->SR & SPI_SR_RXNE));
+	
+	*pRxBuffer = SPIx->DR;
 }
 
 
@@ -177,8 +312,40 @@ void MCAL_SPI_ReceiveData(SPI_Typedef *SPIx, uint16_t *pRxBuffer, enum PollingMe
  * @param [in] 		-PollingEn : can be picked based on @ref SPI_Polling_Mechanism, determines if polling will occur
  * @retval 			-None
  */
-void MCAL_SPI_TX_RX(SPI_Typedef *SPIx, uint16_t *pTxRxBuffer, enum PollingMechanism PollingEnable)
+void MCAL_SPI_TX_RX(SPI_Typedef *SPIx, uint16_t *pTxRxBuffer, enum PollingMechanism PollingEn)
 {
+	if (PollingEn == pollingEnable)
+		while(!((SPIx)->SR & SPI_SR_TXE));
+	SPIx->DR = *pTxRxBuffer;
+	
+	if (PollingEn == pollingEnable)
+		while(!((SPIx)->SR & SPI_SR_RXNE));
+	*pTxRxBuffer = SPIx->DR;
+}
+
+
+
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+//			IRQ:
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+void SPI1_IRQHandler (void)
+{
+	struct S_IRQ_SRC irq_src;
+	irq_src.TXE = ( (SPI1->SR & (1<<1)) >> 1);
+	irq_src.RXNE = ( (SPI1->SR & (1<<0)) >> 0);
+	irq_src.ERRI = ( (SPI1->SR & (1<<4)) >> 4);
+	
+	Global_SPI_Config [SPI1_INDEX]->IRQ_CallBack(irq_src);
+}
+
+void SPI2_IRQHandler (void)
+{
+	struct S_IRQ_SRC irq_src;
+	irq_src.TXE = ( (SPI2->SR & (1<<1)) >> 1);
+	irq_src.RXNE = ( (SPI2->SR & (1<<0)) >> 0);
+	irq_src.ERRI = ( (SPI2->SR & (1<<4)) >> 4);
+	
+	Global_SPI_Config [SPI2_INDEX]->IRQ_CallBack(irq_src);
 }
 
 
