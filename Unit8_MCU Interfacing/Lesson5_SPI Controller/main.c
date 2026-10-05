@@ -19,8 +19,20 @@ unsigned short ch;
 
 void Yamani_UART_IRQ_Callback(void)
 {
+#ifdef MCU_Act_As_Master
+	
 	MCAL_UART_ReceiveData(USART1, &ch, disable);
 	MCAL_UART_SendData(USART1, &ch, enable);
+	
+	//Reset slave select pin
+	MCAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, 0);
+	
+	MCAL_SPI_TX_RX ( SPI1, &ch, pollingEnable);
+	
+	//Sets the slave select pin back
+	MCAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, 1);
+	
+#endif
 }
 
 int main(void)
@@ -41,6 +53,40 @@ int main(void)
 	MCAL_UART_Init(USART1, &uartCFG);
 	MCAL_UART_GPIO_Set_Pins(USART1);
 	
+	
+	//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+    //			SPI Init:
+    //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+	
+	//Common SPI(1) Configuration for master and slave.
+	SPI_Config SPI1CFG;
+	SPI1CFG.CLKPhase = SPI_CLOCK_PHASE_2ND_EDGE;
+	SPI1CFG.CLKPolarity = SPI_CLOCK_POLARITY_IDLE1;
+	SPI1CFG.DataSize = SPI_DataSize_8BIT;
+	SPI1CFG.Frame_Format = SPI_FRAME_FORMATE_MSB_FIRST;
+	SPI1CFG.BaudratePrescaler = SPI_BAUDRATE_PRESCALER_8;
+	SPI1CFG.Communication_Mode = SPI_DIRECTION_2LINES;
+	
+#ifdef MCU_Act_As_Master
+	SPI1CFG.Device_Mode = SPI_MODE_MASTER;
+	SPI1CFG.IRQ_Enable = SPI_IRQ_ENABLE_NONE;
+	SPI1CFG.NSS = SPI_NSS_Software_Set;
+	SPI1CFG.IRQ_CallBack = NULL;
+#endif
+
+	MCAL_SPI_Init(SPI1, &SPI1CFG);
+	MCAL_SPI_Set_Pins(SPI1);
+	
+	//Configure SS on PA.4 by GPIO
+	PinCfg.GPIO_PinNumber = GPIO_PIN_4;
+	PinCfg.GPIO_MODE = GPIO_MODE_OUTPUT_PP;
+	PinCfg.GPIO_Output_Speed = GPIO_SPEED_10M;
+	MCAL_GPIO_Init(GPIOA, &PinCfg);
+	
+	//Force slave select (High) Idle mode
+	MCAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, 1);
+	
+	/*	Loop Forever  */
 	while(1)
 	{
 	}
