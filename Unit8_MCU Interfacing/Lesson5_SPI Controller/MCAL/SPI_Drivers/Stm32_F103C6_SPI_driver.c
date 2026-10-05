@@ -24,7 +24,6 @@ SPI_Config* Global_SPI_Config[2]  =  {NULL, NULL};
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 
-
 /**================================================================
  * @Fn				-MCAL_SPI_Init
  * @brief 			-Initializes a given SPI register using the set configurations chosen by the user
