@@ -80,6 +80,7 @@
 #define NVIC_IRQ31_I2C2_EV_Enable			(NVIC_ISER1 |= 1<<(I2C2_EV_IRQ - 32))
 #define NVIC_IRQ31_I2C2_ER_Enable			(NVIC_ISER1 |= 1<<(I2C2_ER_IRQ - 32))
 
+
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 //EXTI:
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*

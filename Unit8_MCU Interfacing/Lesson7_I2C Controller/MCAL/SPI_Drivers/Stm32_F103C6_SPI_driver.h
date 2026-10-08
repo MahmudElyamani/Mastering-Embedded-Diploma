@@ -105,7 +105,7 @@
  
  //@ref SPI_NSS
  #define SPI_NSS_Hard_Slave						(0x0U) 
- #define SPI_NSS_Hard_Master_Disable 		   ~(0x1U<<2)
+ #define SPI_NSS_Hard_Master_Disable 		  (0x1U<<0)
  #define SPI_NSS_Hard_Master_Enable				(0x1U<<2) 
 
  #define SPI_NSS_Software_Reset					(0x1U<<9) 
