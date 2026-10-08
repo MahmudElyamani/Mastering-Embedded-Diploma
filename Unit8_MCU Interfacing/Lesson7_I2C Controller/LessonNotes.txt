@@ -1,0 +1,37 @@
+--- ✄ --------- 2026.10.8 10:50 -------------------
+
+
+
+
+
+
+
+
+
+
+----------Add previous notes here-----------------
+Transfering data via DMA on I2C Master:
+• DMA contains SAR (Source Address Register) and DAR (Destination Address Register).
+• DMA works by gathering SAR from user and writing it to the DAR without the processor being involved.
+• We can program the DMA to do this operation without having to put extra load on the processor.
+
+
+What is hold time in data transfer?:
+• When signals go from logic HIGH to logic LOW they don't do so instantly
+• and so for protocols like SPI if the clock pulse happens on the SCL line before the SDA line fully goes to low state it could trigger
+  a false stop operation.
+• So we introduce a small time hold once a falling edge signal on SDA line is detected to make sure it fully goes to 0 before we send a
+  signal on SCL.
+• This hold period is called hold time.
+• hold time period can be programmed by the register to be set to the desired value.
+
+
+How would an I2C master read from a TC74 IC slave? Explain the process:
+1. The I2C Master first sends a start bit followed by the TC74's Address and a write bit.
+2. This write bit is to tell all slaves on the bus that I want the salve whose address is this.
+3. Then the TC74 sends back an ACK bit given that its address matches the one sent.
+4. Afterwards the master sends the address of the register it wants to read from the TC74 IC.
+5. The TC74 then sends an ACK to the master
+6. Finally the master sends another start bit followed by the register address and a read bit to tell the slave to begin sending .
+7. This is called repeated start operation.
+
