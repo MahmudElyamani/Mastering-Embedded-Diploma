@@ -143,7 +143,7 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>367</LineNumber>
+          <LineNumber>521</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -412,6 +412,30 @@
       <bDave2>0</bDave2>
       <PathWithFileName>.\MCAL\SPI_Drivers\Stm32_F103C6_SPI_driver.h</PathWithFileName>
       <FilenameWithoutPath>Stm32_F103C6_SPI_driver.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>2</GroupNumber>
+      <FileNumber>17</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\MCAL\I2C_Drivers\Stm32_F103C6_I2C_driver.c</PathWithFileName>
+      <FilenameWithoutPath>Stm32_F103C6_I2C_driver.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>2</GroupNumber>
+      <FileNumber>18</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\MCAL\I2C_Drivers\Stm32_F103C6_I2C_driver.h</PathWithFileName>
+      <FilenameWithoutPath>Stm32_F103C6_I2C_driver.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

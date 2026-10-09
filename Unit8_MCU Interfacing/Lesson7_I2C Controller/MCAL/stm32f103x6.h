@@ -76,9 +76,14 @@
 
 //I2C
 #define NVIC_IRQ31_I2C1_EV_Enable			(NVIC_ISER0 |= 1<<I2C1_EV_IRQ)
-#define NVIC_IRQ31_I2C1_ER_Enable			(NVIC_ISER1 |= 1<<(I2C1_ER_IRQ - 32))
-#define NVIC_IRQ31_I2C2_EV_Enable			(NVIC_ISER1 |= 1<<(I2C2_EV_IRQ - 32))
-#define NVIC_IRQ31_I2C2_ER_Enable			(NVIC_ISER1 |= 1<<(I2C2_ER_IRQ - 32))
+#define NVIC_IRQ32_I2C1_ER_Enable			(NVIC_ISER1 |= 1<<(I2C1_ER_IRQ - 32))
+#define NVIC_IRQ33_I2C2_EV_Enable			(NVIC_ISER1 |= 1<<(I2C2_EV_IRQ - 32))
+#define NVIC_IRQ34_I2C2_ER_Enable			(NVIC_ISER1 |= 1<<(I2C2_ER_IRQ - 32))
+
+#define NVIC_IRQ31_I2C1_EV_Disable			(NVIC_ICER0 |= 1<<I2C1_EV_IRQ)
+#define NVIC_IRQ32_I2C1_ER_Disable			(NVIC_ICER1 |= 1<<(I2C1_ER_IRQ - 32))
+#define NVIC_IRQ33_I2C2_EV_Disable			(NVIC_ICER1 |= 1<<(I2C2_EV_IRQ - 32))
+#define NVIC_IRQ34_I2C2_ER_Disable			(NVIC_ICER1 |= 1<<(I2C2_ER_IRQ - 32))
 
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -499,8 +504,8 @@ typedef struct
 
 
 //I2C
-#define RCC_I2C1_CLK_EN()						(RCC->APB1EBR		|= 1<<21)
-#define RCC_I2C2_CLK_EN()						(RCC->APB1EBR		|= 1<<22)
+#define RCC_I2C1_CLK_EN()						(RCC->APB1ENR		|= 1<<21)
+#define RCC_I2C2_CLK_EN()						(RCC->APB1ENR		|= 1<<22)
 
 #define RCC_I2C1_CLK_Reset()				(RCC->APB1RSTR		|= 1<<21)
 #define RCC_I2C2_CLK_Reset()				(RCC->APB1RSTR		|= 1<<22)

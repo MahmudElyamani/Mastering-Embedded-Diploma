@@ -468,6 +468,16 @@
               <FileType>5</FileType>
               <FilePath>.\MCAL\SPI_Drivers\Stm32_F103C6_SPI_driver.h</FilePath>
             </File>
+            <File>
+              <FileName>Stm32_F103C6_I2C_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MCAL\I2C_Drivers\Stm32_F103C6_I2C_driver.c</FilePath>
+            </File>
+            <File>
+              <FileName>Stm32_F103C6_I2C_driver.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MCAL\I2C_Drivers\Stm32_F103C6_I2C_driver.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
