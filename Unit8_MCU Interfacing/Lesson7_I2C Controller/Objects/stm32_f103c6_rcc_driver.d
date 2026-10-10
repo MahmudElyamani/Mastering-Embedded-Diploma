@@ -1,6 +1,6 @@
 ./objects/stm32_f103c6_rcc_driver.o: \
   MCAL\RCC_Drivers\Stm32_F103C6_RCC_driver.c \
   MCAL\RCC_Drivers\Stm32_F103C6_RCC_driver.h MCAL\stm32f103x6.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
   MCAL\GPIO_Drivers\Stm32_F103C6_gpio_driver.h

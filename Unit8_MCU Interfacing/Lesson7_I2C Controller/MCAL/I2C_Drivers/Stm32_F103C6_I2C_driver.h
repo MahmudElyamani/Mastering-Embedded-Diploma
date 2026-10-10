@@ -151,10 +151,26 @@ typedef enum
 typedef enum
 {
 	I2C_FLAG_BUSY,
-	
+	EV5,
+	EV6,
+	EV7,
+	EV8,
+	EV8_1,
+	MASTER_BYTE_TRANSMITTING = ((uint32_t)0x00070080)
 	
 }Status;
 
+
+typedef enum
+{
+	I2C_Direction_Transmitter,
+	I2C_Direction_Receiver
+	
+}I2C_Direction;
+
+
+
+#define I2C_EVENT_MASTER_BYTE_TRANSMITTING		((uint32_t)0x00070080)
 /*
  *
  *===================================================================================
@@ -172,5 +188,11 @@ typedef enum
  void MCAL_I2C_Master_RX (I2C_Typedef *I2Cx, uint16_t devAddr, uint8_t *dataOut, uint32_t dataLen, Stop_Condition Stop, Repeated_Start start);
  void I2C_GenerateStart(I2C_Typedef* I2Cx, FunctionalState NewState, Repeated_Start start);
  FlagStatus I2C_GetFlagStatus(I2C_Typedef *I2Cx, Status flag);
+ void I2C_SendAddress (I2C_Typedef I2Cx, uint16_t Address, I2C_Direction Direction);
+ void I2C_GenerateSTOP(I2C_Typedef *I2Cx, FunctionalState NewState);
+ 
+ //Slave Interrupt mechanism
+ void MCAL_I2C_SlaveSendData( I2C_Typedef *I2Cx, uint8_t data );
+ uint8_t MCAL_I2C_SlaveReceiveData( I2C_Typedef *I2Cx );
 
  #endif

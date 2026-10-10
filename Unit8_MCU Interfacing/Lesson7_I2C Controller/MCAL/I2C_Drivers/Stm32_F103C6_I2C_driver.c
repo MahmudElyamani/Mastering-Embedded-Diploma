@@ -251,7 +251,37 @@
  
  void MCAL_I2C_Master_TX (I2C_Typedef *I2Cx, uint16_t devAddr, uint8_t *dataOut, uint32_t dataLen, Stop_Condition Stop, Repeated_Start start)
  {
+	 int i = 0;
+	 //Todo:
+	 //Support timeout operation with a timer for a specific duration and raises an interrupt
 	 // 1. Set the START bit in the I2C_CR1 register to generate a start condition.
+	 I2C_GenerateStart(I2Cx, Enable, start);
+	 
+	 //2.Waits for EV5
+	 while (!I2C_GetFlagStatus(I2Cx,EV5));
+	 
+	 //3.Send address
+	 I2C_SendAddress(*I2Cx, devAddr, I2C_Direction_Transmitter);
+	 
+	 //4.Waits EV6
+	 while (!I2C_GetFlagStatus(I2Cx,EV6));
+	 
+	 //5. 	TRA, BUSY, MSL, TXE flags	
+	 while (!I2C_GetFlagStatus(I2Cx, MASTER_BYTE_TRANSMITTING));
+
+	 //6. Sends the data to be transmitted
+	 for ( i = 0; i < dataLen; i++)
+	 {
+		 I2Cx->DR = dataOut[i];
+		 //EV8: wait for TxE to be empty
+		 while (!I2C_GetFlagStatus(I2Cx,EV8));
+	 }
+	 
+	 //7. Sends Stop condition
+	 if ( Stop == With_Stop)
+	 {
+		 I2C_GenerateSTOP(I2Cx, Enable);
+	 }
  }
 
  
@@ -273,6 +303,44 @@
  
  void MCAL_I2C_Master_RX (I2C_Typedef *I2Cx, uint16_t devAddr, uint8_t *dataOut, uint32_t dataLen, Stop_Condition Stop, Repeated_Start start)
  {
+	 uint8_t index = I2C1 == I2C1 ? I2C1_INDEX : I2C2_INDEX;
+	 int i = 0;
+	 // 1. Set the START bit in the I2C_CR1 register to generate a start condition.
+	 I2C_GenerateStart(I2Cx, Enable, start);
+	 
+	 //2.Waits for EV5
+	 while (!I2C_GetFlagStatus(I2Cx,EV5));
+	 
+	 //3.Send address
+	 I2C_SendAddress(*I2Cx, devAddr, I2C_Direction_Receiver);
+	 
+	 //4.Waits EV6
+	 while (!I2C_GetFlagStatus(I2Cx,EV6));
+	 
+	 //I2C_AcknowledgeConfig(I2Cx, Enable);
+	 
+	 //5.Read data
+	 if ( dataLen )
+	 {
+		 for (i = dataLen; i>1; i--)
+		 {
+			 while (!I2C_GetFlagStatus(I2Cx,EV7));
+			 *dataOut = I2C1->DR;
+			 dataOut++;
+		 }
+		 //I2C_AcknowledgeConfig(I2Cx, Disable);
+		 
+	 }
+	 
+	 //6. Sends Stop condition
+	 if ( Stop == With_Stop)
+	 {
+		 I2C_GenerateSTOP(I2Cx, Enable);
+	 }
+	 
+	 //7.re-enable ACKing
+	 if (Global_I2C_Config[index].I2C_Ack_Control == I2C_Ack_Enable);
+		 //I2C_AcknowledgeConfig(I2Cx, Enable);
  }
 
  
@@ -294,7 +362,17 @@
 	 if ( start != repeated_start )
 	 {
 		 //Check if BUS is idle
-		 while(I2C_GetFlagStatus(I2Cx, I2C_FLAG_BUSY));  // Stopped at 4:20:00
+		 while(I2C_GetFlagStatus(I2Cx, I2C_FLAG_BUSY));
+	 }
+	 if (NewState != Disable)
+	 {
+		 //Generates a start Condition
+		 I2C1->CR1 |= I2C_CR1_START;
+	 }
+	 else
+	 {
+		 //disables the start Condition
+		 I2C1->CR1 &= ~(I2C_CR1_START);
 	 }
  }
  
@@ -313,6 +391,7 @@
  {
 	 volatile uint32_t dummyRead ;
 	 FlagStatus bitstatus = RESET;
+	 uint32_t flag1 = 0, flag2 = 0, lastevent = 0;
 	 switch (flag)
 	 {
 		 case I2C_FLAG_BUSY:
@@ -321,7 +400,157 @@
 				 bitstatus = SET;
 			 else
 				 bitstatus = RESET;
+			 break;
+		 }
+		 case EV5:
+		 {
+			 if ( (I2Cx->SR1) & (I2C_SR1_SB) )
+				 bitstatus = SET;
+			 else
+				 bitstatus = RESET;
+			 break;
+		 }
+		 case EV6:
+		 {
+			 if ( (I2Cx->SR1) & (I2C_SR1_ADDR) )
+				 bitstatus = SET;
+			 else
+				 bitstatus = RESET;
+			 dummyRead = I2Cx->SR2;
+			 break;
+		 }
+		 case EV7:
+		 {
+			 if ( (I2Cx->SR1) & (I2C_SR1_RXNE) )
+				 bitstatus = SET;
+			 else
+				 bitstatus = RESET;
+			 break;
+		 }
+		 case EV8_1:
+		 case EV8:
+		 {
+			 if ( (I2Cx->SR1) & (I2C_SR1_TXE) )
+				 bitstatus = SET;
+			 else
+				 bitstatus = RESET;
+			 break;
+		 }
+		 case MASTER_BYTE_TRANSMITTING:
+		 {
+			 flag1 = I2Cx->SR1;
+			 flag2 = I2Cx->SR2;
+			 flag2 = flag2 << 16;
+			 lastevent = ( flag1 | flag2 ) & ( (uint32_t)0x00FFFFFF );
+			 if ( (lastevent & flag) == flag)
+				 bitstatus = SET;
+			 else
+				 bitstatus = RESET;
+			 break;
 		 }
 	 }
+	 return bitstatus;
  }
 
+
+ 
+ 
+ 
+ /**================================================================
+  * @Fn				-I2C_SendAddress
+  * @brief 			-
+  * @param [in] 		-
+  * @retval 			-
+  */
+ 
+  void I2C_SendAddress (I2C_Typedef I2Cx, uint16_t Address, I2C_Direction Direction)
+  {
+	  Address = (Address << 1);
+	  if (Direction != I2C_Direction_Transmitter)
+		  Address |= 1<<0;
+	  else
+		  Address &= ~(1<<0);
+	  I2C1->DR = Address;
+  }
+  
+  
+  
+  
+  
+  
+ /**================================================================
+  * @Fn				-I2C_GenerateSTOP
+  * @brief 			-
+  * @param [in] 		-
+  * @retval 			-None
+  */
+ 
+ void I2C_GenerateSTOP(I2C_Typedef *I2Cx, FunctionalState NewState)
+ {
+	 if ( NewState != Disable )
+		 I2Cx->CR1 |= I2C_CR1_STOP;
+	 else
+		 I2Cx->CR1 &= ~(I2C_CR1_STOP);
+ }
+
+
+ 
+ 
+ 
+ 
+ /**================================================================
+  * @Fn				-MCAL_I2C_SlaveSendData
+  * @brief 			-
+  * @param [in] 		-
+  * @retval 			-
+  */
+ 
+ void MCAL_I2C_SlaveSendData( I2C_Typedef *I2Cx, uint8_t data )
+ {
+	 I2C1->DR = data;
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ /**================================================================
+  * @Fn				-MCAL_I2C_SlaveReceiveData
+  * @brief 			-
+  * @param [in] 		-
+  * @retval 			-
+  */
+ 
+ uint8_t MCAL_I2C_SlaveReceiveData( I2C_Typedef *I2Cx )
+ {
+	 return (uint8_t) I2Cx->DR;
+ }
+ 
+ 
+ 
+ 
+ /*
+ *
+ *===================================================================================
+ *
+ *                      	Interrupt Functions
+ *
+ *===================================================================================
+ *
+ */
+ void I2C1_ER_IRQHandler (void)
+ {
+ }
+ 
+ void I2C1_EV_IRQHandler (void)
+ {
+ }
+ 
+  void I2C2_ER_IRQHandler (void)
+ {
+ }
+ 
+ void I2C2_EV_IRQHandler (void)
+ {
+ }

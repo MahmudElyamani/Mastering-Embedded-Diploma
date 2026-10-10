@@ -1,15 +1,21 @@
+--- ✄ --------- 2026.10.06 11:02 -------------------
+In this lecture we'll be demonstrating an interaction between I2C and EEPROM external chip through a model connected to keiluVision
+
+-When trying to transmit 10 bits through I2C instead of the usual 7, the last 2 bits will be added to the address.
+-I2C has an auto Acknowledge mechanism embedded in its hardware.
+
+-Communication between I2C master and slave happens in the following sequence of events:
+• I2C Master sends one start bit which pulls SDA line low
+• In case of 7 bit transmission the I2C sends the 7 address bits for the slave and R/W bit for a total of 1 byte
+• Since the slave received 1 byte from the master it then sends an ACK to the master as long as the addresses match.
+• Assuming the hardware sent the R/W bit high to 0 so as to act as a receiver, the slave would then send the 1st data byte.
+• The master receives that data byte in a register called receive data register RXDR.
+• The master will then wait until RXDR is full, once it is it sets the RXNE flag to allow the software to read RXDR.
+• Once the software starts reading it should reset the RXNE flag and send an ACK back to the slave after reading it.
+• Once the slave reads the ACK it will then proceed with the 2nd byte.
+• This cycle will go on until the slave doesn't receive an ACK or the master sends a stop bit.
+--- ✄ --------- 2026.10.06 15:02 -------------------
 --- ✄ --------- 2026.10.8 10:50 -------------------
-
-
-
-
-
-
-
-
-
-
-----------Add previous notes here-----------------
 Transfering data via DMA on I2C Master:
 • DMA contains SAR (Source Address Register) and DAR (Destination Address Register).
 • DMA works by gathering SAR from user and writing it to the DAR without the processor being involved.
@@ -34,5 +40,5 @@ How would an I2C master read from a TC74 IC slave? Explain the process:
 5. The TC74 then sends an ACK to the master
 6. Finally the master sends another start bit followed by the register address and a read bit to tell the slave to begin sending .
 7. This is called repeated start operation.
---- ✄ --------- 2026.10.8 14:08 ------------------- Lesson stopped @2:14:17
+--- ✄ --------- 2026.10.8 14:08 ------------------- 
 
