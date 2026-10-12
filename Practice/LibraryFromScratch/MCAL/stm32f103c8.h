@@ -27,6 +27,7 @@
 #define PORTD_BASE			0x40014000UL
 #define PORTE_BASE			0x40018000UL
 
+#define RCC_BASE			0x40021000UL
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 //Peripheral register: GPIO
@@ -43,6 +44,23 @@ typedef struct
 }GPIO_t;
 
 
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+//Peripheral register: RCC
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+typedef struct
+{
+	uint32_t		CR;
+	uint32_t		CFGR;
+	uint32_t		CIR;
+	uint32_t		APB2RSTR;
+	uint32_t		APB1RSTR;
+	uint32_t		AHBENR;
+	uint32_t		APB2ENR;
+	uint32_t		APB1ENR;
+	uint32_t		RCC_BDCR;
+	uint32_t		RCC_CSR;
+}RCC_t;
+
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 //Peripheral Instants:
@@ -53,7 +71,7 @@ typedef struct
 #define GPIOD		((GPIO_t*)PORTD_BASE)
 #define GPIOE		((GPIO_t*)PORTE_BASE)
 
-
+#define RCC			((RCC_t*)RCC_BASE)
 
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*

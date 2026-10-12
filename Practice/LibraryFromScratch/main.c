@@ -10,9 +10,10 @@
 
 int main()
 {
-	//ConfigRegister.PinNumber = PinNumber;
-	//ConfigRegister.GPIO_Mode = GPIO Mode;
-	//ConfigRegister.GPIO_OutputSpeed = GPIO Output Speed;
+	GPIO_Config_t ConfigRegister;
+	ConfigRegister.PinNumber = PIN_8;
+	ConfigRegister.Mode = Output_push_pull;
+	ConfigRegister.OutputSpeed = Speed_10MHZ;
 	//GPIO_Setup(GPIOA, ConfigRegister);
 	
 	while(1)
