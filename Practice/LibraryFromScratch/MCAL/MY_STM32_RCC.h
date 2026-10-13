@@ -25,7 +25,7 @@
  //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
  //References:
  //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
- enum 
+ typedef enum 
  {
 	 RCC_AFIO,
 	 RCC_GPIOA,

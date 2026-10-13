@@ -1,0 +1,2 @@
+--- ✄ --------- 2026.10.13 12:35 -------------------
+A timer is a counter that increments steadily with each clock pulse given to it by the bus its connected to.

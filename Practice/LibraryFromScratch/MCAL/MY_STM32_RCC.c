@@ -71,12 +71,27 @@ void RCC_CLK_SET(uint8_t Peripheral, uint8_t Value)
 			case RCC_TIM11:
 				*ConfigReg |= (1<<21);
 			break;
-				
 		}
+		RCC->APB2ENR |= *ConfigReg;
 	}
 	else	//APB1
 	{
 		ConfigReg = (uint32_t*)(Value == 1 ? RCC->APB1ENR : RCC-> APB1RSTR);
+		switch (Peripheral)
+		{
+			case RCC_SPI2:
+				*ConfigReg |= (1<<14);
+			break;
+			case RCC_SPI3:
+				*ConfigReg |= (1<<15);
+			break;
+			case RCC_I2C1:
+				*ConfigReg |= (1<<21);
+			break;
+			case RCC_I2C2:
+				*ConfigReg |= (1<<22);
+			break;
+		}
 	}
 	
 	

@@ -411,6 +411,16 @@
               <FileType>5</FileType>
               <FilePath>.\MCAL\MY_STM32_GPIO.h</FilePath>
             </File>
+            <File>
+              <FileName>MY_STM32_RCC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MCAL\MY_STM32_RCC.c</FilePath>
+            </File>
+            <File>
+              <FileName>MY_STM32_RCC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MCAL\MY_STM32_RCC.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

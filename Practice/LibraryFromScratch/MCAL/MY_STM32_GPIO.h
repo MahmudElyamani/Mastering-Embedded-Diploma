@@ -52,14 +52,16 @@
 	 PIN_ALL = 0xFFFF
  }GPIO_Pins_t;
  
+
+
  //@ref GPIO_MODES
- enum
+ typedef enum
  {
 	Analog,
 	Input_floating,
 	Input_pull_up_down
  }GPIO_INPUT_MODES;
-  enum
+ typedef enum
  {
 	Output_push_pull,
 	Output_open_drain,
@@ -68,7 +70,7 @@
  }GPIO_OUTPUT_MODES;
  
  //@ref GPIO_Output_Speed
- enum
+ typedef enum
  {
 	 Input,
 	 Speed_10MHZ,
@@ -77,7 +79,7 @@
  }GPIO_Output_Speed;
  
  
- enum
+ typedef enum
  {
 	 LOW,
 	 HIGH
@@ -89,10 +91,10 @@
  //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
  void GPIO_Setup(GPIO_t *GPIOx, GPIO_Config_t *config_register);
  void GPIO_DeSetup(GPIO_t *GPIOx);
- void GPIO_Set(GPIO_t *GPIOx, GPIO_Pins_t *PinNumber, uint8_t Value);
- void GPIO_Toggle(GPIO_t *GPIOx, GPIO_Pins_t *PinNumber);
- uint8_t GPIO_Read(GPIO_t *GPIOx, GPIO_Pins_t *PinNumber);
- void GPIO_Lock(GPIO_t *GPIOx, GPIO_Pins_t *PinNumber);
+ void GPIO_Set(GPIO_t *GPIOx, GPIO_Pins_t PinNumber, uint8_t Value);
+ void GPIO_Toggle(GPIO_t *GPIOx, GPIO_Pins_t PinNumber);
+ uint8_t GPIO_Read(GPIO_t *GPIOx, GPIO_Pins_t PinNumber);
+ void GPIO_Lock(GPIO_t *GPIOx, GPIO_Pins_t PinNumber);
  
  
  #endif

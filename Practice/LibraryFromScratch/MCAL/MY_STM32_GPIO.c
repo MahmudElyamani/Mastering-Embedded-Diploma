@@ -6,7 +6,7 @@
  *
  *=================================================================*/
 #include "MY_STM32_GPIO.h"
-
+#include "MY_STM32_RCC.h"
 
 /**================================================================
  * @Fn				-GPIO_Setup
@@ -19,7 +19,7 @@
 void GPIO_Setup(GPIO_t *GPIOx, GPIO_Config_t *config_register)
 {
 	//First 4 bits which control one pin
-	uint8_t PinSettings = 0x0F;
+	uint8_t PinSettings = 0U;
 	
 	//First 2 Bits [MODE] 
 	PinSettings |= config_register->OutputSpeed;
@@ -29,10 +29,16 @@ void GPIO_Setup(GPIO_t *GPIOx, GPIO_Config_t *config_register)
 	
 	//checking which register to use CRL or CRH
 	if ( config_register->PinNumber < PIN_8 )
+	{
+		GPIOx->CRL &= (0xF << ((config_register->PinNumber)*4));	//Clearing the bits before setting.
 		GPIOx->CRL |= ( PinSettings << ((config_register->PinNumber)*4) );	//Multiplying by 4 to step by 4 bits
+	}
 	else
-		GPIOx->CRH |= ( PinSettings << ((config_register->PinNumber - 8)*4) );  //Subtracting by 8 to get to CRH start
-	
+	{
+		GPIOx->CRH &= (0xF << (((config_register->PinNumber) - 8)*4) );	//Clearing the bits before setting.
+		GPIOx->CRH |= ( PinSettings << (((config_register->PinNumber) - 8)*4) );  //Subtracting by 8 to get to CRH start
+	}
+		
 }
 
 
@@ -50,6 +56,7 @@ void GPIO_Setup(GPIO_t *GPIOx, GPIO_Config_t *config_register)
 
 void GPIO_DeSetup(GPIO_t *GPIOx)
 {
+		
 }
 
 
@@ -67,7 +74,7 @@ void GPIO_DeSetup(GPIO_t *GPIOx)
  * @retval 			-None
  */
 
-void GPIO_Set(GPIO_t *GPIOx, GPIO_Pins_t *PinNumber, uint8_t Value)
+void GPIO_Set(GPIO_t *GPIOx, GPIO_Pins_t PinNumber, uint8_t Value)
 {
 	
 }
@@ -86,7 +93,7 @@ void GPIO_Set(GPIO_t *GPIOx, GPIO_Pins_t *PinNumber, uint8_t Value)
  * @retval 			-None
  */
 
-void GPIO_Toggle(GPIO_t *GPIOx, GPIO_Pins_t *PinNumber)
+void GPIO_Toggle(GPIO_t *GPIOx, GPIO_Pins_t PinNumber)
 {
 }
 
@@ -104,8 +111,9 @@ void GPIO_Toggle(GPIO_t *GPIOx, GPIO_Pins_t *PinNumber)
  * @retval 			-Value of the selected pin, can be HIGH or LOW.
  */
 
-uint8_t GPIO_Read(GPIO_t *GPIOx, GPIO_Pins_t *PinNumber)
+uint8_t GPIO_Read(GPIO_t *GPIOx, GPIO_Pins_t PinNumber)
 {
+	return 0;
 }
 
 
@@ -122,7 +130,7 @@ uint8_t GPIO_Read(GPIO_t *GPIOx, GPIO_Pins_t *PinNumber)
  * @retval 			-None
  */
 
-void GPIO_Lock(GPIO_t *GPIOx, GPIO_Pins_t *PinNumber)
+void GPIO_Lock(GPIO_t *GPIOx, GPIO_Pins_t PinNumber)
 {
 }
 
