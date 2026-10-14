@@ -33,12 +33,12 @@ void GPIO_Setup(GPIO_t *GPIOx, GPIO_Config_t *config_register)
 	//checking which register to use CRL or CRH
 	if ( PinNumber < PIN_8 )
 	{
-		GPIOx->CRL &= (0xF << ((PinNumber)*4));	//Clearing the bits before setting.
+		GPIOx->CRL &= ~(0xF << ((PinNumber)*4));	//Clearing the bits before setting.
 		GPIOx->CRL |= ( PinSettings << ((PinNumber)*4) );	//Multiplying by 4 to step by 4 bits
 	}
 	else
 	{
-		GPIOx->CRH &= (0xF << (((PinNumber) - 8)*4) );	//Clearing the bits before setting.
+		GPIOx->CRH &= ~(0xF << (((PinNumber) - 8)*4) );	//Clearing the bits before setting.
 		GPIOx->CRH |= ( PinSettings << (((PinNumber) - 8)*4) );  //Subtracting by 8 to get to CRH start
 	}
 		
@@ -59,7 +59,11 @@ void GPIO_Setup(GPIO_t *GPIOx, GPIO_Config_t *config_register)
 
 void GPIO_DeSetup(GPIO_t *GPIOx)
 {
-		
+	RCC_CLK_SET(RCC_GPIOA, LOW);
+	GPIOx->CRL &= 0;
+	GPIOx->CRL |= 0x44444444;
+	GPIOx->CRH &= 0;
+	GPIOx->CRH |= 0x44444444;
 }
 
 
@@ -79,7 +83,10 @@ void GPIO_DeSetup(GPIO_t *GPIOx)
 
 void GPIO_Set(GPIO_t *GPIOx, GPIO_Pins_t PinNumber, uint8_t Value)
 {
-	
+	if (Value == HIGH)
+		GPIOx->BSRR = (1<<PinNumber);
+	else
+		GPIOx->BRR = (1<<PinNumber);
 }
 
 

@@ -3620,7 +3620,7 @@
       <Doc>
         <Name>.\MCAL\stm32f103c8.h</Name>
         <ColumnNumber>13</ColumnNumber>
-        <TopLine>1</TopLine>
+        <TopLine>25</TopLine>
         <CurrentLine>61</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
@@ -3628,9 +3628,9 @@
       </Doc>
       <Doc>
         <Name>.\MCAL\MY_STM32_GPIO.c</Name>
-        <ColumnNumber>0</ColumnNumber>
-        <TopLine>33</TopLine>
-        <CurrentLine>45</CurrentLine>
+        <ColumnNumber>36</ColumnNumber>
+        <TopLine>58</TopLine>
+        <CurrentLine>89</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>
@@ -3638,7 +3638,7 @@
       <Doc>
         <Name>.\MCAL\MY_STM32_GPIO.h</Name>
         <ColumnNumber>2</ColumnNumber>
-        <TopLine>1</TopLine>
+        <TopLine>15</TopLine>
         <CurrentLine>35</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
@@ -3646,9 +3646,9 @@
       </Doc>
       <Doc>
         <Name>.\main.c</Name>
-        <ColumnNumber>27</ColumnNumber>
-        <TopLine>1</TopLine>
-        <CurrentLine>22</CurrentLine>
+        <ColumnNumber>0</ColumnNumber>
+        <TopLine>15</TopLine>
+        <CurrentLine>52</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>
@@ -3656,7 +3656,7 @@
       <Doc>
         <Name>.\MCAL\MY_STM32_RCC.c</Name>
         <ColumnNumber>9</ColumnNumber>
-        <TopLine>1</TopLine>
+        <TopLine>49</TopLine>
         <CurrentLine>81</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
@@ -3665,7 +3665,7 @@
       <Doc>
         <Name>.\MCAL\MY_STM32_RCC.h</Name>
         <ColumnNumber>48</ColumnNumber>
-        <TopLine>29</TopLine>
+        <TopLine>1</TopLine>
         <CurrentLine>1</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
