@@ -19,7 +19,10 @@
 void GPIO_Setup(GPIO_t *GPIOx, GPIO_Config_t *config_register)
 {
 	//First 4 bits which control one pin
-	uint8_t PinSettings = 0U;
+	volatile uint8_t PinSettings = 0U;
+	
+	//Pin Number Value saved
+	volatile uint8_t PinNumber = config_register->PinNumber;
 	
 	//First 2 Bits [MODE] 
 	PinSettings |= config_register->OutputSpeed;
@@ -28,15 +31,15 @@ void GPIO_Setup(GPIO_t *GPIOx, GPIO_Config_t *config_register)
 	PinSettings |= ( config_register->Mode << 2 );
 	
 	//checking which register to use CRL or CRH
-	if ( config_register->PinNumber < PIN_8 )
+	if ( PinNumber < PIN_8 )
 	{
-		GPIOx->CRL &= (0xF << ((config_register->PinNumber)*4));	//Clearing the bits before setting.
-		GPIOx->CRL |= ( PinSettings << ((config_register->PinNumber)*4) );	//Multiplying by 4 to step by 4 bits
+		GPIOx->CRL &= (0xF << ((PinNumber)*4));	//Clearing the bits before setting.
+		GPIOx->CRL |= ( PinSettings << ((PinNumber)*4) );	//Multiplying by 4 to step by 4 bits
 	}
 	else
 	{
-		GPIOx->CRH &= (0xF << (((config_register->PinNumber) - 8)*4) );	//Clearing the bits before setting.
-		GPIOx->CRH |= ( PinSettings << (((config_register->PinNumber) - 8)*4) );  //Subtracting by 8 to get to CRH start
+		GPIOx->CRH &= (0xF << (((PinNumber) - 8)*4) );	//Clearing the bits before setting.
+		GPIOx->CRH |= ( PinSettings << (((PinNumber) - 8)*4) );  //Subtracting by 8 to get to CRH start
 	}
 		
 }

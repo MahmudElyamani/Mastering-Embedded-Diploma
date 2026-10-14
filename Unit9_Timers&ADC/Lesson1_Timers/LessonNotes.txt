@@ -1,2 +1,44 @@
 --- ✄ --------- 2026.10.13 12:35 -------------------
-A timer is a counter that increments steadily with each clock pulse given to it by the bus its connected to.
+What's a timer?:
+• A timer is a counter that receives a clock input either from an oscillator or an external clock.
+• The speed of this clock is decided by pre-scalers picked by the programmer in the software.
+• With each clock cycle the counter increments its value by 1
+• counters could be up-counting, down-counting or up & down counting.
+• each increment or decrement in a counter is called a tick.
+
+-If one knows the clock pulse width size as well as the amount of ticks the counter did in total, one can determine how much time
+has passed since the timer started counting.
+
+How could you create a time delay using timer register?:
+• By counting the number of ticks that occured since this counter started counting
+• And since the clock pulse width is known by the input clock frequency and pre-scalers we can calculate the total delay time.
+
+
+-Each timer has its own mode, these mods decide how the timer behaves, if it's upcounting or downcounting, if it does a specific
+action on reset, if it triggers an external GPIO pin or not.
+
+-In industry used MCU's there's timer peripherals with something that's called @cascaded_counters_mode, its basically the triggering
+of another counter once it reaches its action triggering point. So it has multiple counters.
+This mode is also called dependant mode.
+
+
+What are the steps that should be considered when reading a timer:
+1. The number of counters it has, timers could have multiple counters.
+2. The value of F_clk for each counter and its pre-scaler.
+3. Determine its mode: either independant or dependant.
+4. In case of independant mode you need to decide if it's upcounting, downcounting or up & down counting
+5. As well as its compare register and it's zero condition
+6. Zero condition is the timer reseting itself back to zero when either a compare action or an overflow action is met
+7. These actions are programmed by the user and could or could not fire an interrupt request as well.
+8. It is possible that a timer could drive an external GPIO pin if programmed as so as well.
+
+Case Study 1:
+- You have a clock oscillator which consists of 24 MHZ and a prescaller of 12, we need to generate a 1ms delay knowing that the
+  counter register has a 16-bit resolution.
+• We calculate our input clock frequency by dividing the oscillator frequency by the prescaller: 24/12 = 2 MHZ
+• We calculate the tick period by dividing 1 by the input clock frequency value: 1/2MHZ = 0.5 uS
+• Since we need to reach 1ms delay we need to divide the total time by the single tick time to know how many ticks we need:
+  (1*10^-3)/(0.5*10^-6) = 2000 ticks.
+• once the counter reaches 2000 ticks it then resets to 0 and triggers an interrupt request that performs whatever action we need.
+
+--- ✄ --------- 2026.10.14 14:43 -------------------1:26:24

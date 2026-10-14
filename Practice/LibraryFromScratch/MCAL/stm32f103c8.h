@@ -34,13 +34,13 @@
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 typedef struct
 {
-	uint32_t		CRL;
-	uint32_t		CRH;
-	uint32_t		IDR;
-	uint32_t		ODR;
-	uint32_t		BSRR;
-	uint32_t		BRR;
-	uint32_t		LCKR;
+	volatile uint32_t		CRL;
+	volatile uint32_t		CRH;
+	volatile uint32_t		IDR;
+	volatile uint32_t		ODR;
+	volatile uint32_t		BSRR;
+	volatile uint32_t		BRR;
+	volatile uint32_t		LCKR;
 }GPIO_t;
 
 
@@ -49,16 +49,16 @@ typedef struct
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 typedef struct
 {
-	uint32_t		CR;
-	uint32_t		CFGR;
-	uint32_t		CIR;
-	uint32_t		APB2RSTR;
-	uint32_t		APB1RSTR;
-	uint32_t		AHBENR;
-	uint32_t		APB2ENR;
-	uint32_t		APB1ENR;
-	uint32_t		RCC_BDCR;
-	uint32_t		RCC_CSR;
+	volatile uint32_t		CR;
+	volatile uint32_t		CFGR;
+	volatile uint32_t		CIR;
+	volatile uint32_t		APB2RSTR;
+	volatile uint32_t		APB1RSTR;
+	volatile uint32_t		AHBENR;
+	volatile uint32_t		APB2ENR;
+	volatile uint32_t		APB1ENR;
+	volatile uint32_t		RCC_BDCR;
+	volatile uint32_t		RCC_CSR;
 }RCC_t;
 
 
