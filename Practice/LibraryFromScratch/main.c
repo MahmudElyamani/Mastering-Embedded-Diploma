@@ -7,18 +7,27 @@
  *=================================================================*/
 #include "stm32f103c8.h"
 #include "MY_STM32_GPIO.h"
+#include "MY_STM32_RCC.h"
 
 void Mydelay (uint32_t MS_Time)
 {
 	volatile uint32_t i = MS_Time;
 	volatile uint32_t j = 0;
 	for (i = MS_Time; i>0; i--)
-	for (j = 1000; j>0; j--);
+	for (j = 500; j>0; j--);
 
 }
 
 int main()
 {
+	//Clock Config, Internal clock (HSI), AHB frequency = 8MHZ, APB1 frequency = 4MHZ, APB2 frequency = 2MHZ
+	RCC_Config_t RCC_Cnfg;
+	RCC_Cnfg.Clock_Select = RCC_HSI_CLK;
+	RCC_Cnfg.AHB_PRESCALER = AHB_PRESCALER_1;
+	RCC_Cnfg.APB1_PRESCALER = APB1_PRESCALER_2;
+	RCC_Cnfg.APB2_PRESCALER = APB2_PRESCALER_4;
+	RCC_CLK_INIT(&RCC_Cnfg);
+	
 	GPIO_Config_t ConfigRegister;
 	
 	//Port A, Pin 8, Output, Push Pull, 10MHZ

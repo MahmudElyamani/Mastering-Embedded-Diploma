@@ -8,13 +8,52 @@
 #include "MY_STM32_RCC.h"
 
 
+
+/**================================================================
+ * @Fn				-RCC_CLK_INIT
+ * @brief 			-Initializes the clock speeds for each bus line and peripherals, only some features are supported.
+ * @param [in] 		-ConfigRegister : can be set by the user to indicate the used clock and bus line pre-scalers.
+ * @retval 			-None
+ */
+void RCC_CLK_INIT(RCC_Config_t *ConfigRegister)
+{
+	//Resets the pre-defined configuration set by keil uVision
+	//RCC->CFGR &= 0x0U;
+	//RCC->CR &= 0x0U;
+	
+	RCC->CFGR |= (ConfigRegister->Clock_Select)	  <<  0;
+	RCC->CFGR |= (ConfigRegister->AHB_PRESCALER)  <<  4;
+	RCC->CFGR |= (ConfigRegister->APB1_PRESCALER) <<  8;
+	RCC->CFGR |= (ConfigRegister->APB2_PRESCALER) <<  11;
+	
+	if (ConfigRegister->Clock_Select == RCC_HSI_CLK)
+		RCC->CR |= 1<<0;			//Bit 0 HSION: Internal high-speed clock enable
+	else if (ConfigRegister->Clock_Select == RCC_HSE_CLK)
+		RCC->CR |= 1<<16;			//Bit 16 HSEON: HSE clock enable
+	else if (ConfigRegister->Clock_Select == RCC_PLL_CLK) /*Not Supported Yet*/
+		RCC->CR |= 1<<24;			//Bit 24 PLLON: PLL enable
+}
+
+
+
+
+
+/**================================================================
+ * @Fn				-RCC_CLK_SET
+ * @brief 			-Enables or disables a given clock peripheral (Peripheral) depending on a given value (Value)
+ * @param [in] 		-Peripheral: Indicates the RCC peripheral to be enabled / disabled, can be chosen based on
+ *								 @ref RCC_Peripherals
+ * @param [in] 		-Value: Indicates the state you want the peripheral to be in,  can be 1(HIGH) or 0(LOW).
+ * @retval 			-None
+ */
+
 void RCC_CLK_SET(uint8_t Peripheral, uint8_t Value)
 {
-	uint32_t *ConfigReg = NULL;
+	volatile uint32_t *ConfigReg = NULL;
 	//Determine whether the register is APB1 or APB2
 	if ( Peripheral < RCC_TIM2 ) //APB2
 	{
-		ConfigReg = (uint32_t*)(Value == 1 ? RCC->APB2ENR : RCC-> APB2RSTR);
+		ConfigReg = (uint32_t*)(Value == 1 ? &(RCC->APB2ENR) : &(RCC->APB2RSTR));
 		switch (Peripheral)
 		{
 			case RCC_AFIO:

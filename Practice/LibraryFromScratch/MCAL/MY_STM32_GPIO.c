@@ -18,6 +18,18 @@
 
 void GPIO_Setup(GPIO_t *GPIOx, GPIO_Config_t *config_register)
 {
+	//Enables the corresponding GPIO clock
+	if (GPIOx == GPIOA)
+		RCC_CLK_SET(RCC_GPIOA, HIGH);
+	else if (GPIOx == GPIOB)
+		RCC_CLK_SET(RCC_GPIOB, HIGH);
+	else if (GPIOx == GPIOC)
+		RCC_CLK_SET(RCC_GPIOC, HIGH);
+	else if (GPIOx == GPIOD)
+		RCC_CLK_SET(RCC_GPIOD, HIGH);
+	else if (GPIOx == GPIOE)
+		RCC_CLK_SET(RCC_GPIOE, HIGH);
+	
 	//First 4 bits which control one pin
 	volatile uint8_t PinSettings = 0U;
 	
@@ -59,7 +71,17 @@ void GPIO_Setup(GPIO_t *GPIOx, GPIO_Config_t *config_register)
 
 void GPIO_DeSetup(GPIO_t *GPIOx)
 {
-	RCC_CLK_SET(RCC_GPIOA, LOW);
+	//Disables the corresponding GPIO clock
+	if (GPIOx == GPIOA)
+		RCC_CLK_SET(RCC_GPIOA, LOW);
+	else if (GPIOx == GPIOB)
+		RCC_CLK_SET(RCC_GPIOB, LOW);
+	else if (GPIOx == GPIOC)
+		RCC_CLK_SET(RCC_GPIOC, LOW);
+	else if (GPIOx == GPIOD)
+		RCC_CLK_SET(RCC_GPIOD, LOW);
+	else if (GPIOx == GPIOE)
+		RCC_CLK_SET(RCC_GPIOE, LOW);
 	GPIOx->CRL &= 0;
 	GPIOx->CRL |= 0x44444444;
 	GPIOx->CRH &= 0;
