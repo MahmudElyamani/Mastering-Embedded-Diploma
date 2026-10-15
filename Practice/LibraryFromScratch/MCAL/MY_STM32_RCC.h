@@ -30,6 +30,12 @@
 	 
 	uint8_t APB2_PRESCALER;	//Specifies the pre-scaler value for APB2 bus peripherals 
 							//Can be chosen based on @ref APB2_PRE_SCALERS
+	 
+	uint8_t PLL_SOURCE;		//Specifies the entry clock source for PLL
+							//Can be chosen based on @ref PLL_SOURCE_CLOCK
+	 
+	uint8_t PLL_FACTOR;		//Specifies the multiplication factor for the PLL clock (Maximum 72MHZ)
+							//Can be chosen based on @ref PLL_MULTIPLICATION_FACTOR
  }RCC_Config_t;
  
  
@@ -102,6 +108,51 @@
 #define APB2_PRESCALER_8		0x06U
 #define APB2_PRESCALER_16		0x07U
 
+
+
+//@ref PLL_SOURCE_CLOCK
+//0: HSI oscillator clock / 2 selected as PLL input clock
+//1: HSE oscillator clock selected as PLL input clock
+//0: HSE clock not divided
+//1: HSE clock divided by 2
+#define PLL_SRC_HSI_DivBy2		0x0U
+#define PLL_SRC_HSE_NotDiv		0x1U
+#define PLL_SRC_HSE_DivBy2		0x2U
+
+
+
+//@ref PLL_MULTIPLICATION_FACTOR
+//0000: PLL input clock x 2
+//0001: PLL input clock x 3
+//0010: PLL input clock x 4
+//0011: PLL input clock x 5
+//0100: PLL input clock x 6
+//0101: PLL input clock x 7
+//0110: PLL input clock x 8
+//0111: PLL input clock x 9
+//1000: PLL input clock x 10
+//1001: PLL input clock x 11
+//1010: PLL input clock x 12
+//1011: PLL input clock x 13
+//1100: PLL input clock x 14
+//1101: PLL input clock x 15
+//1110: PLL input clock x 16
+//1111: PLL input clock x 16
+#define PLL_CLK_FACTOR_2		0x00U
+#define PLL_CLK_FACTOR_3		0x01U
+#define PLL_CLK_FACTOR_4		0x02U
+#define PLL_CLK_FACTOR_5		0x03U
+#define PLL_CLK_FACTOR_6		0x04U
+#define PLL_CLK_FACTOR_7		0x05U
+#define PLL_CLK_FACTOR_8		0x06U
+#define PLL_CLK_FACTOR_9		0x07U
+#define PLL_CLK_FACTOR_10		0x08U
+#define PLL_CLK_FACTOR_11		0x09U
+#define PLL_CLK_FACTOR_12		0x0AU
+#define PLL_CLK_FACTOR_13		0x0BU
+#define PLL_CLK_FACTOR_14		0x0CU
+#define PLL_CLK_FACTOR_15		0x0DU
+#define PLL_CLK_FACTOR_16		0x0EU
 
  
 //@ref RCC_Peripherals

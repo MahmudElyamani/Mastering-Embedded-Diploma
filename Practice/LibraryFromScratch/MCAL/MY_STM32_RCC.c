@@ -17,14 +17,35 @@
  */
 void RCC_CLK_INIT(RCC_Config_t *ConfigRegister)
 {
-	//Resets the pre-defined configuration set by keil uVision
-	//RCC->CFGR &= 0x0U;
-	//RCC->CR &= 0x0U;
+	RCC->CFGR |= ( (ConfigRegister->Clock_Select)	<<  0 );
+	RCC->CFGR |= ( (ConfigRegister->AHB_PRESCALER)  <<  4 );
+	RCC->CFGR |= ( (ConfigRegister->APB1_PRESCALER) <<  8 );
+	RCC->CFGR |= ( (ConfigRegister->APB2_PRESCALER) <<  11 );
 	
-	RCC->CFGR |= (ConfigRegister->Clock_Select)	  <<  0;
-	RCC->CFGR |= (ConfigRegister->AHB_PRESCALER)  <<  4;
-	RCC->CFGR |= (ConfigRegister->APB1_PRESCALER) <<  8;
-	RCC->CFGR |= (ConfigRegister->APB2_PRESCALER) <<  11;
+	/*		PLL Calculation		*/
+	if (ConfigRegister->Clock_Select == RCC_PLL_CLK)
+		RCC->CFGR |= ( (ConfigRegister->PLL_FACTOR) << 18 ); //Bits 21:18 PLLMUL: PLL multiplication factor
+	
+	switch (ConfigRegister->PLL_SOURCE)
+	{
+		case PLL_SRC_HSI_DivBy2:
+		//Bit 16 PLLSRC: PLL entry clock source
+		//0: HSI oscillator clock / 2 selected as PLL input clock
+		RCC->CFGR &= ~(1<<16);
+		break;
+		case PLL_SRC_HSE_NotDiv:
+		//1: HSE oscillator clock selected as PLL input clock
+		//Bit 17 PLLXTPRE: HSE divider for PLL entry
+		//0: HSE clock not divided
+		RCC->CFGR |=  (1<<16);
+		RCC->CFGR &= ~(1<<17);
+		break;
+		case PLL_SRC_HSE_DivBy2:
+		//1: HSE clock divided by 2
+		RCC->CFGR |=  (1<<16);
+		RCC->CFGR |=  (1<<17);
+		break;
+	}
 	
 	if (ConfigRegister->Clock_Select == RCC_HSI_CLK)
 		RCC->CR |= 1<<0;			//Bit 0 HSION: Internal high-speed clock enable

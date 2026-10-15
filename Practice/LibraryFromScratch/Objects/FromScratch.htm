@@ -3,9 +3,9 @@
 <title>Static Call Graph - [.\Objects\FromScratch.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\FromScratch.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6140101: Last Updated: Thu Oct 15 11:29:30 2026
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6140101: Last Updated: Thu Oct 15 13:33:04 2026
 <BR><P>
-<H3>Maximum Stack Usage =         32 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =         40 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 __rt_entry_main &rArr; main &rArr; GPIO_Setup
 <P>
@@ -193,7 +193,7 @@ Global Symbols
 <P><STRONG><a name="[68]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[3a]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 32 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 40 + Unknown Stack Size
 <LI>Call Chain = __rt_entry_main &rArr; main &rArr; GPIO_Setup
 </UL>
 <BR>[Calls]<UL><LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
@@ -465,8 +465,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[45]"></a>RCC_CLK_INIT</STRONG> (Thumb, 92 bytes, Stack size 8 bytes, my_stm32_rcc.o(.text.RCC_CLK_INIT))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = RCC_CLK_INIT
+<P><STRONG><a name="[45]"></a>RCC_CLK_INIT</STRONG> (Thumb, 164 bytes, Stack size 16 bytes, my_stm32_rcc.o(.text.RCC_CLK_INIT))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = RCC_CLK_INIT
 </UL>
 <BR>[Called By]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -478,8 +478,8 @@ Global Symbols
 <P><STRONG><a name="[30]"></a>SystemInit</STRONG> (Thumb, 80 bytes, Stack size 0 bytes, system_stm32f10x.o(.text.SystemInit))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_ld.o(.text)
 </UL>
-<P><STRONG><a name="[3b]"></a>main</STRONG> (Thumb, 126 bytes, Stack size 8 bytes, main.o(.text.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = main &rArr; GPIO_Setup
+<P><STRONG><a name="[3b]"></a>main</STRONG> (Thumb, 134 bytes, Stack size 16 bytes, main.o(.text.main))
+<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = main &rArr; GPIO_Setup
 </UL>
 <BR>[Calls]<UL><LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_CLK_INIT
 <LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Mydelay

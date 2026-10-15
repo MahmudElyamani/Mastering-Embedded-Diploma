@@ -20,12 +20,15 @@ void Mydelay (uint32_t MS_Time)
 
 int main()
 {
-	//Clock Config, Internal clock (HSI), AHB frequency = 8MHZ, APB1 frequency = 4MHZ, APB2 frequency = 2MHZ
+	//Clock Config, PLL clock (PLL), AHB frequency = 72MHZ, APB1 frequency = 36MHZ, APB2 frequency = 72MHZ
 	RCC_Config_t RCC_Cnfg;
-	RCC_Cnfg.Clock_Select = RCC_HSI_CLK;
+	
+	RCC_Cnfg.Clock_Select = RCC_PLL_CLK;
+	RCC_Cnfg.PLL_SOURCE = PLL_SRC_HSE_DivBy2;
+	RCC_Cnfg.PLL_FACTOR = PLL_CLK_FACTOR_9;
 	RCC_Cnfg.AHB_PRESCALER = AHB_PRESCALER_1;
 	RCC_Cnfg.APB1_PRESCALER = APB1_PRESCALER_2;
-	RCC_Cnfg.APB2_PRESCALER = APB2_PRESCALER_4;
+	RCC_Cnfg.APB2_PRESCALER = APB2_PRESCALER_1;
 	RCC_CLK_INIT(&RCC_Cnfg);
 	
 	GPIO_Config_t ConfigRegister;
