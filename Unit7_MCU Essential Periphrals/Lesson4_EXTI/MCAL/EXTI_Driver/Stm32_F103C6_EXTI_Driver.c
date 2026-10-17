@@ -143,7 +143,8 @@ void Update_EXTI (EXTI_PinConfig_t* EXTI_Config)
 	}
 }
 
-/**================================================================
+/**=============================================================
+ * ===
  * @Fn				-MCAL_EXTI_GPIO_Init
  * @brief 			-
  * @param [in] 		-*EXTI_Config

@@ -41,4 +41,50 @@ Case Study 1:
   (1*10^-3)/(0.5*10^-6) = 2000 ticks.
 • once the counter reaches 2000 ticks it then resets to 0 and triggers an interrupt request that performs whatever action we need.
 
---- ✄ --------- 2026.10.14 14:43 -------------------1:26:24
+--- ✄ --------- 2026.10.14 14:43 -------------------
+--- ✄ --------- 2026.10.17 11:48 -------------------
+-You can control the duty cycle of a pwm pulse by using OCR0 register in an equation where 
+Duty Cycle = ((255-OCR0)*2)/(255*2)
+-Fast PWM mode only operates by the compare and overflow flags, you can control the duty cycle by changing the compare limit.
+
+-What is input capture mode?:
+• it's a mode that's used to measure the incoming PWM pulse timing, either T_high, T_low, T_total.
+• Assuming there's an external pin tied to a timer and programmed to be input capture mode.
+• when a clock signal is subjected to that pin and at the same time an event occured in the MCU, it records the last point from
+. which it was counting and the count number at that point.
+
+-What is PWM?:
+• An array of pulses that happen periodically at a duty cycle.
+• Used in DC motors in applications where speed control is desired.
+• the average voltage between on time and off time amounts to the total speed output.
+
+-What is real-time clock (RTC)? :
+• This could be a module or IC that's purchasable or could exist within your MCU
+• This clock contains a calender that keeps up with day, month, year timings.
+• Works in low power mode (1V)
+• Could contain a back up battery so that it stays active while the MCU is asleep or turned off.
+• That's why some devices have a place for a small cylinderical lithium battery to maintain the RTC clock.
+• An RTC IC module usually communicates with the MCU via I2C and has an external crystal oscillator.
+• RTC has its own registers, some bits are responsible for controlling seconds, some for minutes and some even for years. 
+
+-Is it possible to mimic an RTC operation using a normal timer peripheral?:
+• Yes it is possible if you program the software to keep up with date and time for every time unit.
+• However the RTC does all of that automatically because it has these calculations embedded in its hardware by digital designers.
+
+-What are watchdog timers?: 
+• A simple electronic device that's responsible for resetting the MCU for invalid software status.
+• It's generally kept within loops and is executed periodically within that loop.
+• If the watchdog timer is not called that means the loop is failed to execute and the watchdog timer resets the MCU.
+• Most watchdog timers are normal timers with downcounting from the given value to 0
+• Most MCU has its own internal watchdog timer within them.
+• The watchdog timer interrupt has the HIGHEST PRIORITY below the exceptional interrupt.
+• To use a watch dog timer in your code, you first have to initialize it with its timeout value e.g. wdt_init(timeout_cnt);
+• And then include a reset funcion for that timer inside your main loop at the start or at the end of it.
+• If the watchdog timer resets the MCU the program counter PC goes to the reset section in startup as if the MCU is rebooted.
+• The watchdog timer is not used in personal projects or tests but in user products it is mandatory.
+• Some watchdog timers in some MCU are more advanced and do not require a kick in order to reset, it monitors the code itself.
+
+
+-Thinking Questions:
+1.How to measure 1 sec delay by this timer: F_osc=20MHZ, F_cpu=F_osc/4, Prescaler:2, count register : 8 bits.
+--- ✄ --------- 2026.10.17 13:42 ------------------- 2:16:40
