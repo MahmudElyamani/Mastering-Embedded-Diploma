@@ -421,6 +421,16 @@
               <FileType>5</FileType>
               <FilePath>.\MCAL\MY_STM32_RCC.h</FilePath>
             </File>
+            <File>
+              <FileName>MY_STM32_EXTI.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MCAL\MY_STM32_EXTI.c</FilePath>
+            </File>
+            <File>
+              <FileName>MY_STM32_EXTI.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MCAL\MY_STM32_EXTI.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

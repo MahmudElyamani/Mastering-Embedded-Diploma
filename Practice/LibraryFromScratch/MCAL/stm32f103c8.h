@@ -29,6 +29,8 @@
 
 #define RCC_BASE			0x40021000UL
 
+#define NVIC_BASE			0xE000E100UL
+
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 //Peripheral register: GPIO
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -63,6 +65,20 @@ typedef struct
 
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+//Peripheral register: NVIC
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+typedef struct
+{
+	volatile uint32_t		ISER0;
+	volatile uint32_t		ISER1;
+	volatile uint32_t		ISER2;
+	volatile uint32_t		ICER0;
+	volatile uint32_t		ICER1;
+	volatile uint32_t		ICER2;
+}NVIC_t;
+
+
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 //Peripheral Instants:
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 #define GPIOA		((GPIO_t*)PORTA_BASE)
@@ -73,6 +89,7 @@ typedef struct
 
 #define RCC			((RCC_t*)RCC_BASE)
 
+#define NVIC		((NVIC_t*)NVIC_BASE)
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 //Macros:

@@ -8,6 +8,7 @@
 #include "stm32f103c8.h"
 #include "MY_STM32_GPIO.h"
 #include "MY_STM32_RCC.h"
+#include "MY_STM32_EXTI.h"
 
 void Mydelay (uint32_t MS_Time)
 {
@@ -20,6 +21,14 @@ void Mydelay (uint32_t MS_Time)
 
 int main()
 {
+	NVIC_Enable(NVIC_EXTI0);
+	NVIC_Enable(NVIC_SPI1);
+	NVIC_Enable(NVIC_I2C1_EV);
+	
+	NVIC_Disable(NVIC_EXTI0);
+	NVIC_Disable(NVIC_SPI1);
+	NVIC_Disable(NVIC_I2C1_EV);
+	
 	//Clock Config, PLL clock (PLL), AHB frequency = 72MHZ, APB1 frequency = 36MHZ, APB2 frequency = 72MHZ
 	RCC_Config_t RCC_Cnfg;
 	
