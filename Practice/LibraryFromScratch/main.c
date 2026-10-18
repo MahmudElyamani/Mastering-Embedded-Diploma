@@ -37,31 +37,31 @@ int main()
 	ConfigRegister.PinNumber = PIN_8;
 	ConfigRegister.Mode = Output_push_pull;
 	ConfigRegister.OutputSpeed = Speed_10MHZ;
-	GPIO_Setup(GPIOA, &ConfigRegister);
+	GPIO_Init(GPIOA, &ConfigRegister);
 	
 	//Port A, Pin 5, Output, Open Drain, 50MHZ
 	ConfigRegister.PinNumber = PIN_5;
 	ConfigRegister.Mode = Output_open_drain;
 	ConfigRegister.OutputSpeed = Speed_50MHZ;
-	GPIO_Setup(GPIOA, &ConfigRegister);
+	GPIO_Init(GPIOA, &ConfigRegister);
 	
 	//Port B, Pin 0, Input, Pullup/down
 	ConfigRegister.PinNumber = PIN_0;
 	ConfigRegister.Mode = Input_pull_up_down;
 	ConfigRegister.OutputSpeed = Input;
-	GPIO_Setup(GPIOB, &ConfigRegister);
+	GPIO_Init(GPIOB, &ConfigRegister);
 	
 	//Port B, Pin 12, Input, Analog
 	ConfigRegister.PinNumber = PIN_12;
 	ConfigRegister.Mode = Analog;
 	ConfigRegister.OutputSpeed = Input;
-	GPIO_Setup(GPIOB, &ConfigRegister);
+	GPIO_Init(GPIOB, &ConfigRegister);
 	
 	while(1)
 	{
-		GPIO_Set(GPIOA, PIN_8, HIGH);
+		GPIO_Toggle(GPIOA, PIN_8);
 		Mydelay(1000);
-		GPIO_Set(GPIOA, PIN_8, LOW);
+		GPIO_Toggle(GPIOA, PIN_8);
 		Mydelay(1000);
 	}
 }

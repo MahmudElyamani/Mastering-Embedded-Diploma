@@ -89,7 +89,7 @@
  //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
  //			APIs Supported by MY_STM32_GPIO.h:
  //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
- void GPIO_Setup(GPIO_t *GPIOx, GPIO_Config_t *config_register);
+ void GPIO_Init(GPIO_t *GPIOx, GPIO_Config_t *config_register);
  void GPIO_DeSetup(GPIO_t *GPIOx);
  void GPIO_Set(GPIO_t *GPIOx, GPIO_Pins_t PinNumber, uint8_t Value);
  void GPIO_Toggle(GPIO_t *GPIOx, GPIO_Pins_t PinNumber);

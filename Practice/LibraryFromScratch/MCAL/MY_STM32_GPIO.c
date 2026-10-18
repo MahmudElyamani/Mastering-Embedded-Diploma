@@ -16,7 +16,7 @@
  * @retval 			-None
  */
 
-void GPIO_Setup(GPIO_t *GPIOx, GPIO_Config_t *config_register)
+void GPIO_Init(GPIO_t *GPIOx, GPIO_Config_t *config_register)
 {
 	//Enables the corresponding GPIO clock
 	if (GPIOx == GPIOA)
@@ -127,6 +127,12 @@ void GPIO_Set(GPIO_t *GPIOx, GPIO_Pins_t PinNumber, uint8_t Value)
 
 void GPIO_Toggle(GPIO_t *GPIOx, GPIO_Pins_t PinNumber)
 {
+	uint8_t state = GPIO_Read(GPIOx, PinNumber);
+	if (state == 1)
+		GPIOx->BRR  = (1<<PinNumber);
+	else
+		GPIOx->BSRR = (1<<PinNumber);
+
 }
 
 
@@ -145,10 +151,8 @@ void GPIO_Toggle(GPIO_t *GPIOx, GPIO_Pins_t PinNumber)
 
 uint8_t GPIO_Read(GPIO_t *GPIOx, GPIO_Pins_t PinNumber)
 {
-	return 0;
+	return ( (GPIOx->IDR & (1<<PinNumber)) >> PinNumber );
 }
-
-
 
 
 
@@ -164,6 +168,7 @@ uint8_t GPIO_Read(GPIO_t *GPIOx, GPIO_Pins_t PinNumber)
 
 void GPIO_Lock(GPIO_t *GPIOx, GPIO_Pins_t PinNumber)
 {
+	//To be implemented.
 }
 
 

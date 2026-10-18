@@ -33,9 +33,9 @@ What are the steps that should be considered when reading a timer:
 8. It is possible that a timer could drive an external GPIO pin if programmed as so as well.
 
 Case Study 1:
-- You have a clock oscillator which consists of 24 MHZ and a prescaller of 12, we need to generate a 1ms delay knowing that the
+- You have a clock oscillator which consists of 24 MHZ and a prescaler of 12, we need to generate a 1ms delay knowing that the
   counter register has a 16-bit resolution.
-• We calculate our input clock frequency by dividing the oscillator frequency by the prescaller: 24/12 = 2 MHZ
+• We calculate our input clock frequency by dividing the oscillator frequency by the prescaler: 24/12 = 2 MHZ
 • We calculate the tick period by dividing 1 by the input clock frequency value: 1/2MHZ = 0.5 uS
 • Since we need to reach 1ms delay we need to divide the total time by the single tick time to know how many ticks we need:
   (1*10^-3)/(0.5*10^-6) = 2000 ticks.
@@ -88,3 +88,54 @@ Duty Cycle = ((255-OCR0)*2)/(255*2)
 -Thinking Questions:
 1.How to measure 1 sec delay by this timer: F_osc=20MHZ, F_cpu=F_osc/4, Prescaler:2, count register : 8 bits.
 --- ✄ --------- 2026.10.17 13:42 ------------------- 2:16:40
+--- ✄ --------- 2026.10.18 09:59 -------------------
+• F_cpu = 20/4 = 5MHZ
+• F_clk = F_cpu / Prescaler = 5/2 = 2.5 MHZ
+• Tick_Period = 1/F_clk = 1/2.5 = 0.4 uS
+• Number of ticks needed to reach 1 sec delay = 1/(0.4*10^-6) = 2.5*(10^6) ticks
+• Since 1 count register = 8 bits so it can hold 255 ticks
+• count register overflow times needed to count 1 sec delay = ( (2.5*(10^6))/255 ) = 9804 times.
+
+2.What functionality should be used in order to generate PWM signal using timers?
+• Output compare mode
+
+3.How to calculate the execution time of a c function without using any lib API:
+• We first determine the MCU's processor clock frequency, for example 72MHZ
+• from then we determine the time it takes to perform 1 instruction = 1/72MHZ = 13.8 nS
+• Next we count the amount os assembly instructions needed to perform the C function from start to finish, for example 200
+• and the total time to perform the function should be 20 * 13.8 = 2.76 uS
+
+4.How to generate PWM signal without using PWM mode:
+• PWM mode is just a timer with automatic compare match done by the hardware, so In order to mimic PWM mode we have to do the
+. compare event via software checking.
+• There will be a regular timer that starts counting, once it reaches a certian point during counting it will turn the signal HIGH.
+• This point is decided by the user via register, and decreasing or increasing that point will increase or decrease the duty cycle.
+• Once the signal goes high and the timers is still counting the signal will remain high until the timer reaches overflow event.
+• Once the timer is overflow its value is reset back to 0 and the signal goes LOW until the next compare match event happens.
+
+5.What do you knw about timers? and their modes of operation? How do you initialize a timer step by step?
+• Timers are counters set up by software to count in a specific pattern depending on their input clock frequency. This pattern
+. helps us calculate the amount of time passed since the timer started counting and thereby allowing us to make accurate delays.
+• Timers could be upcounting, downcounting or both. They could increase the number of ticks based on their input clock's rising
+. edge, falling edge or both, they have register for compare match and input detection as well as overflow and ISR for each event.
+• To initialize the timer first we have to initialize its input clock frequency through the clock bus line its connected to, we 
+. do that by adjusting its bus pre-scaler to a value based on the main CPU frequency or main bus line clock frequency.
+. next we determine its bit size and its counting properties by adjusting when it increments its tick, rising edge / falling edge
+. or both edges of the input clock frequency.
+
+6.An 8-bit timer whose frequency is 1MHZ is generating a delay of 3.2 mS, what's its pre-scaler and number of ticks it needed to
+generate that delay?
+• 8-bit timer -> Maximum count until overflow = 0xFF = 255 ticks
+• tick time = 1/(1*10^6) = 1 uS   ->   overflow time = 255*1 = 255 uS
+• In order to generate 3.2 mS delay time the total number of ticks needed = (3.2 ms)/(1 uS) = 3200 tick  (2)
+• The number of times the timer will overflow in order to reach 3.2 ms = (3.2 ms)/(255 us) = 12 times 
+
+7.Assuming the MCU you're working with doesn't have a hardware watchdog timer, how can you implement a watchdog timer using software?
+• we can implement it using a regular timer running at a set clock frequency and calculate the number of times it needs to
+. overflow before it reaches a set limit delay before it resets the whole MCU.
+• We also include a function to reset that timer to the starting point and all of its overflow triggers back to 0.
+• That function shall be included within our main loop and should be called periodically once all other functions are executed.
+• The period it takes to execute all main loop body functions should not exceed the overflow reset times calculated prior.
+• if the reset function is failed to be called, the timer will trigger an ISR at the end of the last overflow that resets the
+. count back to 0 and resets the MCU entirely.
+--- ✄ --------- 2026.10.18 11:38 -------------------
