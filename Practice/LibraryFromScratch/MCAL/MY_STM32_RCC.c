@@ -132,7 +132,10 @@ void RCC_CLK_SET(uint8_t Peripheral, uint8_t Value)
 				*ConfigReg |= (1<<21);
 			break;
 		}
-		RCC->APB2ENR |= *ConfigReg;
+		if (Value == 1)
+			RCC->APB2ENR  |= *ConfigReg;
+		else
+			RCC->APB2RSTR |= *ConfigReg;
 	}
 	else	//APB1
 	{
@@ -152,8 +155,11 @@ void RCC_CLK_SET(uint8_t Peripheral, uint8_t Value)
 				*ConfigReg |= (1<<22);
 			break;
 		}
+		if (Value == 1)
+			RCC->APB1ENR  |= *ConfigReg;
+		else
+			RCC->APB1RSTR |= *ConfigReg;
 	}
-	
 	
 }
 

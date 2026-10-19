@@ -21,31 +21,23 @@
  
  typedef struct
  {
-	uint8_t 				Trigger_Case;	//Specifies the rising or falling edge trigger
+	 uint8_t 				GPIO_PORT;		//Specifies the rising or falling edge trigger
+											//This parameter must be set based on @ref GPIO_PORTS_Define
+	 
+	 uint8_t 				GPIO_PIN;		//Specifies the rising or falling edge trigger
+											//This parameter must be set based on @ref GPIO_PINS
+	 
+	 uint8_t 				Trigger_Case;	//Specifies the rising or falling edge trigger
 											//This parameter must be set based on @ref EXTI_TRIGGER_define
 	
-	uint8_t 				IRQ_EN;			//Specifies whether the interrupt is enabled or disabled
+	 uint8_t 				IRQ_EN;			//Specifies whether the interrupt is enabled or disabled
 											//This parameter must be set based on @ref EXTI_TRIGGER_define
 	
 	void( *P_IRQ_CallBack)(void);			//Sets the C function that will be called once the interrupt happens
 	 
  }EXTI_Config_t;
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
  
  
  
@@ -53,6 +45,16 @@
  //References:
  //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
+ 
+ //@ref GPIO_PORTS_Define
+ #define PORTA					0
+ #define PORTB					1
+ #define PORTC					2
+ #define PORTD					3
+ #define PORTE					4
+ 
+ 
+ 
  //@ref EXTI_TRIGGER_define
  #define Rising_Edge			0
  #define Falling_Edge			1
@@ -132,7 +134,7 @@
  //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
  void NVIC_Enable(NVIC_Peripherals Peripheral);
  void NVIC_Disable(NVIC_Peripherals Peripheral);
- void EXTI_Init(EXTI_Config_t *Exti_Cnfg, GPIO_Config_t *Gpio_Cnfg);
+ void EXTI_Init(EXTI_Config_t *Exti_Cnfg);
  
  #endif
  

@@ -27,9 +27,13 @@
 #define PORTD_BASE			0x40014000UL
 #define PORTE_BASE			0x40018000UL
 
+#define AFIO_BASE			0x40010000UL
+
 #define RCC_BASE			0x40021000UL
 
 #define NVIC_BASE			0xE000E100UL
+
+#define EXTI_BASE			0x40010400UL
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 //Peripheral register: GPIO
@@ -44,6 +48,24 @@ typedef struct
 	volatile uint32_t		BRR;
 	volatile uint32_t		LCKR;
 }GPIO_t;
+
+
+
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+//Peripheral register: AFIO
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+typedef struct
+{
+	volatile uint32_t		EVCR;
+	volatile uint32_t		MAPR;
+	volatile uint32_t		EXTICR1;
+	volatile uint32_t		EXTICR2;
+	volatile uint32_t		EXTICR3;
+	volatile uint32_t		EXTICR4;
+	uint32_t				Reserved;
+	volatile uint32_t		MAPR2;
+}AFIO_t;
+
 
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -78,6 +100,21 @@ typedef struct
 }NVIC_t;
 
 
+
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+//Peripheral register: NVIC
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+typedef struct
+{
+	volatile uint32_t		IMR;
+	volatile uint32_t		EMR;
+	volatile uint32_t		RTSR;
+	volatile uint32_t		FTSR;
+	volatile uint32_t		SWIER;
+	volatile uint32_t		PR;
+}EXTI_t;
+
+
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 //Peripheral Instants:
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -87,9 +124,13 @@ typedef struct
 #define GPIOD		((GPIO_t*)PORTD_BASE)
 #define GPIOE		((GPIO_t*)PORTE_BASE)
 
+#define AFIO		((AFIO_t*)AFIO_BASE)
+
 #define RCC			((RCC_t*)RCC_BASE)
 
 #define NVIC		((NVIC_t*)NVIC_BASE)
+
+#define EXTI 		((EXTI_t*)EXTI_BASE)
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 //Macros:

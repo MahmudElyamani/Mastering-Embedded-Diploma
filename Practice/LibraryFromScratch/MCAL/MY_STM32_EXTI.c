@@ -9,6 +9,66 @@
 #include "MY_STM32_RCC.h"
 #include "MY_STM32_EXTI.h"
 
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+//	Generic Functions:
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+void (* GP_IRQ_Callback[15])(void);
+
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+/*		  ISR Functions	     */
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+void EXTI0_IRQHandler(void)
+{
+   //Clear by writing 1 into bit pnding register (EXTI_PR)
+	EXTI->PR |= 1<<0;
+	//CALL IRQ_CALL
+	GP_IRQ_Callback[0]();
+}
+
+void EXTI1_IRQHandler(void)
+{
+	EXTI->PR |= 1<<1;
+	GP_IRQ_Callback[1]();
+}
+
+void EXTI2_IRQHandler(void)
+{
+	EXTI->PR |= 1<<2;
+	GP_IRQ_Callback[2]();
+}
+
+void EXTI3_IRQHandler(void)
+{
+	EXTI->PR |= 1<<3;
+	GP_IRQ_Callback[3]();
+}
+
+void EXTI4_IRQHandler(void)
+{
+	EXTI->PR |= 1<<4;
+	GP_IRQ_Callback[4]();
+}
+
+void EXTI9_5_IRQHandler(void)
+{
+	if (EXTI->PR & (1<<5)) {EXTI->PR |= (1<<5); GP_IRQ_Callback[5]();}
+	if (EXTI->PR & (1<<6)) {EXTI->PR |= (1<<6); GP_IRQ_Callback[6]();}
+	if (EXTI->PR & (1<<7)) {EXTI->PR |= (1<<7); GP_IRQ_Callback[7]();}
+	if (EXTI->PR & (1<<8)) {EXTI->PR |= (1<<8); GP_IRQ_Callback[8]();}
+	if (EXTI->PR & (1<<9)) {EXTI->PR |= (1<<9); GP_IRQ_Callback[9]();}
+}
+
+
+void EXTI10_15_IRQHandler(void)
+{
+	if (EXTI->PR & (1<<10)) {EXTI->PR |= (1<<10); GP_IRQ_Callback[10]();}
+	if (EXTI->PR & (1<<11)) {EXTI->PR |= (1<<11); GP_IRQ_Callback[11]();}
+	if (EXTI->PR & (1<<12)) {EXTI->PR |= (1<<12); GP_IRQ_Callback[12]();}
+	if (EXTI->PR & (1<<13)) {EXTI->PR |= (1<<13); GP_IRQ_Callback[13]();}
+	if (EXTI->PR & (1<<14)) {EXTI->PR |= (1<<14); GP_IRQ_Callback[14]();}
+	if (EXTI->PR & (1<<15)) {EXTI->PR |= (1<<15); GP_IRQ_Callback[15]();}
+}
+
 
 /**================================================================
  * @Fn				-NVIC_Enable
@@ -80,6 +140,123 @@ void NVIC_Disable(NVIC_Peripherals Peripheral)
  * @retval 			-
  */
 
-void EXTI_Init(EXTI_Config_t *Exti_Cnfg, GPIO_Config_t *Gpio_Cnfg)
+void EXTI_Init(EXTI_Config_t *Exti_Cnfg)
 {
+	volatile uint8_t Pin = Exti_Cnfg->GPIO_PIN;
+	volatile uint8_t NVIC_Number = NULL;
+	GPIO_Config_t GPIO_Cnfg;
+	
+	/*		GPIO Configuration		*/
+	GPIO_Cnfg.Mode = Alternate_function_open_drain;
+	GPIO_Cnfg.PinNumber = Exti_Cnfg->GPIO_PIN;
+	switch (Exti_Cnfg->GPIO_PORT)
+	{
+		case PORTA:
+		GPIO_Init(GPIOA, &GPIO_Cnfg);
+		RCC_CLK_SET(RCC_GPIOA, HIGH);
+		break;
+		case PORTB:
+		GPIO_Init(GPIOB, &GPIO_Cnfg);
+		RCC_CLK_SET(RCC_GPIOB, HIGH);
+		break;
+		case PORTC:
+		GPIO_Init(GPIOC, &GPIO_Cnfg);
+		RCC_CLK_SET(RCC_GPIOC, HIGH);
+		break;
+		case PORTD:
+		GPIO_Init(GPIOD, &GPIO_Cnfg);
+		RCC_CLK_SET(RCC_GPIOD, HIGH);
+		break;
+		case PORTE:
+		GPIO_Init(GPIOE, &GPIO_Cnfg);
+		RCC_CLK_SET(RCC_GPIOE, HIGH);
+		break;
+	}
+	
+	/*		AFIO Assignment		*/
+	if (Exti_Cnfg->GPIO_PIN < PIN_4)
+	{
+		AFIO->EXTICR1 |= (Exti_Cnfg->GPIO_PORT << (Pin*4));
+	}
+	else if (Exti_Cnfg->GPIO_PIN <PIN_8)
+	{
+		Pin -= 4;
+		AFIO->EXTICR2 |= (Exti_Cnfg->GPIO_PORT << (Pin*4));
+	}
+	else if (Exti_Cnfg->GPIO_PIN <PIN_12)
+	{
+		Pin -= 8;
+		AFIO->EXTICR3 |= (Exti_Cnfg->GPIO_PORT << (Pin*4));
+	}
+	else if (Exti_Cnfg->GPIO_PIN <PIN_15)
+	{
+		Pin -= 12;
+		AFIO->EXTICR4 |= (Exti_Cnfg->GPIO_PORT << (Pin*4));
+	}
+	
+	
+	/*		Update rising edge falling edge triggers		*/
+	EXTI->RTSR &= ~(1 << Exti_Cnfg->GPIO_PIN);
+	EXTI->FTSR &= ~(1 << Exti_Cnfg->GPIO_PIN);
+	if (Exti_Cnfg->Trigger_Case == Rising_Edge)
+		EXTI->RTSR |= (1<< Exti_Cnfg->GPIO_PIN);
+	else if (Exti_Cnfg->Trigger_Case == Falling_Edge)
+		EXTI->FTSR |= (1<< Exti_Cnfg->GPIO_PIN);
+	else
+	{
+		EXTI->RTSR |= (1 << Exti_Cnfg->GPIO_PIN);
+		EXTI->FTSR |= (1 << Exti_Cnfg->GPIO_PIN);
+	}
+	
+	/*		call ISR    	*/
+	GP_IRQ_Callback[Exti_Cnfg->GPIO_PIN] = Exti_Cnfg->P_IRQ_CallBack;
+	
+	
+	/*		Enable or Disable the interrupt		*/
+	switch (Exti_Cnfg->GPIO_PIN)
+	{
+		case PIN_0:
+		NVIC_Number = NVIC_EXTI0;
+		break;
+		case PIN_1:
+		NVIC_Number = NVIC_EXTI1;
+		break;
+		case PIN_2:
+		NVIC_Number = NVIC_EXTI2;
+		break;
+		case PIN_3:
+		NVIC_Number = NVIC_EXTI3;
+		break;
+		case PIN_4:
+		NVIC_Number = NVIC_EXTI4;
+		break;
+		case PIN_5:
+		case PIN_6:
+		case PIN_7:
+		case PIN_8:
+		case PIN_9:
+		NVIC_Number = NVIC_EXTI9_5;
+		break;
+		case PIN_10:
+		case PIN_11:
+		case PIN_12:
+		case PIN_13:
+		case PIN_14:
+		case PIN_15:
+		NVIC_Number = NVIC_EXTI15_10;
+		break;
+	}
+	if (Exti_Cnfg->IRQ_EN == EXTI_IRQ_Enable)
+	{
+		EXTI->IMR |= (1 <<Exti_Cnfg->GPIO_PIN);
+		NVIC_Enable(NVIC_Number);
+		RCC_CLK_SET(RCC_AFIO, HIGH);
+	}
+	else
+	{
+		EXTI->IMR &= ~(1 <<Exti_Cnfg->GPIO_PIN);
+		NVIC_Disable(NVIC_Number);
+		RCC_CLK_SET(RCC_AFIO, LOW);
+	}
+		
 }

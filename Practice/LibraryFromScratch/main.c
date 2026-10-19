@@ -10,6 +10,11 @@
 #include "MY_STM32_RCC.h"
 #include "MY_STM32_EXTI.h"
 
+void IRQ_Test_LED()
+{
+	GPIO_Toggle(GPIOA, PIN_5);
+}
+
 void Mydelay (uint32_t MS_Time)
 {
 	volatile uint32_t i = MS_Time;
@@ -21,13 +26,13 @@ void Mydelay (uint32_t MS_Time)
 
 int main()
 {
-	NVIC_Enable(NVIC_EXTI0);
-	NVIC_Enable(NVIC_SPI1);
-	NVIC_Enable(NVIC_I2C1_EV);
-	
-	NVIC_Disable(NVIC_EXTI0);
-	NVIC_Disable(NVIC_SPI1);
-	NVIC_Disable(NVIC_I2C1_EV);
+	EXTI_Config_t Exti_cnfg;
+	Exti_cnfg.GPIO_PIN = PIN_9;
+	Exti_cnfg.GPIO_PORT = PORTD;
+	Exti_cnfg.Trigger_Case = RisingAndFalling;
+	Exti_cnfg.P_IRQ_CallBack = IRQ_Test_LED;
+	Exti_cnfg.IRQ_EN = EXTI_IRQ_Enable;
+	EXTI_Init(&Exti_cnfg);
 	
 	//Clock Config, PLL clock (PLL), AHB frequency = 72MHZ, APB1 frequency = 36MHZ, APB2 frequency = 72MHZ
 	RCC_Config_t RCC_Cnfg;
