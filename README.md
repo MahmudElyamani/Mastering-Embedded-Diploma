@@ -12,6 +12,8 @@
 * [📘 Unit 5: First Term Project](./Unit5_First%20Term%20Project)
 * [📘 Unit 6: Micro-Controller Architecture](./Unit6_Micro-Controller%20Arch)
 * [📘 Unit 7: Micro-Controller Essential Periphrals](./Unit7_MCU%20Essential%20Periphrals)
+* [📘 Unit 8: Unit8_MCU Interfacing](./Unit8_MCU%20Interfacing)
+* [📘 Unit 9: Unit9_Timers&ADC](./Unit9_Timers&ADC)
 
 ---
 
