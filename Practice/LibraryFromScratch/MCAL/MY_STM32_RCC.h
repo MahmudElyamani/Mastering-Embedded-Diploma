@@ -64,12 +64,12 @@
 #define AHB_PRESCALER_1			0x00U
 #define AHB_PRESCALER_2			0x08U
 #define AHB_PRESCALER_4			0x09U
-#define AHB_PRESCALER_8			0x10U
-#define AHB_PRESCALER_16		0x11U
-#define AHB_PRESCALER_64		0x12U
-#define AHB_PRESCALER_128		0x13U
-#define AHB_PRESCALER_256		0x14U
-#define AHB_PRESCALER_512		0x15U
+#define AHB_PRESCALER_8			0x0AU
+#define AHB_PRESCALER_16		0x0BU
+#define AHB_PRESCALER_64		0x0CU
+#define AHB_PRESCALER_128		0x0DU
+#define AHB_PRESCALER_256		0x0EU
+#define AHB_PRESCALER_512		0x0FU
 
 
 
@@ -207,6 +207,7 @@
  //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
  void RCC_CLK_INIT(RCC_Config_t *ConfigRegister);
  void RCC_CLK_SET(uint8_t Peripheral, uint8_t Value);
+ void RCC_CLK_RESET(uint8_t Peripheral, uint8_t Value);
  
  #endif
  

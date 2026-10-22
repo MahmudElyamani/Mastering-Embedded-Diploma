@@ -12,7 +12,7 @@
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 //	Generic Functions:
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-void (* GP_IRQ_Callback[15])(void);
+void (* GP_IRQ_Callback[16])(void);
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 /*		  ISR Functions	     */
@@ -20,53 +20,53 @@ void (* GP_IRQ_Callback[15])(void);
 void EXTI0_IRQHandler(void)
 {
    //Clear by writing 1 into bit pnding register (EXTI_PR)
-	EXTI->PR |= 1<<0;
+	EXTI->PR = 1<<0;
 	//CALL IRQ_CALL
 	GP_IRQ_Callback[0]();
 }
 
 void EXTI1_IRQHandler(void)
 {
-	EXTI->PR |= 1<<1;
+	EXTI->PR = 1<<1;
 	GP_IRQ_Callback[1]();
 }
 
 void EXTI2_IRQHandler(void)
 {
-	EXTI->PR |= 1<<2;
+	EXTI->PR = 1<<2;
 	GP_IRQ_Callback[2]();
 }
 
 void EXTI3_IRQHandler(void)
 {
-	EXTI->PR |= 1<<3;
+	EXTI->PR = 1<<3;
 	GP_IRQ_Callback[3]();
 }
 
 void EXTI4_IRQHandler(void)
 {
-	EXTI->PR |= 1<<4;
+	EXTI->PR = 1<<4;
 	GP_IRQ_Callback[4]();
 }
 
 void EXTI9_5_IRQHandler(void)
 {
-	if (EXTI->PR & (1<<5)) {EXTI->PR |= (1<<5); GP_IRQ_Callback[5]();}
-	if (EXTI->PR & (1<<6)) {EXTI->PR |= (1<<6); GP_IRQ_Callback[6]();}
-	if (EXTI->PR & (1<<7)) {EXTI->PR |= (1<<7); GP_IRQ_Callback[7]();}
-	if (EXTI->PR & (1<<8)) {EXTI->PR |= (1<<8); GP_IRQ_Callback[8]();}
-	if (EXTI->PR & (1<<9)) {EXTI->PR |= (1<<9); GP_IRQ_Callback[9]();}
+	if (EXTI->PR & (1<<5)) {EXTI->PR = (1<<5); GP_IRQ_Callback[5]();}
+	if (EXTI->PR & (1<<6)) {EXTI->PR = (1<<6); GP_IRQ_Callback[6]();}
+	if (EXTI->PR & (1<<7)) {EXTI->PR = (1<<7); GP_IRQ_Callback[7]();}
+	if (EXTI->PR & (1<<8)) {EXTI->PR = (1<<8); GP_IRQ_Callback[8]();}
+	if (EXTI->PR & (1<<9)) {EXTI->PR = (1<<9); GP_IRQ_Callback[9]();}
 }
 
 
-void EXTI10_15_IRQHandler(void)
+void EXTI15_10_IRQHandler(void)
 {
-	if (EXTI->PR & (1<<10)) {EXTI->PR |= (1<<10); GP_IRQ_Callback[10]();}
-	if (EXTI->PR & (1<<11)) {EXTI->PR |= (1<<11); GP_IRQ_Callback[11]();}
-	if (EXTI->PR & (1<<12)) {EXTI->PR |= (1<<12); GP_IRQ_Callback[12]();}
-	if (EXTI->PR & (1<<13)) {EXTI->PR |= (1<<13); GP_IRQ_Callback[13]();}
-	if (EXTI->PR & (1<<14)) {EXTI->PR |= (1<<14); GP_IRQ_Callback[14]();}
-	if (EXTI->PR & (1<<15)) {EXTI->PR |= (1<<15); GP_IRQ_Callback[15]();}
+	if (EXTI->PR & (1<<10)) {EXTI->PR = (1<<10); GP_IRQ_Callback[10]();}
+	if (EXTI->PR & (1<<11)) {EXTI->PR = (1<<11); GP_IRQ_Callback[11]();}
+	if (EXTI->PR & (1<<12)) {EXTI->PR = (1<<12); GP_IRQ_Callback[12]();}
+	if (EXTI->PR & (1<<13)) {EXTI->PR = (1<<13); GP_IRQ_Callback[13]();}
+	if (EXTI->PR & (1<<14)) {EXTI->PR = (1<<14); GP_IRQ_Callback[14]();}
+	if (EXTI->PR & (1<<15)) {EXTI->PR = (1<<15); GP_IRQ_Callback[15]();}
 }
 
 
@@ -83,17 +83,17 @@ void NVIC_Enable(NVIC_Peripherals Peripheral)
 	//volatile uint32_t *SCRegister = (uint32_t*)(Peripheral < 32 ? NVIC->ISER0 : Peripheral < 64 ? NVIC->ISER1 : NVIC->ISER2);
 	if ( Peripheral < 32 )
 	{
-		NVIC->ISER0 |= (1<<Peripheral);
+		NVIC->ISER[0] |= (1<<Peripheral);
 	}
-	else if ( Peripheral > 32 && Peripheral < 64 )
+	else if ( Peripheral >= 32 && Peripheral < 64 )
 	{
 		Peripheral -= 32;
-		NVIC->ISER1 |= (1<<Peripheral);
+		NVIC->ISER[1] |= (1<<Peripheral);
 	}
-	else if ( Peripheral > 64 )
+	else if ( Peripheral >= 64 )
 	{
 		Peripheral -= 64;
-		NVIC->ISER2 |= (1<<Peripheral);
+		NVIC->ISER[2] |= (1<<Peripheral);
 	}
 }
 
@@ -113,17 +113,17 @@ void NVIC_Disable(NVIC_Peripherals Peripheral)
 {
 	if ( Peripheral < 32 )
 	{
-		NVIC->ICER0 |= (1<<Peripheral);
+		NVIC->ICER[0] |= (1<<Peripheral);
 	}
 	else if ( Peripheral > 32 && Peripheral < 64 )
 	{
 		Peripheral -= 32;
-		NVIC->ICER1 |= (1<<Peripheral);
+		NVIC->ICER[1] |= (1<<Peripheral);
 	}
 	else if ( Peripheral > 64 )
 	{
 		Peripheral -= 64;
-		NVIC->ICER2 |= (1<<Peripheral);
+		NVIC->ICER[2] |= (1<<Peripheral);
 	}
 }
 
@@ -147,50 +147,49 @@ void EXTI_Init(EXTI_Config_t *Exti_Cnfg)
 	GPIO_Config_t GPIO_Cnfg;
 	
 	/*		GPIO Configuration		*/
-	GPIO_Cnfg.Mode = Alternate_function_open_drain;
+	GPIO_Cnfg.Mode = Input_floating;
 	GPIO_Cnfg.PinNumber = Exti_Cnfg->GPIO_PIN;
 	switch (Exti_Cnfg->GPIO_PORT)
 	{
 		case PORTA:
 		GPIO_Init(GPIOA, &GPIO_Cnfg);
-		RCC_CLK_SET(RCC_GPIOA, HIGH);
 		break;
 		case PORTB:
 		GPIO_Init(GPIOB, &GPIO_Cnfg);
-		RCC_CLK_SET(RCC_GPIOB, HIGH);
 		break;
 		case PORTC:
 		GPIO_Init(GPIOC, &GPIO_Cnfg);
-		RCC_CLK_SET(RCC_GPIOC, HIGH);
 		break;
 		case PORTD:
 		GPIO_Init(GPIOD, &GPIO_Cnfg);
-		RCC_CLK_SET(RCC_GPIOD, HIGH);
 		break;
 		case PORTE:
 		GPIO_Init(GPIOE, &GPIO_Cnfg);
-		RCC_CLK_SET(RCC_GPIOE, HIGH);
 		break;
 	}
 	
 	/*		AFIO Assignment		*/
 	if (Exti_Cnfg->GPIO_PIN < PIN_4)
 	{
+		AFIO->EXTICR1 &= ~(0xFu << (Pin*4));
 		AFIO->EXTICR1 |= (Exti_Cnfg->GPIO_PORT << (Pin*4));
 	}
 	else if (Exti_Cnfg->GPIO_PIN <PIN_8)
 	{
 		Pin -= 4;
+		AFIO->EXTICR2 &= ~(0xFu << (Pin*4));
 		AFIO->EXTICR2 |= (Exti_Cnfg->GPIO_PORT << (Pin*4));
 	}
 	else if (Exti_Cnfg->GPIO_PIN <PIN_12)
 	{
 		Pin -= 8;
+		AFIO->EXTICR3 &= ~(0xFu << (Pin*4));
 		AFIO->EXTICR3 |= (Exti_Cnfg->GPIO_PORT << (Pin*4));
 	}
-	else if (Exti_Cnfg->GPIO_PIN <PIN_15)
+	else if (Exti_Cnfg->GPIO_PIN <=PIN_15)
 	{
 		Pin -= 12;
+		AFIO->EXTICR4 &= ~(0xFu << (Pin*4));
 		AFIO->EXTICR4 |= (Exti_Cnfg->GPIO_PORT << (Pin*4));
 	}
 	

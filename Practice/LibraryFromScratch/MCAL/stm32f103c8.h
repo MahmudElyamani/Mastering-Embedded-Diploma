@@ -91,12 +91,9 @@ typedef struct
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 typedef struct
 {
-	volatile uint32_t		ISER0;
-	volatile uint32_t		ISER1;
-	volatile uint32_t		ISER2;
-	volatile uint32_t		ICER0;
-	volatile uint32_t		ICER1;
-	volatile uint32_t		ICER2;
+	volatile uint32_t		ISER[3];
+	uint32_t				Reserved;
+	volatile uint32_t		ICER[3];
 }NVIC_t;
 
 

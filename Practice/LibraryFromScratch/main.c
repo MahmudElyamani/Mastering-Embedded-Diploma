@@ -27,9 +27,9 @@ void Mydelay (uint32_t MS_Time)
 int main()
 {
 	EXTI_Config_t Exti_cnfg;
-	Exti_cnfg.GPIO_PIN = PIN_9;
-	Exti_cnfg.GPIO_PORT = PORTD;
-	Exti_cnfg.Trigger_Case = RisingAndFalling;
+	Exti_cnfg.GPIO_PIN = PIN_15;
+	Exti_cnfg.GPIO_PORT = PORTC;
+	Exti_cnfg.Trigger_Case = Falling_Edge;
 	Exti_cnfg.P_IRQ_CallBack = IRQ_Test_LED;
 	Exti_cnfg.IRQ_EN = EXTI_IRQ_Enable;
 	EXTI_Init(&Exti_cnfg);
@@ -55,27 +55,16 @@ int main()
 	
 	//Port A, Pin 5, Output, Open Drain, 50MHZ
 	ConfigRegister.PinNumber = PIN_5;
-	ConfigRegister.Mode = Output_open_drain;
+	ConfigRegister.Mode = Output_push_pull;
 	ConfigRegister.OutputSpeed = Speed_50MHZ;
 	GPIO_Init(GPIOA, &ConfigRegister);
 	
-	//Port B, Pin 0, Input, Pullup/down
-	ConfigRegister.PinNumber = PIN_0;
-	ConfigRegister.Mode = Input_pull_up_down;
-	ConfigRegister.OutputSpeed = Input;
-	GPIO_Init(GPIOB, &ConfigRegister);
-	
-	//Port B, Pin 12, Input, Analog
-	ConfigRegister.PinNumber = PIN_12;
-	ConfigRegister.Mode = Analog;
-	ConfigRegister.OutputSpeed = Input;
-	GPIO_Init(GPIOB, &ConfigRegister);
 	
 	while(1)
 	{
 		GPIO_Toggle(GPIOA, PIN_8);
-		Mydelay(1000);
+		Mydelay(500);
 		GPIO_Toggle(GPIOA, PIN_8);
-		Mydelay(1000);
+		Mydelay(500);
 	}
 }
