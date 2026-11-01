@@ -1,0 +1,95 @@
+--- ✄ --------- 2026.10.31 12:45 -------------------
+This unit talks about software engineering practices and it is very important in interviews such as valeo's exam.
+-Verification is making sure the functionality is working correctly.
+-Validation is making sure the performed functionality is in fact the required functionality.
+
+What's the purpose of software testing?: (Interview_Question)
+Software testing is a way to assess the @quality of the software and reduce the @risk of the software failure during operation.
+@quality means to improve the software and make sure it's working correctly and efficienlty.
+@risk means preventing bugs and ensuring everything is wokring properly.
+
+Error: It's the measure between a measured or calculated output to the actual output.
+Fault: It's the condition that causes the software to fail to perform its required function.
+Failure: The inability of the system or component to perform the required functionality according to its specification.
+
+
+Does Software testing means testing out the software only?: (Interview_Question)
+-No, software execution is part of the software testing process but software testing consists of two types of testing which are,
+• Static testing is when the code is not running, reviewing the code, inspecting warnings, reviewing syntax.
+• Dynamic testing is when the code is running, it involves @functional testing such as unit testing, integration testing and system
+. testing, and @non-functional testing which is checking up the performance of the system and testing it.
+
+
+What is quality management?:
+• It consists of two parts, creating test cases for dynamic and static testing in order to find the defects within that code.
+• As well as enhancing the process and ensuring quality.
+
+What's the difference between Quality assurance and Quality Control?: (Interview_Question)
+• Quality Assurance focuses on enhancing a proper process and preventing defects.
+• Quality Control involves various activities including testing activities that support the achievements of higher level of quality and Finding defects.
+
+
+What's the difference between False Positive and False Negative?:
+• False positive comes into play when a test case fails but in actuality there's no bug and or the functionality is working correctly.
+• False negative on the other hand are given when the test case passes but there is in fact a bug present in the sysem and or the functionality is not working as it should be.
+
+Explain what SDLC and STLC mean:
+• SDLC stands for software development life cycle and it includes the sequence of activities carried out by the developer to design
+. and develop high-quality software, sometimes it includes creating small test cases to ensure the code is working properly mid development.
+• STLC stands for software testing life cycle and it consists of a series of activities carried out by testers methodologically 
+. to test your software products.
+
+Explain in depth the stages of SDLC:
+1. Gathering requirements from the data analyst based on the customer / business that needs the service.
+2. Analysis phase which is putting the requirements into consistent and complete steps that define the requirements and the user approves of.
+3. Designing stage has two phases, High level design which gives software architecture of the software to be developed and low-level
+   design which describes how each and every feature in the product should work and how every component should work.
+4. Coding phase takes the architectures gathered from the design stage and turns them into codes, This stage is also known as the SDLC.
+5. Testing phase which runs the code through various methodological test cases made by the testing team and sending any faults or errors to the developer to debug.
+6. Deployment and maintenance phase happens after successful testing and reception of the customer to the code, this is where real issues might come up that need to be solved from time to time.
+
+
+Explain the three types of acceptance testing:
+• Alpha Testing: performed by the developer who writes the code and it ensures usability of the code during development.
+• Beta Testing: Done by a limited number of end users and if they raise the need for some changes it will be assigned to developers.
+• Gamma testing: verifies the software for the readiness for the release, it occurs towars the end of the SDLC.
+
+Explain the Water Fall software testing model:
+• This is known as the sequential testing mode, meaning that steps happen one after the other and not in parallel to one another.
+• The order of these steps are 1.Requirement gathering 2.Analysis 3.Design 4.Coding 5.Testing 6.Deployment.
+• This method is prefered when quality is more important as compared to schedule or cost.
+• Best suited for short tem projects where requirements will not change over time. 
+
+Explain the spiral software testing model:
+• Works in an iterative nature and places more emphasis on risk analysis.
+• It undergoes 4 phases: 1.Planning 2.Risk Analysis 3.Design 4.Evaluation.
+• These steps are called an iteration process, a project could undergo multiple iteration processes.
+• Best suited for complicated projects where risk is high.
+
+Explain V-Model software testing model:
+• Known as the verification and validation model (V&V) model.
+• It follows the same sequential design process as the waterfall testing model except it solves disadvantages of the waterfall model
+. by working with each step within the sequence in parallel with another step 
+• when the client sends business requirement specifications both the testing team and development team start their activities
+• The development teams translates the BRS to system requirements specifications and the testing team is involved for corrections.
+• Next the development team sends the SRS to the testing team for review and the developers start building the HLD of the product
+• -Other steps that were glanced over.
+
+-Requirements Consistency:  Checking that there are no confilcts between requirements
+-Requirements Completeness: Checking that all the customers requirements are defined.
+-Equivalence partitioning:  A technique that considers identifying the groups of input which have some impact on the system's outputs.
+-Testing activity starts once system requirements are ready.
+-Unit testing and integration testing are considered part of the quality control testing.
+-Unit testing: testing each function in the software versus its detailed design with different possible inputs that cover all branches of the function.
+
+-What is the ISTQB?
+• The ISTQB also known as International Software Testing Qualification Board
+• its an organization that offers certificates that are important for software testing and validation positions.
+• First level of certificates is called "Foundation Level" in addition to other branches such as automotive, mobile, acceptance.
+• Another level of foundation level is called Agile model (will be discussed next lesson)
+• Advanced level is the 2nd level above foundation level.
+• Expert level is another level above the advanced level.
+• There's a national site where you can do the exam in Egypt and offers some certificates.
+• There's also an international exam that's more expensive but contains more certificates.
+
+--- ✄ --------- 2026.11.01 11:13 -------------------
