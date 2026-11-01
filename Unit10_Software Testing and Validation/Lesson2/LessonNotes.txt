@@ -1,0 +1,35 @@
+--- ✄ --------- 2026.11.01 12:47 -------------------
+Agile is a model that has rules that force modules to communicate with each other.
+Scrum is a subfield of Agile that performs these rules in a specific sequence and it's the most popular subfield.
+
+Explain in details what Scrum is:
+• Scrum is an Agile process that allows us to focus on delivering the highest business value in the shortest time.
+• It allows us to rapidly and repeatidly inspect actual working software (every two weeks to one month).
+• The business sets the priorities, teams self-organize to determine the best way to deliver the highest priority features.
+• Every two weeks to a month anyone can see real working software and decide to release it as is or continue to enhance it for another sprint.
+
+Explain the Agile-Scrum methodology:
+-In Scrum, the project is divided into sprints, each sprint has a specified timeline (2 weeks to a month), here the user stories are
+split into different modules, end result of every sprint should be potentially shippable product.
+-The steps of a sprint consist of the following:
+1. The product owner sits with the customer and obtains his requirements, these requirements are then converted into items using EPIC
+2. EPIC is a cutsom tool included within JIRA which we'll be using this lecture.
+3. Next phase is sprint planning which decides the priority and order of each item or EPIC
+4. The items within every EPIC taken will be seperated into sprint backlogs containing "User story" which includes everything the user said about that item.
+5. Then the sprint begins which takes between 1 to 3 weeks, within that period there must be a @Daily_Scrum_Meating within which every
+   concern or issue brought up during the sprint is discussed, as well as every task that's successfully performed.
+6. After that a potentially shippable product is put out and will be decided by the owner whether to ship it or not.
+7. Then a sprint review happens between all people within that sprint to determine how things could've been handled better.
+
+What are roles in the Agile Scrum methodology?:
+1. Owner of the product: Full time or part time business oriented person who gathers the requirements from the customer and puts them into backlogs.
+2. Scrum Master : Full time or part time person which governs and monitors the scrum system including the developers working on the scrum.
+3. Development team : Full time specialists ranging from 3 to 9 people and are tasked to perform the tasks.
+
+When do we use Agile Scrum Methodology?:
+• When the client is not clear on requirements.
+• The client expects quick releases
+• The client doesn't give all his requirements at once.
+
+- Second term project explained (1:00:00)
+--- ✄ --------- 2026.11.01 14:58 ------------------- Lesson Ended 1:48:52
