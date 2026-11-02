@@ -10,3 +10,27 @@ on its given custom inputs is considered a black box test.
 
 What is test case design?:
 -Refers to how you set up your test cases
+-Designing good test cases ensure that every aspect of your software gets tested so taht you can find
+any issues within the code.
+-Test cases must be documented with test case name, type, requirement number, module and steps for the conducting the test.
+
+
+Explain Equivalance Partitioning Method (ECP):
+• Also known as Equivalance class Partitioning
+• It is a software testing technique or black-box testing
+• It divides input domain into classes of data and with the help of these classes test cases can be derived
+• Equivalance class represents or describes set of valid or invalid states.
+
+Explain Boundary Value Analysis Method (BVA):
+• It's a technique based on testing the boundaries of the test data.
+• It works by attempting a number before, after and inside a known boundary value.
+• It includes the maximum, minimum, inside or outside boundaries and error values.
+• Based on the likeliness that developers will make mistakes at the boundaries conditions.
+
+what is decision table based testing?:
+• Assuming you have a closed blackbox that takes 2 inputs and puts out an output.
+• Decision table assumes that either input can be valid or invalid.
+• it then puts out cases of input 1 and 2 being valid and invalid and measures the output.
+• The output must be invalid until both inputs become valid.
+
+--- ✄ --------- 2026.11.02 15:27 -------------------Lesson ended 1:00:01
