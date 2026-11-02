@@ -35,6 +35,10 @@
 
 #define EXTI_BASE			0x40010400UL
 
+#define USART1_BASE			0x40013800UL
+#define USART2_BASE			0x40004400UL
+#define USART3_BASE			0x40004800UL
+
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 //Peripheral register: GPIO
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -99,7 +103,7 @@ typedef struct
 
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-//Peripheral register: NVIC
+//Peripheral register: EXTI
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 typedef struct
 {
@@ -110,6 +114,23 @@ typedef struct
 	volatile uint32_t		SWIER;
 	volatile uint32_t		PR;
 }EXTI_t;
+
+
+
+
+
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+//Peripheral register: EXTI
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+typedef struct
+{
+	volatile uint32_t		SR;
+	volatile uint32_t		DR;
+	volatile uint32_t		BRR;
+	volatile uint32_t		CR[3];
+	volatile uint32_t		GTPR;
+}USART_t;
+
 
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -129,6 +150,9 @@ typedef struct
 
 #define EXTI 		((EXTI_t*)EXTI_BASE)
 
+#define USART1		((USART_t*)USART1_BASE)
+#define USART2		((USART_t*)USART2_BASE)
+#define USART3		((USART_t*)USART3_BASE)
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 //Macros:
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*

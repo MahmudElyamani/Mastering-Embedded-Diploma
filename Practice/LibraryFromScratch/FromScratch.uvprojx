@@ -431,6 +431,16 @@
               <FileType>5</FileType>
               <FilePath>.\MCAL\MY_STM32_EXTI.h</FilePath>
             </File>
+            <File>
+              <FileName>MY_STM32_USART.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MCAL\MY_STM32_USART.c</FilePath>
+            </File>
+            <File>
+              <FileName>MY_STM32_USART.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MCAL\MY_STM32_USART.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
