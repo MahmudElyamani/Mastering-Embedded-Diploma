@@ -1,0 +1,12 @@
+--- ✄ --------- 2026.11.02 09:54 -------------------
+This lesson will discuss testing methods, static and dynamic testing and white and black box theory in depth. It is very essential
+for when applying to embedded validation and testing roles.
+
+White box testing is when every element about the code is seen and tested, meaning that unit test and integration tests are
+part of white box testing.
+
+Black box testing is testing the software according to what it should do, so a systems test that tests the system's outputs based
+on its given custom inputs is considered a black box test.
+
+What is test case design?:
+-Refers to how you set up your test cases
