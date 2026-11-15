@@ -1,20 +1,19 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
 
-void update(int *a,int *b) {
-    // Complete this function    
-    *a = *a+*b;
-    *b = (*a>*b)?(*a-*b):(*b-*a);
+uint32_t numArray(uint32_t arr[], uint32_t arraySize)
+{
+    int result = 0;
+    for (int i = 0; i < arraySize; i++) {
+        result ^= arr[i];
+    }
+    return result;
 }
 
 int main() {
-    int a, b;
-    int *pa = &a, *pb = &b;
     
-    scanf("%d %d", &a, &b);
-    update(pa, pb);
-    printf("%d\n%d", a, b);
 
     return 0;
 }
