@@ -33,4 +33,13 @@ what is decision table based testing?:
 • it then puts out cases of input 1 and 2 being valid and invalid and measures the output.
 • The output must be invalid until both inputs become valid.
 
---- ✄ --------- 2026.11.02 15:27 -------------------Lesson ended 1:00:01
+--- ✄ --------- 2026.11.02 15:27 -------------------
+--- ✄ --------- 2026.11.05 09:35 -------------------
+Example: How many test cases are required for 100% decision coverage for the following sequence?
+Read P, Read Q, If P+Q > 100 then print "Large", ENDIF, IF P>50 THEN print "P Large" ENDIF.
+
+1. First we make a flowchart on paper that resolves this scenario
+2. we find out there's 2 if statements with 2 possible outcome so the possible decisions are 2*2 = 4
+3. In order to reach 100% decision coverage we need at least 2 test cases.
+
+There are tools within the GNU arm toolchain that see the code coverage of your test case called GCNO and GCOV
