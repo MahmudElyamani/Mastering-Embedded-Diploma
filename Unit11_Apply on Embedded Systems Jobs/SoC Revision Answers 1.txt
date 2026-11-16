@@ -1,0 +1,124 @@
+--- ✄ --------- 2026.11.15 13:36 -------------------
+1. The stack is the location which contains all local variables within the scope and executes operations based on LIFO.
+
+
+
+2. 
+uint32_t countOnes(uint32_t Number)
+{
+    int Bitsize = 0, temp=Number, count=0;
+    while(Numer/10 != 0)
+    {
+        Bitsize++;
+        temp /= 10;
+    }
+    for (int i = 0; i<Bitsize; i++)
+    {
+        if ( (Number & (1<<i))>>i == 1)
+        count++;
+    }
+    return count;
+}
+
+
+
+3. No, static is used to define a variable throughout the lifetime of the program execution, extern is used to tell the compiler that a variable
+is defined elsewhere and not allocate space for it.
+
+
+4.
+uint32_t CalculateSQRT(uint32_t Num)
+{
+    if ( (Num <= 0) )
+    return Num;
+
+    int result = 0;
+    int prodFive = result*result*result*result*result;
+    while(prodFive != Num && prodFive < result)
+    result++;
+
+    return result;
+}
+
+
+
+5. Static defines a variable within the scope of a function or file if defined globally, the variable retains its function and is not destroyed.
+extern is a keyword that informs the compiler that a variable exists elsewhere, it extends the variable's visibility but doesn't allocate space.
+
+
+
+
+6.
+uint32_t numArray(uint32_t arr[], uint32_t arraySize)
+{
+    int result = 0;
+    for (int i = 0; i < arraySize; i++) {
+        result ^= arr[i];
+    }
+    return result;
+}
+
+
+
+7. //C code to check if a number is repeated in an array or not
+uint32_t isRepeated(uint32_t arr[], uint32_t arraySize, uint32_t Num) {
+    uint32_t count = 0;
+    for (uint32_t i = 0; i < arraySize; i++) {
+        if (arr[i] == Num)
+            count++;
+    }
+    return count;
+}
+
+
+
+8. //Difference between NULL, Dangling and void pointers
+Null pointers are initialized to point at 0.
+Dangling pointers are pointers which point to a variable that's no longer visible within the current scope they're called from.
+void pointers are pointers that do not have a type during initialization but require type casting when dereferenced or called.
+
+
+
+
+9. //Difference between macros and functions
+Macros are code snippets which are assigned a symbol used within the code, during pre-processing time these symbols are replaced 
+by the code snippets they were assigned and the code is expanded.
+Functions are a sequence of operations that are called within the main program bracket, once called the program counter points to the
+first instrucion of the function to start executing it, they do not replace already existing lines that reference them.
+
+
+
+10. //C function to count number of zeros and ones in the binary of a number.
+void CountZerosOnes(uint32_t Number)
+{
+    int tempNum = Number, zeros=0, ones=0;
+    while(tempNum)
+    {
+        if( (tempNum & 1) == 1 )
+        ones++;
+        else
+        zeros++;
+
+        tempNum >>= 1;
+    }
+    printf("%d's binary has %d zeros and %d ones.\n",Number,zeros,ones);
+}
+
+int main() 
+{
+    int num;
+    printf("Enter a number: ");
+    scanf ("%d",&num);
+    CountZerosOnes(num);
+    return 0;
+}
+
+
+
+
+11. None of the above
+12. 0 to 6
+13. After the last character there is a null or zero value
+14. A,B work
+
+

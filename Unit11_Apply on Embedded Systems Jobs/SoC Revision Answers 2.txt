@@ -1,0 +1,30 @@
+--- ✄ --------- 2026.11.16 12:27 -------------------
+1. //How to decide whether a given MCU is using little endian format or big endian?
+- This depends on how the MCU handles bits, if it reads bits from the MSB side then its formatting is big endian, otherwise it's little endian
+
+2. //Difference between RISC and CISC Processors
+In CISC complexity is found in hardware, Less lines of code needed to provide same functionality instructions have different sizes
+and are harder to decode.
+In RISC complexity is on the software side, requires more instructions to provide same functionality, all instructions have the same size
+and easier to decode.
+
+
+3. //Line of code to set bit 2 in PORT B assuming it's an output.
+GPIO_PORTB_DATA_R |= 0x04;   (e)
+
+
+4. //Line of code to clear bit 2 in PORT B assuming it's initialized as an output.
+GPIO_PORTB_DATA_R &= ~0x04;  (i)
+
+
+5. //choose the resistor value in ohms for the following figure if the desired LED operating point is Vf = 1.2V and If = 2 mA.
+.  //Look page 17
+R = V / I
+R = (3.2-1.2)/(2*10^-3) = 1000 Ohm
+
+
+6. //Which circuit properly interfaces a switch in negative logic?
+Option (c)
+
+7. //Which circuit interfaces an LED in negative logic?
+Option (a)
