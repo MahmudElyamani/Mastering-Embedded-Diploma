@@ -1,0 +1,35 @@
+--- ✄ --------- 2026.11.17 14:15 -------------------
+1. //How to implement a WD timer in software
+• We initialize the watchdog with a time that should be no less than the time it takes to execute one main loop.
+• We then add a watchdog timer call inside the main loop body that gets called periodically so the watchdog timer resets.
+
+2. //The watchdog timer is used to
+(a) Ensuring the execution of the software doesn't stay trapped in an endless loop or blocked state.
+
+3. //With external oscillator 16MHZ. a 4x PLL and divider by 2, what is the duration of a MOV instruction knowing that it takes
+   //2 clock cycle?
+16MHZ * 4 = 64MHZ
+64MHZ / 2 = 32MHZ
+1 clock cycle = 1/32MHZ = 31.25 ns
+2 clock cycle = 2*32.25 = 62.5 ns
+(b) 62.5 ns
+
+4. //what do you know about DC, stepper and servo motors?
+DC motors are two wire continous rotation motors used in cooling fans or radio controlled car wheels.
+Servo motors are 3 wire motors, they operate like a DC motor but with more precision in controlling its position, can be proggrammed
+to rotate by angle, and rotate speed and direction can be changed.
+Stepper motors consist of 4 or 6 windings, each controlling a phase of motion, when power is supplied to a phase it spins in that
+phase. :)
+
+5. //Which of the following helps with generation of waveforms
+(A) timers
+
+6. //Which bit size determines the slowest frequency?
+(B)
+
+7. //Which bit size determines the maximum value of the counter-derived period?
+(A).
+
+8, //Which mode of the intel timer 8253 provides a software watchdog timer?
+(D).
+

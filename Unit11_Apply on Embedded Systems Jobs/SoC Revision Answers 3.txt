@@ -1,2 +1,54 @@
 --- ✄ --------- 2026.11.16 14:50 -------------------
+1. //What is interrupt latency?
+The maximum amount of time an interrupt is delayed before the CPU starts executing the 1st instruction in the ISR
 
+2. //How can you optimize interrupt latency?
+Decreasing the amount of instructions within a function that the CPU has to go through.
+
+3. //What is ISR?
+A sequence of operations that's executed by the ECU when an interrupt is invoked corresponding to the ISR number.
+
+4. //What is return type of ISR
+ISR returns void, when the CPU encounters a return statement in an ISR it loads the stored address from stack to the program counter.
+
+5. //Can we use any function inside ISR
+Functions must not be long or have calls to other functions.
+
+6. //Can we use printf inside ISR?
+If the library is used then yes.
+
+7. //Can we use breakpoints inside ISR?
+For debugging purposes, yes.
+
+8. //When an interrupt event occurs some of the folowing actions are taken:
+Correct order of events is (C) 
+
+9. //What happens when an interrupt occurs in detail
+• When an interrupt occurs, the CPU finishes executing the current instruction its at.
+• It then stores the address of the next instruction in the stack and points the program counter to the start of the ISR.
+• It then sends an acknowledge signal to the interrupt controller to clear the interrupt bit.
+• then starts executing the interrupt service routine (ISR)
+• once it encounters a return statement it loads back the stored address from the stack to the program counter and continues the program.
+
+
+10. //What is the difference between maskable and non-maskable interrupts?
+Maskable interrupts can be enabled/disabled by the software, non-maskable cannot.
+
+11. //Please match the following terms with the letter of their appropriate definitions.
+Thread            -> (C) the path of execution as software runs, alternatively, the results caused by executing software.
+Trigger           -> (D) hardware or software event that causes an interrupt
+Context switch    -> (A) The steps that occur as control is passed from foreground to background to foreground.
+Interface latency -> (B) the time between when new input is available, and the time when the software reads the input data.
+
+12. //Which I/O synchronization method is best for real-time systems?
+(B) Interrupt synchronization is best for real time systems because it can guarantee bounded latency
+
+13. //What I/O condition should cause an interrupt when interfacing input device like a keyboard?
+(A) Busy to done, new input ready.
+
+14. //Which of the following steps does not occur when an interrupt is triggered suspending the foreground and launching a thread 
+    //in the background?
+(A) 
+
+15. //What I/O condition should cause an interrupt when interfacing an output device like a printer?
+(E) 
